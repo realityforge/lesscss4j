@@ -1,9 +1,5 @@
 generated
 target
-*.classpath
-*.project
-*.settings
-*.eclipsebuild
 *.ipr
 *.iml
 *.iws
