@@ -29,7 +29,6 @@ import org.localmatters.lesscss4j.model.expression.LiteralExpression;
 import org.localmatters.lesscss4j.model.expression.MultiplyExpression;
 import org.localmatters.lesscss4j.model.expression.SubtractExpression;
 import org.localmatters.lesscss4j.model.expression.VariableReferenceExpression;
-
 import static org.localmatters.lesscss4j.parser.antlr.LessCssLexer.*;
 
 public class ExpressionFactory extends AbstractObjectFactory<Expression> {

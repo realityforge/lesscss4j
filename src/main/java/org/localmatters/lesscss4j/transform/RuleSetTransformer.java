@@ -19,7 +19,6 @@ package org.localmatters.lesscss4j.transform;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.localmatters.lesscss4j.model.RuleSet;
 import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 

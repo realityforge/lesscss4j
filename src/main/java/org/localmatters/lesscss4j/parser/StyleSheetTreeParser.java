@@ -17,7 +17,6 @@
 package org.localmatters.lesscss4j.parser;
 
 import java.io.IOException;
-
 import org.antlr.runtime.tree.Tree;
 import org.localmatters.lesscss4j.error.ErrorHandler;
 

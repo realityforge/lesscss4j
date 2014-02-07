@@ -20,8 +20,6 @@ import org.antlr.runtime.tree.Tree;
 import org.localmatters.lesscss4j.error.ErrorHandler;
 import org.localmatters.lesscss4j.model.Selector;
 
-import static org.localmatters.lesscss4j.parser.antlr.LessCssLexer.WS;
-
 public class SelectorFactory extends AbstractObjectFactory<Selector> {
     public Selector create(Tree selectorNode, ErrorHandler errorHandler) {
         Selector selector = null;

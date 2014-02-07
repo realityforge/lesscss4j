@@ -22,7 +22,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.List;
-
 import org.apache.commons.io.IOUtils;
 import org.localmatters.lesscss4j.error.ErrorHandler;
 import org.localmatters.lesscss4j.model.BodyElement;

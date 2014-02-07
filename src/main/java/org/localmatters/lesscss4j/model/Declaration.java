@@ -18,7 +18,6 @@ package org.localmatters.lesscss4j.model;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.localmatters.lesscss4j.model.expression.Expression;
 
 public class Declaration extends AbstractElement implements DeclarationElement {

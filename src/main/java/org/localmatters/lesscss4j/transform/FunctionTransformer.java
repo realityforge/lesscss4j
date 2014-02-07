@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.localmatters.lesscss4j.model.expression.Expression;
 import org.localmatters.lesscss4j.model.expression.FunctionExpression;
 import org.localmatters.lesscss4j.model.expression.LiteralExpression;

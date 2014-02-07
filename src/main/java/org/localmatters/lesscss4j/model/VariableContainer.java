@@ -17,7 +17,6 @@
 package org.localmatters.lesscss4j.model;
 
 import java.util.Iterator;
-
 import org.localmatters.lesscss4j.model.expression.Expression;
 
 public interface VariableContainer {

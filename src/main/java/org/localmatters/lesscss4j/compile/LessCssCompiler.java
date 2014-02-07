@@ -18,7 +18,6 @@ package org.localmatters.lesscss4j.compile;
 
 import java.io.IOException;
 import java.io.OutputStream;
-
 import org.localmatters.lesscss4j.error.ErrorHandler;
 import org.localmatters.lesscss4j.parser.StyleSheetResource;
 

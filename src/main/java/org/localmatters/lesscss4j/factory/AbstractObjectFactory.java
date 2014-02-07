@@ -16,10 +16,8 @@
 
 package org.localmatters.lesscss4j.factory;
 
-import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.Tree;
 import org.localmatters.lesscss4j.parser.antlr.LessCssParser;
-
 import static org.localmatters.lesscss4j.parser.antlr.LessCssLexer.*;
 
 public abstract class AbstractObjectFactory<T> implements ObjectFactory<T> {

@@ -17,7 +17,6 @@
 package org.localmatters.lesscss4j.transform.manager;
 
 import java.util.Map;
-
 import org.localmatters.lesscss4j.transform.Transformer;
 
 /**

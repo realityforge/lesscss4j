@@ -23,7 +23,6 @@ import org.localmatters.lesscss4j.model.MixinReference;
 import org.localmatters.lesscss4j.model.RuleSet;
 import org.localmatters.lesscss4j.model.Selector;
 import org.localmatters.lesscss4j.model.expression.Expression;
-
 import static org.localmatters.lesscss4j.parser.antlr.LessCssLexer.*;
 
 public class RuleSetFactory extends AbstractObjectFactory<RuleSet> {

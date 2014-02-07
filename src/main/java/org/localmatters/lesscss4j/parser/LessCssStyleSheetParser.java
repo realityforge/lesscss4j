@@ -19,7 +19,6 @@ package org.localmatters.lesscss4j.parser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PushbackInputStream;
-
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;

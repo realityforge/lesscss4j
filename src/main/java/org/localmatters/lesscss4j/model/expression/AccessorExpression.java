@@ -17,7 +17,6 @@
 package org.localmatters.lesscss4j.model.expression;
 
 import java.util.List;
-
 import org.localmatters.lesscss4j.model.AbstractElement;
 import org.localmatters.lesscss4j.model.Declaration;
 import org.localmatters.lesscss4j.model.RuleSet;

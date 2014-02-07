@@ -18,11 +18,8 @@ package org.localmatters.lesscss4j.factory;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.antlr.runtime.tree.Tree;
 import org.apache.commons.io.FilenameUtils;
 import org.localmatters.lesscss4j.error.ErrorHandler;
@@ -40,7 +37,6 @@ import org.localmatters.lesscss4j.parser.StyleSheetResource;
 import org.localmatters.lesscss4j.parser.StyleSheetResourceLoader;
 import org.localmatters.lesscss4j.parser.StyleSheetTree;
 import org.localmatters.lesscss4j.parser.StyleSheetTreeParser;
-
 import static org.localmatters.lesscss4j.parser.antlr.LessCssLexer.*;
 
 public class StyleSheetFactory extends AbstractObjectFactory<StyleSheet> {
@@ -210,12 +206,12 @@ public class StyleSheetFactory extends AbstractObjectFactory<StyleSheet> {
                                 ErrorHandler errorHandler) {
         String importUrl = importNode.getChild(0).getText();
         try {
-            String path = cleanImportPath(importUrl);
+            String path = cleanImportPath( importUrl );
 
             // circular/duplicate import check
             if (!stylesheet.getImports().contains(path)) {
                 stylesheet.addImport(path);
-                importStylesheet(path, resource, stylesheet, errorHandler);
+                importStylesheet( path, resource, stylesheet, errorHandler );
             }
         }
         catch (IOException e) {
@@ -255,7 +251,7 @@ public class StyleSheetFactory extends AbstractObjectFactory<StyleSheet> {
             importUrl = new URL(path);
         }
         else {
-            String extension = FilenameUtils.getExtension(path);
+            String extension = FilenameUtils.getExtension( path );
             if (extension == null || (!extension.equals("css") && !extension.equals("less"))) {
                 path = path + ".less";
             }

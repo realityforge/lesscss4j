@@ -21,7 +21,6 @@ import org.localmatters.lesscss4j.error.ErrorHandler;
 import org.localmatters.lesscss4j.model.Declaration;
 import org.localmatters.lesscss4j.model.Page;
 import org.localmatters.lesscss4j.model.expression.Expression;
-
 import static org.localmatters.lesscss4j.parser.antlr.LessCssLexer.*;
 
 public class PageFactory extends AbstractObjectFactory<Page> {

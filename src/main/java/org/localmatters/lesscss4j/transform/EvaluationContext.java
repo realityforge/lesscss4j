@@ -17,7 +17,6 @@
 package org.localmatters.lesscss4j.transform;
 
 import java.util.List;
-
 import org.localmatters.lesscss4j.error.ErrorHandler;
 import org.localmatters.lesscss4j.model.RuleSet;
 import org.localmatters.lesscss4j.model.RuleSetContainer;

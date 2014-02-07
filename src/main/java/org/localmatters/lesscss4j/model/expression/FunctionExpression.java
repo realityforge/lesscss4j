@@ -18,7 +18,6 @@ package org.localmatters.lesscss4j.model.expression;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.localmatters.lesscss4j.model.AbstractElement;
 import org.localmatters.lesscss4j.transform.EvaluationContext;
 

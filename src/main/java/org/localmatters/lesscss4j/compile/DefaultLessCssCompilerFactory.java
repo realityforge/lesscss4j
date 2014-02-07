@@ -19,7 +19,6 @@ package org.localmatters.lesscss4j.compile;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import org.localmatters.lesscss4j.factory.StyleSheetFactory;
 import org.localmatters.lesscss4j.model.Declaration;
 import org.localmatters.lesscss4j.model.Keyframes;

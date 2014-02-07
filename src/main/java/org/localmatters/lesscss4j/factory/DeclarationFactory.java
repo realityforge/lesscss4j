@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
@@ -34,7 +33,6 @@ import org.localmatters.lesscss4j.model.expression.FunctionExpression;
 import org.localmatters.lesscss4j.model.expression.LiteralExpression;
 import org.localmatters.lesscss4j.parser.antlr.LessCssLexer;
 import org.localmatters.lesscss4j.parser.antlr.LessCssParser;
-
 import static org.localmatters.lesscss4j.parser.antlr.LessCssLexer.*;
 
 public class DeclarationFactory extends AbstractObjectFactory<Declaration> {

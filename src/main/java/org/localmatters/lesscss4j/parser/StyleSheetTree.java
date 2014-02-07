@@ -17,7 +17,6 @@
 package org.localmatters.lesscss4j.parser;
 
 import java.util.List;
-
 import org.antlr.runtime.tree.Tree;
 
 public class StyleSheetTree implements Tree {

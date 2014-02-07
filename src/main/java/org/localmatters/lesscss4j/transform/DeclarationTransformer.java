@@ -19,7 +19,6 @@ package org.localmatters.lesscss4j.transform;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
-
 import org.localmatters.lesscss4j.error.ErrorUtils;
 import org.localmatters.lesscss4j.error.LessCssException;
 import org.localmatters.lesscss4j.model.Declaration;
