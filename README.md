@@ -93,22 +93,3 @@ snippet:
     StyleSheetResource resource = new FileStyleSheetResource(filename);
     LessCssCompiler compiler = new DefaultLessCssCompilerFactory().create();
     compiler.compile(resource, System.out, null);
-
-
-Spring Integration
-------------------
-
-To embed the LessCSS compiler using the Spring Framework, several classes have
-been provided in the org.localmatters.lesscss4j.spring package:
-
-* `LessCssCompilerFactoryBean`
-
-    FactoryBean implementation derived from DefaultLessCssCompilerFactory that
-    allows the compiler to be configured via standard Spring XML wiring.
-
-* `SpringStyleSheetResourceLoader`
-* `SpringStyleSheetResource`
-
-    Adapter classes that wrap Spring ResourceLoader and Resource
-    implementations, respectively.
-

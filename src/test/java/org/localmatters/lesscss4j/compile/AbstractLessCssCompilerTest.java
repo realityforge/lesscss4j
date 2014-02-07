@@ -28,7 +28,6 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.localmatters.lesscss4j.error.ErrorHandler;
 import org.localmatters.lesscss4j.output.PrettyPrintOptions;
 import org.localmatters.lesscss4j.parser.UrlStyleSheetResource;
-import org.localmatters.lesscss4j.spring.LessCssCompilerFactoryBean;
 
 public abstract class AbstractLessCssCompilerTest extends TestCase {
     public static final String ENCODING = "UTF-8";
@@ -45,12 +44,11 @@ public abstract class AbstractLessCssCompilerTest extends TestCase {
         _printOptions.setOpeningBraceOnNewLine(false);
         _printOptions.setIndentSize(2);
 
-        LessCssCompilerFactoryBean factoryBean = new LessCssCompilerFactoryBean();
+        DefaultLessCssCompilerFactory factoryBean = new DefaultLessCssCompilerFactory();
         factoryBean.setDefaultEncoding(ENCODING);
         factoryBean.setPrettyPrintEnabled(true);
         factoryBean.setPrettyPrintOptions(_printOptions);
-        factoryBean.afterPropertiesSet();
-        _compiler = (LessCssCompiler) factoryBean.getObject();
+        _compiler = factoryBean.create();
     }
 
     protected String readCss(String cssFile) throws IOException {

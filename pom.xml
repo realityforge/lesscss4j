@@ -36,7 +36,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.version>2.5.6</spring.version>
     </properties>
 
     <licenses>
@@ -90,18 +89,6 @@
             <artifactId>servlet-api</artifactId>
             <version>2.4</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>${spring.version}</version>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
-            <optional>true</optional>
         </dependency>
 
         <!-- Test Libraries ================================================-->
@@ -265,7 +252,6 @@ package org.localmatters.lesscss4j.parser.antlr;
                     <instructions>
                         <Import-Package>
                             org.antlr*;version="3.2",
-                            org.springframework*; resolution:=optional;version="[2.5,4.0)",
                             javax.servlet*; resolution:=optional,
                             *
                         </Import-Package>

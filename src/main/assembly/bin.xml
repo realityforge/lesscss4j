@@ -27,9 +27,6 @@
             <unpack>false</unpack>
             <outputDirectory>lib</outputDirectory>
             <scope>runtime</scope>
-            <excludes>
-                <exclude>org.springframework:*</exclude>
-            </excludes>
         </dependencySet>
     </dependencySets>
     <fileSets>
