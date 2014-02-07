@@ -3,5 +3,3 @@ target
 *.ipr
 *.iml
 *.iws
-overlays
-*.swp
