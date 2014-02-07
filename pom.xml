@@ -202,6 +202,7 @@ package org.localmatters.lesscss4j.parser.antlr;
                 </executions>
                 <configuration>
                     <sourceDirectory>target/antlr3</sourceDirectory>
+                  <outputDirectory>generated/antlr3/main/java/org/localmatters/lesscss4j/parser/antlr</outputDirectory>
                 </configuration>
             </plugin>
 

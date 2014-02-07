@@ -1,4 +1,4 @@
-src/main/antlr3/org/localmatters/lesscssj4/parser/output/
+generated
 target
 *.classpath
 *.project
