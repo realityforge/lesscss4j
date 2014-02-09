@@ -33,4 +33,10 @@ define 'lesscss4j' do
     bnd['Import-Package'] = 'org.antlr*;version="3.2",javax.servlet*; resolution:=optional,*'
     bnd['Export-Package'] = "org.localmatters.lesscss4j.*;version=#{version}"
   end
+  package(:bundle, :classifier => 'all').tap do |bnd|
+    bnd['Main-Class'] = 'org.localmatters.lesscss4j.cli.CompilerMain'
+    bnd['Bundle-SymbolicName'] = "#{project.group}.#{project.id}-all"
+    bnd['Private-Package'] = 'org.antlr*,org.apache.commons.io.*'
+    bnd['Export-Package'] = "org.localmatters.lesscss4j.*;version=#{version}"
+  end
 end
