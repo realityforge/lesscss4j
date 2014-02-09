@@ -4,6 +4,8 @@ repositories:
 
 artifacts:
   javax_javaee: javax:javaee-api:jar:7.0
+  # Servlet API needed as javax_javaee does not include required resource bundles
+  javax_servlet: javax.servlet:javax.servlet-api:jar:3.1.0
   commons_io: commons-io:commons-io:jar:1.4
 
   junit: junit:junit:jar:3.8.1

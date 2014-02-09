@@ -4,7 +4,7 @@ require 'buildr/antlr'
 require 'buildr/bnd'
 require 'buildr/jacoco'
 
-PROVIDED_DEPS = [:javax_javaee]
+PROVIDED_DEPS = [:javax_javaee, :javax_servlet]
 COMPILE_DEPS = [Buildr::Antlr.runtime_dependencies, :commons_io]
 
 desc 'Less CSS for Java'
