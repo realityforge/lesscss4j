@@ -39,4 +39,6 @@ define 'lesscss4j' do
     bnd['Private-Package'] = 'org.antlr*,org.apache.commons.io.*'
     bnd['Export-Package'] = "org.localmatters.lesscss4j.*;version=#{version}"
   end
+  package(:sources)
+  package(:javadoc)
 end
