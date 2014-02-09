@@ -45,7 +45,7 @@ public abstract class ErrorUtils {
             if (error.getPosition() != null) {
                 pos = error.getPosition();
             }
-            
+
             if (pos != null) {
                 message = formatPosition(pos.getLine(), pos.getChar()) + " - " + (message == null ? "" : message);
             }
@@ -66,3 +66,4 @@ public abstract class ErrorUtils {
         return "[" + lineNum + ":" + charPos + "]";
     }
 }
+

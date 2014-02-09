@@ -41,7 +41,7 @@ public class LessCssStyleSheetParserTest extends TestCase {
                                                      "/* */  /* another */  \n" +
                                                      "    @charset    'UTF-8'  ;  "));
     }
-    
+
     public void testParseCharsetNoCharset() throws IOException {
         assertEquals(null, _parser.parseCharset("   @import url(something)"));
         assertEquals(null, _parser.parseCharset("//\n comment" +
@@ -56,3 +56,4 @@ public class LessCssStyleSheetParserTest extends TestCase {
         assertEquals(null, _parser.parseCharset(""));
     }
 }
+

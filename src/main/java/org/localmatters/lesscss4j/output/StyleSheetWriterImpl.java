@@ -171,7 +171,7 @@ public class StyleSheetWriterImpl implements StyleSheetWriter {
                                      List<BodyElement> bodyElements,
                                      int indent) throws IOException {
         if (bodyElements == null) return;
-        
+
         for (int i = 0, bodyElementsSize = bodyElements.size(); i < bodyElementsSize; i++) {
             BodyElement element = bodyElements.get(i);
             if (i > 0 && isPrettyPrintEnabled() && getPrettyPrintOptions().isLineBetweenRuleSets()) {
@@ -359,3 +359,4 @@ public class StyleSheetWriterImpl implements StyleSheetWriter {
                declarations.size() <= 1;
     }
 }
+

@@ -193,7 +193,7 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
      * Provide custom {@link Transformer} instances.  The elements in this map will override the values used when
      * creating the default {@link TransformerManager}.  If a custom {@link TransformerManager} is specified using
      * {@link #setTransformerManager}, this map is ignored.
-     * 
+     *
      * @param transformers
      */
     public void setTransformers(Map<Class, Transformer> transformers) {
@@ -256,7 +256,7 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
         if (_transformers != null) {
             transformerMap.putAll(_transformers);
         }
-        
+
         return transformerMap;
     }
 
@@ -319,3 +319,4 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
         }
     }
 }
+

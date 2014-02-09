@@ -23,7 +23,7 @@ import static org.localmatters.lesscss4j.parser.antlr.LessCssLexer.*;
 public abstract class AbstractObjectFactory<T> implements ObjectFactory<T> {
     protected String formatNode(String prefix, Tree node) {
         return String.format("%s [%d=%s] %d:%d - %s",
-                             prefix, node.getType(), LessCssParser.tokenNames[node.getType()],  
+                             prefix, node.getType(), LessCssParser.tokenNames[node.getType()],
                              node.getLine(), node.getCharPositionInLine(),
                              node.toString());
     }
@@ -50,3 +50,4 @@ public abstract class AbstractObjectFactory<T> implements ObjectFactory<T> {
         return buf.toString();
     }
 }
+

@@ -68,11 +68,11 @@ public class LessCssCompilerTest extends AbstractLessCssCompilerTest {
     public void testMixinArgs() throws IOException {
         compileAndValidate("less/mixins-args.less", "css/mixins-args.css");
     }
-    
+
     public void testMultipleSelectors() throws IOException {
         compileAndValidate("less/selectors.less", "css/selectors.css");
     }
-    
+
     public void testCss3SingleRun() throws IOException {
         compileAndValidate("less/singlerun.less", "css/singlerun.css");
     }
@@ -105,7 +105,7 @@ public class LessCssCompilerTest extends AbstractLessCssCompilerTest {
     public void testAccessors() throws IOException {
         compileAndValidate("less/accessors.less", "css/accessors.css");
     }
-    
+
     public void testFunctions() throws IOException {
         compileAndValidate("less/functions.less", "css/functions.css");
     }
@@ -123,3 +123,4 @@ public class LessCssCompilerTest extends AbstractLessCssCompilerTest {
         });
     }
 }
+

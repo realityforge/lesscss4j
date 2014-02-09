@@ -78,7 +78,7 @@ public class LessCssCompilerErrorTest extends AbstractLessCssCompilerTest {
 
         URL url = getClass().getClassLoader().getResource(resource);
         String baseDir = FilenameUtils.getFullPath(url.getPath());
-        
+
         assertEquals( "import-error.less [2:8] - Import error: \"bogus.less\": File '" + baseDir + "bogus.less' does not exist\n" +
                       "imported-with-error.less [1:8] - Import error: url(nope.less): File '" + baseDir + "nope.less' does not exist\n" +
                       "import-error.less [4:8] - Import error: 'missing.less': File '" + baseDir + "missing.less' does not exist\n",
@@ -94,3 +94,4 @@ public class LessCssCompilerErrorTest extends AbstractLessCssCompilerTest {
         assertEquals(2, _errorHandler.getErrorCount());
     }
 }
+

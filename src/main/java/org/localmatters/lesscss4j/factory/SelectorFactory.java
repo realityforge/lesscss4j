@@ -23,13 +23,14 @@ import org.localmatters.lesscss4j.model.Selector;
 public class SelectorFactory extends AbstractObjectFactory<Selector> {
     public Selector create(Tree selectorNode, ErrorHandler errorHandler) {
         Selector selector = null;
-        
+
         String selectorText = concatChildNodeText(selectorNode);
         if (selectorText.length() > 0) {
             selector = new Selector(selectorText.toString());
             selector.setLine(selectorNode.getLine());
             selector.setChar(selectorNode.getCharPositionInLine());
         }
-        return selector; 
+        return selector;
     }
 }
+

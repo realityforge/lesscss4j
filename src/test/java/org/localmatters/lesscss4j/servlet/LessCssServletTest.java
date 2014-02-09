@@ -53,7 +53,7 @@ public class LessCssServletTest extends TestCase {
         _request = mock( HttpServletRequest.class );
         _response = mock( HttpServletResponse.class );
         _servletContext = mock( ServletContext.class );
-        
+
         _servletConfig = new MockServletConfig();
         _servletConfig.setServletContext(_servletContext);
 
@@ -149,7 +149,7 @@ public class LessCssServletTest extends TestCase {
         when(_request.getParameter(LessCssServlet.CLEAR_CACHE)).thenReturn(null);
 
         _response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-        
+
         doReplay();
 
         _servlet.init(_servletConfig);
@@ -353,3 +353,4 @@ public class LessCssServletTest extends TestCase {
       }
     }
 }
+

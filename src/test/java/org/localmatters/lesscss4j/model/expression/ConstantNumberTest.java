@@ -77,7 +77,7 @@ public class ConstantNumberTest extends TestCase {
 
         System.out.println(timer.prettyPrint());
     }
-    
+
     protected void perfTest(double[] values, boolean decimalFormat) {
         int ITERATIONS = 10000;
         for (int idx = 0; idx < ITERATIONS; idx++) {
@@ -141,7 +141,7 @@ public class ConstantNumberTest extends TestCase {
             // expected
         }
     }
-    
+
     public void testDivide() {
         assertEquals(new ConstantNumber(1.5, "px"), new ConstantNumber(3, null).divide(new ConstantNumber(2, "px")));
         assertEquals(new ConstantNumber(1.5, "px"), new ConstantNumber(3, "px").divide(new ConstantNumber(2, "px")));
@@ -191,3 +191,4 @@ public class ConstantNumberTest extends TestCase {
         assertEquals(new ConstantColor(0xffffff), new ConstantNumber(3, null).multiply(new ConstantColor(0xaaaaaa)));
     }
 }
+

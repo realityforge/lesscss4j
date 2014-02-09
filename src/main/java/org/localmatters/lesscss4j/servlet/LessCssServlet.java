@@ -195,7 +195,7 @@ public class LessCssServlet extends HttpServlet {
     protected CacheEntry getCacheEntry(String resource, long time) {
         CacheEntry newCacheEntry = new CacheEntry();
         newCacheEntry.setPath(resource);
-        
+
         CacheEntry cacheEntry = null;
         if (isCacheEnabled()) {
             cacheEntry = _cache.putIfAbsent(resource, newCacheEntry);
@@ -397,3 +397,4 @@ public class LessCssServlet extends HttpServlet {
         }
     }
 }
+
