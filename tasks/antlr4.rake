@@ -90,7 +90,6 @@ module Buildr
         else
           args << "-o" << package_dir
           args << "-lib" << File.dirname(input_file)
-
         end
         args << input_file
         begin
