@@ -23,7 +23,6 @@ define 'lesscss4j' do
   test.with :junit, :mockito
 
   package(:bundle).tap do |bnd|
-    bnd['Private-Package'] = 'gelf4j.sender.*'
     bnd['Import-Package'] = 'org.antlr*;version="3.2",javax.servlet*; resolution:=optional,*'
     bnd['Export-Package'] = "gelf4j.*;version=#{version}"
   end
