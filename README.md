@@ -1,6 +1,8 @@
 What is LessCSS4j?
 ------------------
 
+[![Build Status](https://secure.travis-ci.org/realityforge/lesscss4j.png?branch=master)](http://travis-ci.org/realityforge/lesscss4j)
+
 LessCSS4j is a java implementation of the LESS language (http://lesscss.org).
 This version has all of the features of the original plus a few additional
 features:
