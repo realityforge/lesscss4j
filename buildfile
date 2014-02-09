@@ -24,6 +24,6 @@ define 'lesscss4j' do
 
   package(:bundle).tap do |bnd|
     bnd['Import-Package'] = 'org.antlr*;version="3.2",javax.servlet*; resolution:=optional,*'
-    bnd['Export-Package'] = "gelf4j.*;version=#{version}"
+    bnd['Export-Package'] = "org.localmatters.lesscss4j.*;version=#{version}"
   end
 end
