@@ -8,7 +8,6 @@ features:
 * Support for Internet Explorer CSS oddities without the need for escaping
 * Pluggable architecture to allow additional functions and transformations
   to be provided.
-* Optional Spring integration
 * Optional Servlet API integration
 
 History
