@@ -1,6 +1,9 @@
-generated
-target
-*.ipr
-*.iml
-*.iws
+/generated
+/target
+/reports
+/*.iml
+/*.ipr
+/*.iws
+/.idea
+/_buildr.rb
 /Gemfile.lock
