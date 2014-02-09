@@ -43,7 +43,33 @@ tokens {
 // during the build process.  The code doesn't live here so that it's easier
 // to test the grammar in ANTLRWorks without having to set up custom code.
 
-//@@JAVA@@
+@header {
+package org.localmatters.lesscss4j.parser.antlr;
+
+import org.localmatters.lesscss4j.error.ErrorHandler;
+import org.localmatters.lesscss4j.error.ErrorUtils;
+}
+@lexer::header {
+package org.localmatters.lesscss4j.parser.antlr;
+}
+@members {
+    private ErrorHandler _errorHandler;
+    private int _errorCount = 0;
+
+    public void setErrorHandler(ErrorHandler errorHandler) {
+        _errorHandler = errorHandler;
+    }
+
+    public int getErrorCount() {
+        return _errorCount;
+    }
+
+    @Override
+    public void displayRecognitionError(String[] tokenNames, RecognitionException e) {
+        _errorCount++;
+        ErrorUtils.handleError(_errorHandler, e, this);
+    }
+}
 
 // -------------
 // Main rule.   This is the main entry rule for the parser, the top level
