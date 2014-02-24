@@ -26,7 +26,7 @@ public class SelectorFactory extends AbstractObjectFactory<Selector> {
 
         String selectorText = concatChildNodeText(selectorNode);
         if (selectorText.length() > 0) {
-            selector = new Selector(selectorText.toString());
+            selector = new Selector( selectorText );
             selector.setLine(selectorNode.getLine());
             selector.setChar(selectorNode.getCharPositionInLine());
         }

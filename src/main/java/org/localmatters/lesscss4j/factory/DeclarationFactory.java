@@ -180,7 +180,6 @@ public class DeclarationFactory extends AbstractObjectFactory<Declaration> {
      * expressions can be used in the opacity value.
      *
      * @param value The Literal expression to parse
-     * @param handler
      * @return The parsed Expression.  Null if it isn't an Alpha expression or it cannot be parsed.
      */
     protected Expression parseIE8AlphaFilter(Expression value, ErrorHandler errorHandler) {

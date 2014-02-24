@@ -32,8 +32,6 @@ public interface ErrorHandler {
     /**
      * Sets the current context.  The error handler may use this to include context specific information with each error
      * message.  For example, the name of the file currently being parsed might be used as the context.
-     *
-     * @param context
      */
     void setContext(Object context);
 

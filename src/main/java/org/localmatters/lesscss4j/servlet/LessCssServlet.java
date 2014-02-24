@@ -187,10 +187,6 @@ public class LessCssServlet extends HttpServlet {
     /**
      * Gets the cache entry from the concurrent map.  Subclasses may override if an alternate cache provider is
      * desired.
-     *
-     * @param resource
-     * @param time
-     * @return
      */
     protected CacheEntry getCacheEntry(String resource, long time) {
         CacheEntry newCacheEntry = new CacheEntry();

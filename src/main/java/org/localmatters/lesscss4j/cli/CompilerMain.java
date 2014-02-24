@@ -86,8 +86,6 @@ public class CompilerMain {
     /**
      * Determines if the argument is an "anti" option, meaning that is disables a regular option.  If the regular options
      * are --something or -s, the "anti" options are --no-something or -ns.
-     * @param arg
-     * @return
      */
     protected boolean isAntiOption(String arg) {
         return arg.startsWith("--no") || (arg.startsWith("-n") && arg.length() >= 3);

@@ -214,9 +214,8 @@ public class ConstantNumber implements ConstantValue {
         ConstantNumber that = (ConstantNumber) obj;
 
         if (Double.compare(that._value, _value) != 0) return false;
-        if (_unit != null ? !_unit.equals(that._unit) : that._unit != null) return false;
+      return !( _unit != null ? !_unit.equals( that._unit ) : that._unit != null );
 
-        return true;
     }
 
     @Override
