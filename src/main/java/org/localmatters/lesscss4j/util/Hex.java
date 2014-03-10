@@ -20,6 +20,10 @@ import java.security.NoSuchAlgorithmException;
 
 public final class Hex
 {
+  private Hex()
+  {
+  }
+
   /**
    * Used building output as Hex
    */
