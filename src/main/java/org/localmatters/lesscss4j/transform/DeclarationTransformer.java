@@ -41,18 +41,15 @@ public class DeclarationTransformer
     }
 
     final Declaration transformed = new Declaration( declaration, false );
-    for ( Object value : declaration.getValues() )
+    for ( final Object value : declaration.getValues() )
     {
-      value = transformDeclarationValue( value, declaration, context );
-      transformed.addValue( value );
+      transformed.addValue( transformDeclarationValue( value, context ) );
     }
 
     return Arrays.asList( transformed );
   }
 
-  protected Object transformDeclarationValue( Object value,
-                                              final Declaration declaration,
-                                              final EvaluationContext context )
+  protected Object transformDeclarationValue( final Object value, final EvaluationContext context )
   {
     if ( value instanceof Expression )
     {
@@ -65,7 +62,7 @@ public class DeclarationTransformer
           // Can't think of a reason why we'd ever want to return more than one expression.
           expression = expressionTransformer.transform( expression, context ).get( 0 );
         }
-        value = expression.evaluate( context );
+        return expression.evaluate( context );
       }
       catch ( final LessCssException ex )
       {
