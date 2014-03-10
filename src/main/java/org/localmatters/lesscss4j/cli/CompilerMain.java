@@ -19,7 +19,6 @@ package org.localmatters.lesscss4j.cli;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URL;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -290,12 +289,6 @@ public class CompilerMain
     try
     {
       // todo: verify that inputfilename and outputfilename don't correspond to directories
-
-      URL inputUrl = null;
-      if ( inputFilename != null )
-      {
-        inputUrl = new File( inputFilename ).toURI().toURL();
-      }
 
       // Generate an output filename from the input filename
       if ( outputFilename == null && inputFilename != null )
