@@ -18,17 +18,14 @@ package org.localmatters.lesscss4j.transform;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.annotation.Nonnull;
 import org.localmatters.lesscss4j.model.RuleSet;
 import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 
 public class RuleSetTransformer
   extends AbstractDeclarationContainerTransformer<RuleSet>
 {
-  public RuleSetTransformer()
-  {
-  }
-
-  public RuleSetTransformer( final TransformerManager transformerManager )
+  public RuleSetTransformer( @Nonnull final TransformerManager transformerManager )
   {
     super( transformerManager );
   }

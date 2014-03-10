@@ -17,6 +17,7 @@ package org.localmatters.lesscss4j.transform;
 
 import java.util.Arrays;
 import java.util.List;
+import javax.annotation.Nonnull;
 import org.localmatters.lesscss4j.model.BodyElement;
 import org.localmatters.lesscss4j.model.StyleSheet;
 import org.localmatters.lesscss4j.transform.manager.TransformerManager;
@@ -24,11 +25,7 @@ import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 public class StyleSheetTransformer
   extends AbstractTransformer<StyleSheet>
 {
-  public StyleSheetTransformer()
-  {
-  }
-
-  public StyleSheetTransformer( final TransformerManager transformerManager )
+  public StyleSheetTransformer( @Nonnull final TransformerManager transformerManager )
   {
     super( transformerManager );
   }

@@ -17,6 +17,7 @@ package org.localmatters.lesscss4j.transform;
 
 import java.util.Arrays;
 import java.util.List;
+import javax.annotation.Nonnull;
 import org.localmatters.lesscss4j.model.BodyElement;
 import org.localmatters.lesscss4j.model.Keyframes;
 import org.localmatters.lesscss4j.model.RuleSet;
@@ -25,13 +26,9 @@ import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 public class KeyframesTransformer
   extends AbstractTransformer<Keyframes>
 {
-  public KeyframesTransformer( final TransformerManager transformerManager )
+  public KeyframesTransformer( @Nonnull final TransformerManager transformerManager )
   {
     super( transformerManager );
-  }
-
-  public KeyframesTransformer()
-  {
   }
 
   public List<Keyframes> transform( final Keyframes keyframes, final EvaluationContext context )

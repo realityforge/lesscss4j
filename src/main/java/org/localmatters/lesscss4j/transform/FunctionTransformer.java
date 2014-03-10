@@ -20,15 +20,22 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nonnull;
 import org.localmatters.lesscss4j.model.expression.Expression;
 import org.localmatters.lesscss4j.model.expression.FunctionExpression;
 import org.localmatters.lesscss4j.model.expression.LiteralExpression;
 import org.localmatters.lesscss4j.transform.function.Function;
+import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 
 public class FunctionTransformer
   extends AbstractTransformer<Expression>
 {
   private Map<String, Function> _functionMap;
+
+  public FunctionTransformer( @Nonnull final TransformerManager transformerManager )
+  {
+    super( transformerManager );
+  }
 
   public void addFunction( final String name, final Function function )
   {

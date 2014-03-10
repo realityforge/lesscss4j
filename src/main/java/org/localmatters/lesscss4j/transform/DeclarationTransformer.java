@@ -17,6 +17,7 @@ package org.localmatters.lesscss4j.transform;
 
 import java.util.Arrays;
 import java.util.List;
+import javax.annotation.Nonnull;
 import org.localmatters.lesscss4j.error.ErrorUtils;
 import org.localmatters.lesscss4j.error.LessCssException;
 import org.localmatters.lesscss4j.model.Declaration;
@@ -27,11 +28,7 @@ import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 public class DeclarationTransformer
   extends AbstractTransformer<Declaration>
 {
-  public DeclarationTransformer()
-  {
-  }
-
-  public DeclarationTransformer( final TransformerManager transformerManager )
+  public DeclarationTransformer( @Nonnull final TransformerManager transformerManager )
   {
     super( transformerManager );
   }

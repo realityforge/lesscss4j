@@ -16,36 +16,27 @@
 package org.localmatters.lesscss4j.transform;
 
 import java.util.Iterator;
+import javax.annotation.Nonnull;
 import org.localmatters.lesscss4j.error.ErrorUtils;
 import org.localmatters.lesscss4j.error.LessCssException;
 import org.localmatters.lesscss4j.model.VariableContainer;
 import org.localmatters.lesscss4j.model.expression.Expression;
 import org.localmatters.lesscss4j.transform.manager.TransformerManager;
-import org.localmatters.lesscss4j.transform.manager.TransformerManagerAware;
 
 public abstract class AbstractTransformer<T>
-  implements Transformer<T>, TransformerManagerAware
+  implements Transformer<T>
 {
-  private TransformerManager _transformerManager;
+  private final TransformerManager _transformerManager;
 
-  protected AbstractTransformer()
-  {
-    this( null );
-  }
-
-  protected AbstractTransformer( final TransformerManager transformerManager )
+  protected AbstractTransformer( @Nonnull final TransformerManager transformerManager )
   {
     _transformerManager = transformerManager;
   }
 
+  @Nonnull
   public TransformerManager getTransformerManager()
   {
     return _transformerManager;
-  }
-
-  public void setTransformerManager( final TransformerManager transformerManager )
-  {
-    _transformerManager = transformerManager;
   }
 
   protected <T> Transformer<T> getTransformer( final T obj )
@@ -53,18 +44,12 @@ public abstract class AbstractTransformer<T>
     return getTransformer( obj, true );
   }
 
-  protected <T> Transformer<T> getTransformer( final T obj, final boolean required )
+  protected final <T> Transformer<T> getTransformer( final T obj, final boolean required )
   {
-    Transformer<T> transformer = null;
-    if ( null != getTransformerManager() )
-    {
-      transformer = getTransformerManager().getTransformer( obj );
-    }
-
+    final Transformer<T> transformer = getTransformerManager().getTransformer( obj );
     if ( required && null == transformer )
     {
-      throw new IllegalStateException(
-        "Unable to find transformer for object of type " + obj.getClass().getName() );
+      throw new IllegalStateException( "Unable to find transformer for object of type " + obj.getClass().getName() );
     }
     else
     {

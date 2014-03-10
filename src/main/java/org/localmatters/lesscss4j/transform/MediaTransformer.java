@@ -17,6 +17,7 @@ package org.localmatters.lesscss4j.transform;
 
 import java.util.Arrays;
 import java.util.List;
+import javax.annotation.Nonnull;
 import org.localmatters.lesscss4j.model.BodyElement;
 import org.localmatters.lesscss4j.model.Media;
 import org.localmatters.lesscss4j.model.RuleSet;
@@ -25,13 +26,9 @@ import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 public class MediaTransformer
   extends AbstractTransformer<Media>
 {
-  public MediaTransformer( final TransformerManager transformerManager )
+  public MediaTransformer( @Nonnull final TransformerManager transformerManager )
   {
     super( transformerManager );
-  }
-
-  public MediaTransformer()
-  {
   }
 
   public List<Media> transform( final Media media, final EvaluationContext context )

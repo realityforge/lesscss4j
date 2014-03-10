@@ -17,17 +17,14 @@ package org.localmatters.lesscss4j.transform;
 
 import java.util.Arrays;
 import java.util.List;
+import javax.annotation.Nonnull;
 import org.localmatters.lesscss4j.model.Page;
 import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 
 public class PageTransformer
   extends AbstractDeclarationContainerTransformer<Page>
 {
-  public PageTransformer()
-  {
-  }
-
-  public PageTransformer( final TransformerManager transformerManager )
+  public PageTransformer( @Nonnull final TransformerManager transformerManager )
   {
     super( transformerManager );
   }

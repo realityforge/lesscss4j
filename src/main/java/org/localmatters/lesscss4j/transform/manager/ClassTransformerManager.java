@@ -76,13 +76,6 @@ public class ClassTransformerManager
 
   public void setClassTransformerMap( final Map<Class, Transformer> classTransformerMap )
   {
-    for ( final Transformer transformer : classTransformerMap.values() )
-    {
-      if ( transformer instanceof TransformerManagerAware )
-      {
-        ( (TransformerManagerAware) transformer ).setTransformerManager( this );
-      }
-    }
     _classTransformerMap = classTransformerMap;
   }
 }

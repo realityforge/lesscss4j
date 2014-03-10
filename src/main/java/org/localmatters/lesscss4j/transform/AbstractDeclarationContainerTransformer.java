@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nonnull;
 import org.localmatters.lesscss4j.error.ErrorUtils;
 import org.localmatters.lesscss4j.error.LessCssException;
 import org.localmatters.lesscss4j.error.MixinArgumentMismatchException;
@@ -36,11 +37,7 @@ import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 public abstract class AbstractDeclarationContainerTransformer<T extends DeclarationContainer>
   extends AbstractTransformer<T>
 {
-  protected AbstractDeclarationContainerTransformer()
-  {
-  }
-
-  protected AbstractDeclarationContainerTransformer( final TransformerManager transformerManager )
+  protected AbstractDeclarationContainerTransformer( @Nonnull final TransformerManager transformerManager )
   {
     super( transformerManager );
   }
