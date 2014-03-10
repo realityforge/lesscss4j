@@ -19,24 +19,24 @@ package org.localmatters.lesscss4j.error;
 import org.localmatters.lesscss4j.model.MixinReference;
 
 public class UndefinedMixinReference extends LessCssException {
-    private MixinReference _mixin;
+    private final MixinReference _mixin;
 
-    public UndefinedMixinReference(MixinReference mixin) {
+    public UndefinedMixinReference( final MixinReference mixin) {
         super("Undefined mixin: " + mixin.getSelector().getText());
         _mixin = mixin;
     }
 
-    public UndefinedMixinReference(String message, MixinReference mixin) {
+    public UndefinedMixinReference( final String message, final MixinReference mixin) {
         super("Undefined mixin: " + message + mixin.getSelector().getText());
         _mixin = mixin;
     }
 
-    public UndefinedMixinReference(String message, MixinReference mixin, Throwable cause) {
+    public UndefinedMixinReference( final String message, final MixinReference mixin, final Throwable cause) {
         super("Undefined mixin: " + message + mixin.getSelector().getText(), cause);
         _mixin = mixin;
     }
 
-    public UndefinedMixinReference(MixinReference mixin, Throwable cause) {
+    public UndefinedMixinReference( final MixinReference mixin, final Throwable cause) {
         super("Undefined mixin: " + mixin.getSelector().getText(), cause);
         _mixin = mixin;
     }

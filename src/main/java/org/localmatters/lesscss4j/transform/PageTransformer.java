@@ -25,12 +25,12 @@ public class PageTransformer extends AbstractDeclarationContainerTransformer<Pag
     public PageTransformer() {
     }
 
-    public PageTransformer(TransformerManager transformerManager) {
+    public PageTransformer( final TransformerManager transformerManager) {
         super(transformerManager);
     }
 
-    public List<Page> transform(Page page, EvaluationContext context) {
-        List<Page> pageList = Arrays.asList(new Page(page, false));
+    public List<Page> transform( final Page page, final EvaluationContext context) {
+        final List<Page> pageList = Arrays.asList(new Page(page, false));
         doTransform(page, pageList, context);
         return pageList;
     }

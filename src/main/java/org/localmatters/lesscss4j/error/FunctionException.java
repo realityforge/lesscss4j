@@ -20,19 +20,19 @@ public class FunctionException extends ExpressionException {
     public FunctionException() {
     }
 
-    public FunctionException(String message) {
+    public FunctionException( final String message) {
         super(message);
     }
 
-    public FunctionException(String message, Throwable cause) {
+    public FunctionException( final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public FunctionException(Throwable cause) {
+    public FunctionException( final Throwable cause) {
         super(cause);
     }
 
-    public FunctionException(String message, Object... args) {
+    public FunctionException( final String message, final Object... args) {
         super(String.format(message, args));
     }
 }

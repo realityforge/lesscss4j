@@ -20,15 +20,15 @@ public abstract class ExpressionException extends LessCssException {
     public ExpressionException() {
     }
 
-    public ExpressionException(String message) {
+    public ExpressionException( final String message) {
         super(message);
     }
 
-    public ExpressionException(String message, Throwable cause) {
+    public ExpressionException( final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public ExpressionException(Throwable cause) {
+    public ExpressionException( final Throwable cause) {
         super(cause);
     }
 }

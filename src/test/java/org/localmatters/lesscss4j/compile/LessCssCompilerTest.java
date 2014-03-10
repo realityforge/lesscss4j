@@ -116,7 +116,7 @@ public class LessCssCompilerTest extends AbstractLessCssCompilerTest {
 
     public void testBigCssFileCompareToSelf()  throws IOException {
         compileAndValidate("css/big.css", "css/big.css", new Comparator<String>() {
-            public int compare(String expected, String actual) {
+            public int compare( final String expected, final String actual) {
                 assertEquals(expected.toLowerCase(), actual.toLowerCase());
                 return 0;
             }

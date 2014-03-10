@@ -20,16 +20,16 @@ public class DivideExpression extends CompoundExpression {
     public DivideExpression() {
     }
 
-    public DivideExpression(DivideExpression copy) {
+    public DivideExpression( final DivideExpression copy) {
         super(copy);
     }
 
-    public DivideExpression(Expression left, Expression right) {
+    public DivideExpression( final Expression left, final Expression right) {
         super(left, right);
     }
 
     @Override
-    public ConstantValue evaluate(ConstantValue left, ConstantValue right) {
+    public ConstantValue evaluate( final ConstantValue left, final ConstantValue right) {
         return left.divide(right);
     }
 

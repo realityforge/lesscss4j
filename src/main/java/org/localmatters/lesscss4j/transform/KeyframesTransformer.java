@@ -24,32 +24,32 @@ import org.localmatters.lesscss4j.model.RuleSet;
 import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 
 public class KeyframesTransformer extends AbstractTransformer<Keyframes> {
-    public KeyframesTransformer(TransformerManager transformerManager) {
+    public KeyframesTransformer( final TransformerManager transformerManager) {
         super(transformerManager);
     }
 
     public KeyframesTransformer() {
     }
 
-    public List<Keyframes> transform(Keyframes keyframes, EvaluationContext context) {
-        Keyframes transformed = new Keyframes(keyframes, false);
+    public List<Keyframes> transform( final Keyframes keyframes, final EvaluationContext context) {
+        final Keyframes transformed = new Keyframes(keyframes, false);
         evaluateVariables(keyframes, transformed, context);
         transformBodyElements(keyframes, transformed, context);
         return Arrays.asList(transformed);
     }
 
-    protected void transformBodyElements(Keyframes keyframes, Keyframes transformed, EvaluationContext context) {
-        EvaluationContext mediaContext = new EvaluationContext();
+    protected void transformBodyElements( final Keyframes keyframes, final Keyframes transformed, final EvaluationContext context) {
+        final EvaluationContext mediaContext = new EvaluationContext();
         mediaContext.setParentContext(context);
         mediaContext.setVariableContainer(transformed);
         mediaContext.setRuleSetContainer(transformed);
 
-        for (BodyElement element : keyframes.getBodyElements()) {
+        for ( final BodyElement element : keyframes.getBodyElements()) {
             if (element instanceof RuleSet) {
-                RuleSet ruleSet = (RuleSet) element;
-                List<RuleSet> transformedRuleSets = getTransformer(ruleSet).transform(ruleSet, mediaContext);
+                final RuleSet ruleSet = (RuleSet) element;
+                final List<RuleSet> transformedRuleSets = getTransformer(ruleSet).transform(ruleSet, mediaContext);
                 if (transformedRuleSets != null) {
-                    for (RuleSet transformedRuleSet : transformedRuleSets) {
+                    for ( final RuleSet transformedRuleSet : transformedRuleSets) {
                         transformed.addBodyElement(transformedRuleSet);
                     }
                 }

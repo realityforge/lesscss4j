@@ -21,14 +21,14 @@ import java.io.InputStream;
 import java.net.URL;
 
 public class InputStreamStyleSheetResource implements StyleSheetResource {
-    private InputStream _inputStream;
-    private URL _url;
+    private final InputStream _inputStream;
+    private final URL _url;
 
-    public InputStreamStyleSheetResource(InputStream inputStream) {
+    public InputStreamStyleSheetResource( final InputStream inputStream) {
         this(inputStream, null);
     }
 
-    public InputStreamStyleSheetResource(InputStream inputStream, URL url) {
+    public InputStreamStyleSheetResource( final InputStream inputStream, final URL url) {
         _inputStream = inputStream;
         _url = url;
     }

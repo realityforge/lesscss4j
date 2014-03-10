@@ -24,19 +24,19 @@ public class LessCssException extends RuntimeException {
     public LessCssException() {
     }
 
-    public LessCssException(String message) {
+    public LessCssException( final String message) {
         super(message);
     }
 
-    public LessCssException(String message, Throwable cause) {
+    public LessCssException( final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public LessCssException(Throwable cause) {
+    public LessCssException( final Throwable cause) {
         super(cause);
     }
 
-    public void setPosition(PositionAware position) {
+    public void setPosition( final PositionAware position) {
         _position = position;
     }
 

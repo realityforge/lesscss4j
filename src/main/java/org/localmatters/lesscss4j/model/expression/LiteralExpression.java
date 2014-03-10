@@ -29,13 +29,13 @@ public class LiteralExpression extends AbstractElement implements Expression {
     public LiteralExpression() {
     }
 
-    public LiteralExpression(LiteralExpression copy) {
+    public LiteralExpression( final LiteralExpression copy) {
         super(copy);
         _value = copy._value;
         _type = copy._type;
     }
 
-    public LiteralExpression(String value) {
+    public LiteralExpression( final String value) {
         _value = value;
     }
 
@@ -43,7 +43,7 @@ public class LiteralExpression extends AbstractElement implements Expression {
         return _value;
     }
 
-    public void setValue(String value) {
+    public void setValue( final String value) {
         _value = value;
     }
 
@@ -51,11 +51,11 @@ public class LiteralExpression extends AbstractElement implements Expression {
         return _type;
     }
 
-    public void setType(int type) {
+    public void setType( final int type) {
         _type = type;
     }
 
-    public Expression evaluate(EvaluationContext context) {
+    public Expression evaluate( final EvaluationContext context) {
         return this;
     }
 
@@ -70,7 +70,7 @@ public class LiteralExpression extends AbstractElement implements Expression {
 
     public boolean isString() {
         if (_value.length() >= 2) {
-            char first = _value.charAt(0);
+            final char first = _value.charAt(0);
             if (first == '"' || first == '\'' && first == _value.charAt(_value.length() - 1)) {
                 return true;
             }

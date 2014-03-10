@@ -20,10 +20,10 @@ import java.util.List;
 import org.antlr.runtime.tree.Tree;
 
 public class StyleSheetTree implements Tree {
-    private Tree _delegate;
-    private StyleSheetResource _resource;
+    private final Tree _delegate;
+    private final StyleSheetResource _resource;
 
-    public StyleSheetTree(Tree delegate, StyleSheetResource resource) {
+    public StyleSheetTree( final Tree delegate, final StyleSheetResource resource) {
         _delegate = delegate;
         _resource = resource;
     }
@@ -36,7 +36,7 @@ public class StyleSheetTree implements Tree {
         return _resource;
     }
 
-    public Tree getChild(int i) {
+    public Tree getChild( final int i) {
         return getDelegate().getChild(i);
     }
 
@@ -48,15 +48,15 @@ public class StyleSheetTree implements Tree {
         return getDelegate().getParent();
     }
 
-    public void setParent(Tree t) {
+    public void setParent( final Tree t) {
         getDelegate().setParent(t);
     }
 
-    public boolean hasAncestor(int ttype) {
+    public boolean hasAncestor( final int ttype) {
         return getDelegate().hasAncestor(ttype);
     }
 
-    public Tree getAncestor(int ttype) {
+    public Tree getAncestor( final int ttype) {
         return getDelegate().getAncestor(ttype);
     }
 
@@ -68,7 +68,7 @@ public class StyleSheetTree implements Tree {
         return getDelegate().getChildIndex();
     }
 
-    public void setChildIndex(int index) {
+    public void setChildIndex( final int index) {
         getDelegate().setChildIndex(index);
     }
 
@@ -76,19 +76,19 @@ public class StyleSheetTree implements Tree {
         getDelegate().freshenParentAndChildIndexes();
     }
 
-    public void addChild(Tree t) {
+    public void addChild( final Tree t) {
         getDelegate().addChild(t);
     }
 
-    public void setChild(int i, Tree t) {
+    public void setChild( final int i, final Tree t) {
         getDelegate().setChild(i, t);
     }
 
-    public Object deleteChild(int i) {
+    public Object deleteChild( final int i) {
         return getDelegate().deleteChild(i);
     }
 
-    public void replaceChildren(int startChildIndex, int stopChildIndex, Object t) {
+    public void replaceChildren( final int startChildIndex, final int stopChildIndex, final Object t) {
         getDelegate().replaceChildren(startChildIndex, stopChildIndex, t);
     }
 
@@ -100,7 +100,7 @@ public class StyleSheetTree implements Tree {
         return getDelegate().getTokenStartIndex();
     }
 
-    public void setTokenStartIndex(int index) {
+    public void setTokenStartIndex( final int index) {
         getDelegate().setTokenStartIndex(index);
     }
 
@@ -108,7 +108,7 @@ public class StyleSheetTree implements Tree {
         return getDelegate().getTokenStopIndex();
     }
 
-    public void setTokenStopIndex(int index) {
+    public void setTokenStopIndex( final int index) {
         getDelegate().setTokenStopIndex(index);
     }
 

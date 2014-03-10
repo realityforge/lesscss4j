@@ -31,7 +31,7 @@ public abstract class AbstractTransformer<T> implements Transformer<T>, Transfor
         this(null);
     }
 
-    protected AbstractTransformer(TransformerManager transformerManager) {
+    protected AbstractTransformer( final TransformerManager transformerManager) {
         _transformerManager = transformerManager;
     }
 
@@ -39,15 +39,15 @@ public abstract class AbstractTransformer<T> implements Transformer<T>, Transfor
         return _transformerManager;
     }
 
-    public void setTransformerManager(TransformerManager transformerManager) {
+    public void setTransformerManager( final TransformerManager transformerManager) {
         _transformerManager = transformerManager;
     }
 
-    protected <T> Transformer<T> getTransformer(T obj) {
+    protected <T> Transformer<T> getTransformer( final T obj) {
         return getTransformer(obj, true);
     }
 
-    protected <T> Transformer<T> getTransformer(T obj, boolean required) {
+    protected <T> Transformer<T> getTransformer( final T obj, final boolean required) {
         Transformer<T> transformer = null;
         if (getTransformerManager() != null) {
             transformer = getTransformerManager().getTransformer(obj);
@@ -62,17 +62,17 @@ public abstract class AbstractTransformer<T> implements Transformer<T>, Transfor
         }
     }
 
-    protected void evaluateVariables(VariableContainer variableContainer,
-                                     VariableContainer transformed,
-                                     EvaluationContext context) {
-        EvaluationContext varContext = new EvaluationContext(variableContainer, context);
-        for (Iterator<String> iter = variableContainer.getVariableNames(); iter.hasNext();) {
-            String varName = iter.next();
-            Expression varExpression = variableContainer.getVariable(varName);
+    protected void evaluateVariables( final VariableContainer variableContainer,
+                                     final VariableContainer transformed,
+                                     final EvaluationContext context) {
+        final EvaluationContext varContext = new EvaluationContext(variableContainer, context);
+        for ( final Iterator<String> iter = variableContainer.getVariableNames(); iter.hasNext();) {
+            final String varName = iter.next();
+            final Expression varExpression = variableContainer.getVariable(varName);
             try {
                 transformed.setVariable(varName, varExpression.evaluate(varContext));
             }
-            catch (LessCssException ex) {
+            catch ( final LessCssException ex) {
                 ErrorUtils.handleError(context.getErrorHandler(), varExpression, null, ex);
             }
         }

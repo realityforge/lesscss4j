@@ -17,7 +17,7 @@
 package org.localmatters.lesscss4j.error;
 
 public class ExceptionThrowingErrorHandler extends AbstractErrorHandler {
-    public void handleError(String message, Throwable exception) {
+    public void handleError( final String message, final Throwable exception) {
         super.handleError(message, exception);
         if (exception != null) {
             if (message != null) {

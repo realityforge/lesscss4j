@@ -20,16 +20,16 @@ public class MultiplyExpression extends CompoundExpression {
     public MultiplyExpression() {
     }
 
-    public MultiplyExpression(MultiplyExpression copy) {
+    public MultiplyExpression( final MultiplyExpression copy) {
         super(copy);
     }
 
-    public MultiplyExpression(Expression left, Expression right) {
+    public MultiplyExpression( final Expression left, final Expression right) {
         super(left, right);
     }
 
     @Override
-    public ConstantValue evaluate(ConstantValue left, ConstantValue right) {
+    public ConstantValue evaluate( final ConstantValue left, final ConstantValue right) {
         return left.multiply(right);
     }
 

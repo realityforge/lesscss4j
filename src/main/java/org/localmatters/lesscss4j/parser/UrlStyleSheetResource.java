@@ -22,14 +22,14 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class UrlStyleSheetResource implements StyleSheetResource {
-    private URL _url;
+    private final URL _url;
 
-    public UrlStyleSheetResource(URL url) {
+    public UrlStyleSheetResource( final URL url) {
         _url = url;
     }
 
     public InputStream getInputStream() throws IOException {
-        URLConnection con = getUrl().openConnection();
+        final URLConnection con = getUrl().openConnection();
         con.setUseCaches(false);
         return con.getInputStream();
     }

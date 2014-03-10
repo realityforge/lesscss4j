@@ -19,7 +19,7 @@ package org.localmatters.lesscss4j.error;
 import org.antlr.runtime.RecognitionException;
 
 public class ParseError extends LessCssException {
-    public ParseError(String message, RecognitionException exception) {
+    public ParseError( final String message, final RecognitionException exception) {
         super(message, exception);
     }
 }

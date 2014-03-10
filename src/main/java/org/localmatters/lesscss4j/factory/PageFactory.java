@@ -31,7 +31,7 @@ public class PageFactory extends AbstractObjectFactory<Page> {
         return _expressionFactory;
     }
 
-    public void setExpressionFactory(ObjectFactory<Expression> expressionFactory) {
+    public void setExpressionFactory( final ObjectFactory<Expression> expressionFactory) {
         _expressionFactory = expressionFactory;
     }
 
@@ -39,29 +39,29 @@ public class PageFactory extends AbstractObjectFactory<Page> {
         return _declarationFactory;
     }
 
-    public void setDeclarationFactory(ObjectFactory<Declaration> declarationFactory) {
+    public void setDeclarationFactory( final ObjectFactory<Declaration> declarationFactory) {
         _declarationFactory = declarationFactory;
     }
 
-    public Page create(Tree pageNode, ErrorHandler errorHandler) {
-        Page page = new Page();
+    public Page create( final Tree pageNode, final ErrorHandler errorHandler) {
+        final Page page = new Page();
         page.setLine(pageNode.getLine());
         page.setChar(pageNode.getCharPositionInLine());
         for (int idx = 0, numChildren = pageNode.getChildCount(); idx < numChildren; idx++) {
-            Tree child = pageNode.getChild(idx);
+            final Tree child = pageNode.getChild(idx);
             switch (child.getType()) {
                 case IDENT:
                     page.setPseudoPage(child.getText());
 
                 case DECLARATION:
-                    Declaration declaration = getDeclarationFactory().create(child, errorHandler);
+                    final Declaration declaration = getDeclarationFactory().create(child, errorHandler);
                     if (declaration != null) {
                         page.addDeclaration(declaration);
                     }
                     break;
 
                 case VAR:
-                    Expression expr = getExpressionFactory().create(child.getChild(1), errorHandler);
+                    final Expression expr = getExpressionFactory().create(child.getChild(1), errorHandler);
                     if (expr != null) {
                         page.setVariable(child.getChild(0).getText(), expr);
                     }

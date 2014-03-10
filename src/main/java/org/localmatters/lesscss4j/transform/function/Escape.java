@@ -26,8 +26,8 @@ import org.localmatters.lesscss4j.model.expression.LiteralExpression;
  * Usage: e("some weird IE expression")
  */
 public class Escape implements Function {
-    public Expression evaluate(String name, Expression... args) {
-        int numArgs = args.length;
+    public Expression evaluate( final String name, final Expression... args) {
+        final int numArgs = args.length;
         if (numArgs != 1) {
             throw new FunctionException("Unexpected number of arguments to function %s: %d", name, numArgs);
         }

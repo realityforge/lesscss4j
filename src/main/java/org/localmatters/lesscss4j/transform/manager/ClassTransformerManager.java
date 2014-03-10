@@ -43,16 +43,16 @@ public class ClassTransformerManager implements TransformerManager {
      *
      * @return The located transformer.  <code>null</code> if no matching transformer can be found.
      */
-    public <T> Transformer<T> getTransformer(T object) {
-        Class objClass = object.getClass();
+    public <T> Transformer<T> getTransformer( final T object) {
+        final Class objClass = object.getClass();
 
         Transformer<T> transformer = null;
 
-        Map<Class, Transformer> transformerMap = getClassTransformerMap();
+        final Map<Class, Transformer> transformerMap = getClassTransformerMap();
         if (transformerMap != null) {
             transformer = transformerMap.get(objClass);
             if (transformer == null) {
-                for (Map.Entry<Class, Transformer> entry : transformerMap.entrySet()) {
+                for ( final Map.Entry<Class, Transformer> entry : transformerMap.entrySet()) {
                     if (entry.getKey().isAssignableFrom(objClass)) {
                         transformer = entry.getValue();
                         break;
@@ -67,8 +67,8 @@ public class ClassTransformerManager implements TransformerManager {
         return _classTransformerMap;
     }
 
-    public void setClassTransformerMap(Map<Class, Transformer> classTransformerMap) {
-        for (Transformer transformer : classTransformerMap.values()) {
+    public void setClassTransformerMap( final Map<Class, Transformer> classTransformerMap) {
+        for ( final Transformer transformer : classTransformerMap.values()) {
             if (transformer instanceof TransformerManagerAware) {
                 ((TransformerManagerAware) transformer).setTransformerManager(this);
             }

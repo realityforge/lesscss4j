@@ -39,7 +39,7 @@ public class LessCssCompilerImpl implements LessCssCompiler {
         return _transformerManager;
     }
 
-    public void setTransformerManager(TransformerManager transformerManager) {
+    public void setTransformerManager( final TransformerManager transformerManager) {
         _transformerManager = transformerManager;
     }
 
@@ -47,7 +47,7 @@ public class LessCssCompilerImpl implements LessCssCompiler {
         return _styleSheetParser;
     }
 
-    public void setStyleSheetParser(StyleSheetParser styleSheetParser) {
+    public void setStyleSheetParser( final StyleSheetParser styleSheetParser) {
         _styleSheetParser = styleSheetParser;
     }
 
@@ -55,11 +55,11 @@ public class LessCssCompilerImpl implements LessCssCompiler {
         return _styleSheetWriter;
     }
 
-    public void setStyleSheetWriter(StyleSheetWriter styleSheetWriter) {
+    public void setStyleSheetWriter( final StyleSheetWriter styleSheetWriter) {
         _styleSheetWriter = styleSheetWriter;
     }
 
-    public void compile(StyleSheetResource input, OutputStream output, ErrorHandler errorHandler) throws IOException {
+    public void compile( final StyleSheetResource input, final OutputStream output, final ErrorHandler errorHandler) throws IOException {
         if (getTransformerManager() == null) {
             throw new IllegalStateException("No TransformerManager defined in compiler.");
         }
@@ -70,11 +70,11 @@ public class LessCssCompilerImpl implements LessCssCompiler {
         StyleSheet styleSheet = getStyleSheetParser().parse(input, errorHandler);
 
         if (errorHandler == null || errorHandler.getErrorCount() == 0) {
-            StyleSheetEvaluationContext context = new StyleSheetEvaluationContext();
+            final StyleSheetEvaluationContext context = new StyleSheetEvaluationContext();
             context.setResource(input);
             context.setErrorHandler(errorHandler);
 
-            Transformer<StyleSheet> styleSheetTransformer = getTransformerManager().getTransformer(styleSheet);
+            final Transformer<StyleSheet> styleSheetTransformer = getTransformerManager().getTransformer(styleSheet);
             if (styleSheetTransformer == null) {
                 throw new IllegalStateException("No transformer found for class: " + styleSheet.getClass().getName());
             }

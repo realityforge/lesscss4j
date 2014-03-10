@@ -28,11 +28,11 @@ public class AbstractErrorHandler implements ErrorHandler {
         return _context != null ? _context.toString() + ' ' : "";
     }
 
-    public void setContext(Object context) {
+    public void setContext( final Object context) {
         _context = context;
     }
 
-    public void handleError(String message, Throwable exception) {
+    public void handleError( final String message, final Throwable exception) {
         _errorCount++;
     }
 

@@ -27,21 +27,21 @@ import org.localmatters.lesscss4j.model.expression.Expression;
  * Parent container for CSS elements that contain variables and additional rule sets. (e.g. @media, @keyframes, etc)
  */
 public class BodyElementContainer extends AbstractElement implements VariableContainer, RuleSetContainer {
-    private List<BodyElement> _bodyElements = new ArrayList<BodyElement>();
-    private Map<String, Expression> _variables = new LinkedHashMap<String, Expression>();
-    private Map<Selector, List<RuleSet>> _ruleSetMap = new LinkedHashMap<Selector, List<RuleSet>>();
+    private final List<BodyElement> _bodyElements = new ArrayList<>();
+    private final Map<String, Expression> _variables = new LinkedHashMap<>();
+    private final Map<Selector, List<RuleSet>> _ruleSetMap = new LinkedHashMap<>();
     private int _ruleSetCount;
 
     public BodyElementContainer() {
     }
 
-    public BodyElementContainer(BodyElementContainer copy) {
+    public BodyElementContainer( final BodyElementContainer copy) {
         this(copy, true);
     }
 
-    public BodyElementContainer(BodyElementContainer copy, boolean copyBodyElements) {
+    public BodyElementContainer( final BodyElementContainer copy, final boolean copyBodyElements) {
         super(copy);
-        for (Map.Entry<String, Expression> entry : copy._variables.entrySet()) {
+        for ( final Map.Entry<String, Expression> entry : copy._variables.entrySet()) {
             _variables.put(entry.getKey(), entry.getValue().clone());
         }
         if (copyBodyElements) {
@@ -58,11 +58,11 @@ public class BodyElementContainer extends AbstractElement implements VariableCon
         return _bodyElements;
     }
 
-    public void addBodyElement(BodyElement bodyElement) {
+    public void addBodyElement( final BodyElement bodyElement) {
         addBodyElement(bodyElement, -1);
     }
 
-    public void addBodyElement(BodyElement bodyElement, int index) {
+    public void addBodyElement( final BodyElement bodyElement, final int index) {
         if (index >= 0) {
             _bodyElements.add(Math.min(_bodyElements.size(), index), bodyElement);
         }
@@ -70,11 +70,11 @@ public class BodyElementContainer extends AbstractElement implements VariableCon
             _bodyElements.add(bodyElement);
         }
         if (bodyElement instanceof RuleSet) {
-            RuleSet ruleSet = (RuleSet) bodyElement;
-            for (Selector selector : ruleSet.getSelectors()) {
+            final RuleSet ruleSet = (RuleSet) bodyElement;
+            for ( final Selector selector : ruleSet.getSelectors()) {
                 List<RuleSet> ruleSetList = _ruleSetMap.get(selector);
                 if (ruleSetList == null) {
-                    ruleSetList = new ArrayList<RuleSet>();
+                    ruleSetList = new ArrayList<>();
                     _ruleSetMap.put(selector, ruleSetList);
                 }
                 ruleSetList.add(ruleSet);
@@ -89,11 +89,11 @@ public class BodyElementContainer extends AbstractElement implements VariableCon
         _bodyElements.clear();
     }
 
-    public void setVariable(String name, Expression value) {
+    public void setVariable( final String name, final Expression value) {
         _variables.put(name, value);
     }
 
-    public Expression getVariable(String name) {
+    public Expression getVariable( final String name) {
         return _variables.get(name);
     }
 
@@ -101,11 +101,11 @@ public class BodyElementContainer extends AbstractElement implements VariableCon
         return _variables.keySet().iterator();
     }
 
-    public void addRuleSet(RuleSet ruleSet, int index) {
+    public void addRuleSet( final RuleSet ruleSet, final int index) {
         addBodyElement(ruleSet, index);
     }
 
-    public List<RuleSet> getRuleSet(Selector selector) {
+    public List<RuleSet> getRuleSet( final Selector selector) {
         return _ruleSetMap.get(selector);
     }
 

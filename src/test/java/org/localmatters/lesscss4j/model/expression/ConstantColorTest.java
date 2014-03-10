@@ -19,11 +19,11 @@ package org.localmatters.lesscss4j.model.expression;
 import junit.framework.TestCase;
 
 public class ConstantColorTest extends TestCase {
-    protected void validateColor(int expectedValue, ConstantColor actual) {
+    protected void validateColor( final int expectedValue, final ConstantColor actual) {
         validateColor(expectedValue, null, actual);
     }
 
-    protected void validateColor(int expectedValue, Float expectedAlpha, ConstantColor actual) {
+    protected void validateColor( final int expectedValue, final Float expectedAlpha, final ConstantColor actual) {
         assertEquals("Unexpected color value", Integer.toHexString(expectedValue), Integer.toHexString((int)actual.getValue()));
         assertEquals("Unexpected alpha value", expectedAlpha, actual.getAlpha());
     }

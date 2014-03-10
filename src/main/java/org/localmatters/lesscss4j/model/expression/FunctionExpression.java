@@ -29,19 +29,19 @@ public class FunctionExpression extends AbstractElement implements Expression {
     public FunctionExpression() {
     }
 
-    public FunctionExpression(FunctionExpression copy) {
+    public FunctionExpression( final FunctionExpression copy) {
         super(copy);
         _name = copy._name;
         _quoted = copy._quoted;
         if (copy._arguments != null) {
-            _arguments = new ArrayList<Expression>(copy._arguments.size());
-            for (Expression argument : copy._arguments) {
+            _arguments = new ArrayList<>(copy._arguments.size());
+            for ( final Expression argument : copy._arguments) {
                 _arguments.add(argument.clone());
             }
         }
     }
 
-    public FunctionExpression(String name) {
+    public FunctionExpression( final String name) {
         this();
         _name = name;
     }
@@ -50,7 +50,7 @@ public class FunctionExpression extends AbstractElement implements Expression {
         return _name;
     }
 
-    public void setName(String name) {
+    public void setName( final String name) {
         _name = name;
     }
 
@@ -58,13 +58,13 @@ public class FunctionExpression extends AbstractElement implements Expression {
         return _arguments;
     }
 
-    public void setArguments(List<Expression> arguments) {
+    public void setArguments( final List<Expression> arguments) {
         _arguments = arguments;
     }
 
-    public void addArgument(Expression arg) {
+    public void addArgument( final Expression arg) {
         if (_arguments == null) {
-            _arguments = new ArrayList<Expression>();
+            _arguments = new ArrayList<>();
         }
         _arguments.add(arg);
     }
@@ -73,23 +73,23 @@ public class FunctionExpression extends AbstractElement implements Expression {
         return _quoted;
     }
 
-    public void setQuoted(boolean quoted) {
+    public void setQuoted( final boolean quoted) {
         _quoted = quoted;
     }
 
-    public Expression evaluate(EvaluationContext context) {
+    public Expression evaluate( final EvaluationContext context) {
         return new LiteralExpression(toString(context));
     }
 
-    public String toString(EvaluationContext context) {
-        StringBuilder buf = new StringBuilder();
+    public String toString( final EvaluationContext context) {
+        final StringBuilder buf = new StringBuilder();
         if (isQuoted()) {
             buf.append("\"");
         }
         buf.append(getName());
         buf.append("(");
         if (getArguments() != null) {
-            for (Expression expression : getArguments()) {
+            for ( final Expression expression : getArguments()) {
                 if (context != null) {
                     buf.append(expression.evaluate(context).toString());
                 }

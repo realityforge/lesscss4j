@@ -23,11 +23,11 @@ public class Keyframes extends BodyElementContainer implements BodyElement {
     }
 
 
-    public Keyframes(Keyframes copy) {
+    public Keyframes( final Keyframes copy) {
         this(copy, true);
     }
 
-    public Keyframes(Keyframes copy, boolean copyBodyElements) {
+    public Keyframes( final Keyframes copy, final boolean copyBodyElements) {
         super(copy, copyBodyElements);
         _name = copy._name;
     }
@@ -36,7 +36,7 @@ public class Keyframes extends BodyElementContainer implements BodyElement {
         return _name;
     }
 
-    public void setName(String name) {
+    public void setName( final String name) {
         _name = name;
     }
 

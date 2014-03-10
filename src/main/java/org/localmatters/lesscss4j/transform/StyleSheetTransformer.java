@@ -26,12 +26,12 @@ public class StyleSheetTransformer extends AbstractTransformer<StyleSheet> {
     public StyleSheetTransformer() {
     }
 
-    public StyleSheetTransformer(TransformerManager transformerManager) {
+    public StyleSheetTransformer( final TransformerManager transformerManager) {
         super(transformerManager);
     }
 
-    public List<StyleSheet> transform(StyleSheet styleSheet, EvaluationContext context) {
-        StyleSheet transformed = new StyleSheet();
+    public List<StyleSheet> transform( final StyleSheet styleSheet, final EvaluationContext context) {
+        final StyleSheet transformed = new StyleSheet();
 
         processImports(styleSheet, transformed, context);
         evaluateVariables(styleSheet, transformed, context);
@@ -41,29 +41,29 @@ public class StyleSheetTransformer extends AbstractTransformer<StyleSheet> {
         return Arrays.asList(transformed);
     }
 
-    protected void processImports(StyleSheet styleSheet, StyleSheet transformed, EvaluationContext context) {
+    protected void processImports( final StyleSheet styleSheet, final StyleSheet transformed, final EvaluationContext context) {
         // Imports are handled by the Parser.  Don't need to do anything since
         // we don't want to output any @import statements in the writer.
     }
 
-    protected void transformBodyElements(StyleSheet styleSheet, StyleSheet transformed, EvaluationContext context) {
-        EvaluationContext styleContext = new EvaluationContext();
+    protected void transformBodyElements( final StyleSheet styleSheet, final StyleSheet transformed, final EvaluationContext context) {
+        final EvaluationContext styleContext = new EvaluationContext();
         styleContext.setParentContext(context);
         styleContext.setVariableContainer(transformed);
         styleContext.setRuleSetContainer(transformed);
 
-        List<BodyElement> elements = styleSheet.getBodyElements();
-        for (BodyElement element : elements) {
-            List<? extends BodyElement> transformedElementList = transformBodyElement(element, styleContext);
+        final List<BodyElement> elements = styleSheet.getBodyElements();
+        for ( final BodyElement element : elements) {
+            final List<? extends BodyElement> transformedElementList = transformBodyElement(element, styleContext);
             if (transformedElementList != null) {
-                for (BodyElement transformedElement : transformedElementList) {
+                for ( final BodyElement transformedElement : transformedElementList) {
                     transformed.addBodyElement(transformedElement);
                 }
             }
         }
     }
 
-    private List<? extends BodyElement> transformBodyElement(BodyElement element, EvaluationContext styleContext) {
+    private List<? extends BodyElement> transformBodyElement( final BodyElement element, final EvaluationContext styleContext) {
         return getTransformer(element).transform(element, styleContext);
     }
 }

@@ -31,7 +31,7 @@ public class Grayscale extends Desaturate {
     }
 
     @Override
-    protected Expression evaluate(ConstantColor color, ConstantNumber value) {
+    protected Expression evaluate( final ConstantColor color, final ConstantNumber value) {
         return super.evaluate(color, new ConstantNumber(100, "%"));
     }
 }

@@ -22,11 +22,11 @@ public class Page extends DeclarationContainer implements BodyElement {
     public Page() {
     }
 
-    public Page(Page copy) {
+    public Page( final Page copy) {
         this(copy, true);
     }
 
-    public Page(Page copy, boolean copyDeclarations) {
+    public Page( final Page copy, final boolean copyDeclarations) {
         super(copy, copyDeclarations);
         _pseudoPage = copy._pseudoPage;
     }
@@ -35,7 +35,7 @@ public class Page extends DeclarationContainer implements BodyElement {
         return _pseudoPage;
     }
 
-    public void setPseudoPage(String pseudoPage) {
+    public void setPseudoPage( final String pseudoPage) {
         _pseudoPage = pseudoPage;
     }
 

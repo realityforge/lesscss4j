@@ -17,19 +17,19 @@
 package org.localmatters.lesscss4j.error;
 
 public class ImportException extends LessCssException {
-    private String _url;
+    private final String _url;
 
-    public ImportException(String url) {
+    public ImportException( final String url) {
         super("Import error: " + url);
         _url = url;
     }
 
-    public ImportException(String url, Throwable exception) {
+    public ImportException( final String url, final Throwable exception) {
         super("Import error: " + url, exception);
         _url = url;
     }
 
-    public ImportException(String message, String url, Throwable exception) {
+    public ImportException( final String message, final String url, final Throwable exception) {
         super("Import error: " + url + ": " + message, exception);
         _url = url;
     }

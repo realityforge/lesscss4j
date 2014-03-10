@@ -28,29 +28,29 @@ public abstract class CompoundExpression extends AbstractElement implements Expr
         this(null, null);
     }
 
-    public CompoundExpression(Expression left, Expression right) {
+    public CompoundExpression( final Expression left, final Expression right) {
         setLeft(left);
         setRight(right);
     }
 
-    public CompoundExpression(CompoundExpression copy) {
+    public CompoundExpression( final CompoundExpression copy) {
         super(copy);
         _left = copy._left.clone();
         _right = copy._right.clone();
     }
 
-    public Expression evaluate(EvaluationContext context) {
-        Expression left = getLeft().evaluate(context);
-        Expression right = getRight().evaluate(context);
+    public Expression evaluate( final EvaluationContext context) {
+        final Expression left = getLeft().evaluate(context);
+        final Expression right = getRight().evaluate(context);
         if (left instanceof ConstantExpression && right instanceof ConstantExpression) {
             try {
-                ConstantValue result = evaluate(((ConstantExpression) left).getValue(),
+                final ConstantValue result = evaluate(((ConstantExpression) left).getValue(),
                                                 ((ConstantExpression) right).getValue());
                 if (result != null) {
                     return new ConstantExpression(result);
                 }
             }
-            catch (LessCssException ex) {
+            catch ( final LessCssException ex) {
                 if (ex.getPosition() == null) {
                     ex.setPosition(left);
                 }
@@ -60,7 +60,7 @@ public abstract class CompoundExpression extends AbstractElement implements Expr
         return this;
     }
 
-    public ConstantValue evaluate(ConstantValue left, ConstantValue right) {
+    public ConstantValue evaluate( final ConstantValue left, final ConstantValue right) {
         return null;
     }
 
@@ -68,7 +68,7 @@ public abstract class CompoundExpression extends AbstractElement implements Expr
         return _left;
     }
 
-    public void setLeft(Expression left) {
+    public void setLeft( final Expression left) {
         _left = left;
     }
 
@@ -76,7 +76,7 @@ public abstract class CompoundExpression extends AbstractElement implements Expr
         return _right;
     }
 
-    public void setRight(Expression right) {
+    public void setRight( final Expression right) {
         _right = right;
     }
 

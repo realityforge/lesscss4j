@@ -21,24 +21,24 @@ import org.localmatters.lesscss4j.parser.antlr.LessCssParser;
 import static org.localmatters.lesscss4j.parser.antlr.LessCssLexer.*;
 
 public abstract class AbstractObjectFactory<T> implements ObjectFactory<T> {
-    protected String formatNode(String prefix, Tree node) {
+    protected String formatNode( final String prefix, final Tree node) {
         return String.format("%s [%d=%s] %d:%d - %s",
                              prefix, node.getType(), LessCssParser.tokenNames[node.getType()],
                              node.getLine(), node.getCharPositionInLine(),
                              node.toString());
     }
 
-    protected void handleUnexpectedChild(String prefix, Tree child) {
-        int type = child.getType();
+    protected void handleUnexpectedChild( final String prefix, final Tree child) {
+        final int type = child.getType();
         if (type != WS && type != EOF) {
             throw new IllegalStateException(formatNode(prefix, child));
         }
     }
 
-    protected String concatChildNodeText(Tree parent) {
-        StringBuilder buf = new StringBuilder();
+    protected String concatChildNodeText( final Tree parent) {
+        final StringBuilder buf = new StringBuilder();
         for (int idx = 0, numChildren = parent.getChildCount(); idx < numChildren; idx++) {
-            Tree child = parent.getChild(idx);
+            final Tree child = parent.getChild(idx);
             if (child.getType() == WS) {
                 // Compress all whitespace into a single space
                 buf.append(' ');

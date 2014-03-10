@@ -23,13 +23,13 @@ public class Selector extends AbstractElement implements Cloneable {
         this((String)null);
     }
 
-    public Selector(String text) {
+    public Selector( final String text) {
         _text = text;
     }
 
-    public Selector(Selector... selectors) {
-        StringBuilder buf = new StringBuilder();
-        for (Selector selector : selectors) {
+    public Selector( final Selector... selectors) {
+        final StringBuilder buf = new StringBuilder();
+        for ( final Selector selector : selectors) {
             if (buf.length() > 0 && selector.getText().charAt(0) != ':') {
                 buf.append(' ');
             }
@@ -42,7 +42,7 @@ public class Selector extends AbstractElement implements Cloneable {
         return _text;
     }
 
-    public void setText(String text) {
+    public void setText( final String text) {
         _text = text;
     }
 
@@ -52,11 +52,11 @@ public class Selector extends AbstractElement implements Cloneable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals( final Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
 
-        Selector that = (Selector) obj;
+        final Selector that = (Selector) obj;
         return getText().equals(that.getText());
     }
 

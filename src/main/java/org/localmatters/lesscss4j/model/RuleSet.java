@@ -25,25 +25,25 @@ import org.localmatters.lesscss4j.model.expression.Expression;
 
 public class RuleSet extends DeclarationContainer implements BodyElement, Cloneable {
     private List<Selector> _selectors;
-    private Map<String, Expression> _arguments = new LinkedHashMap<String, Expression>();
+    private final Map<String, Expression> _arguments = new LinkedHashMap<>();
 
     public RuleSet() {
     }
 
-    public RuleSet(RuleSet copy) {
+    public RuleSet( final RuleSet copy) {
         this(copy, true);
     }
 
-    public RuleSet(RuleSet copy, boolean copyDeclarations) {
+    public RuleSet( final RuleSet copy, final boolean copyDeclarations) {
         super(copy, copyDeclarations);
         if (copy._selectors != null) {
-            _selectors = new ArrayList<Selector>(copy._selectors.size());
-            for (Selector selector : copy._selectors) {
+            _selectors = new ArrayList<>(copy._selectors.size());
+            for ( final Selector selector : copy._selectors) {
                 _selectors.add(selector.clone());
             }
         }
 
-        for (Map.Entry<String, Expression> entry : copy._arguments.entrySet()) {
+        for ( final Map.Entry<String, Expression> entry : copy._arguments.entrySet()) {
             _arguments.put(entry.getKey(), entry.getValue().clone());
         }
     }
@@ -52,13 +52,13 @@ public class RuleSet extends DeclarationContainer implements BodyElement, Clonea
         return _selectors;
     }
 
-    public void setSelectors(List<Selector> selectors) {
+    public void setSelectors( final List<Selector> selectors) {
         _selectors = selectors;
     }
 
-    public void addSelector(Selector selector) {
+    public void addSelector( final Selector selector) {
         if (_selectors == null) {
-            _selectors = new ArrayList<Selector>();
+            _selectors = new ArrayList<>();
         }
         _selectors.add(selector);
     }
@@ -67,7 +67,7 @@ public class RuleSet extends DeclarationContainer implements BodyElement, Clonea
         return _arguments;
     }
 
-    public void addArgument(String name, Expression value) {
+    public void addArgument( final String name, final Expression value) {
         _arguments.put(name, value);
     }
 
@@ -78,8 +78,8 @@ public class RuleSet extends DeclarationContainer implements BodyElement, Clonea
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
-        for (Selector selector : _selectors) {
+        final StringBuilder buf = new StringBuilder();
+        for ( final Selector selector : _selectors) {
             if (buf.length() > 0) {
                 buf.append(", ");
             }

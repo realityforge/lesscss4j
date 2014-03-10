@@ -18,7 +18,6 @@ package org.localmatters.lesscss4j.transform;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.ListIterator;
 import org.localmatters.lesscss4j.error.ErrorUtils;
 import org.localmatters.lesscss4j.error.LessCssException;
 import org.localmatters.lesscss4j.model.Declaration;
@@ -31,35 +30,35 @@ public class DeclarationTransformer extends AbstractTransformer<Declaration> {
     public DeclarationTransformer() {
     }
 
-    public DeclarationTransformer(TransformerManager transformerManager) {
+    public DeclarationTransformer( final TransformerManager transformerManager) {
         super(transformerManager);
     }
 
-    public List<Declaration> transform(Declaration declaration, EvaluationContext context) {
+    public List<Declaration> transform( final Declaration declaration, final EvaluationContext context) {
         if (declaration.getValues() == null) return null;
 
-        Declaration transformed = new Declaration(declaration, false);
-        for (ListIterator<Object> iter = declaration.getValues().listIterator(); iter.hasNext();) {
-            Object value = iter.next();
-            value = transformDeclarationValue(value, declaration, context);
-            transformed.addValue(value);
-        }
+        final Declaration transformed = new Declaration(declaration, false);
+      for ( Object value : declaration.getValues() )
+      {
+        value = transformDeclarationValue( value, declaration, context );
+        transformed.addValue( value );
+      }
 
         return Arrays.asList(transformed);
     }
 
-    protected Object transformDeclarationValue(Object value, Declaration declaration, EvaluationContext context) {
+    protected Object transformDeclarationValue(Object value, final Declaration declaration, final EvaluationContext context) {
         if (value instanceof Expression) {
             try {
                 Expression expression = (Expression) value;
-                Transformer<Expression> expressionTransformer = getTransformer(expression, false);
+                final Transformer<Expression> expressionTransformer = getTransformer(expression, false);
                 if (expressionTransformer != null) {
                     // Can't think of a reason why we'd ever want to return more than one expression.
                     expression = expressionTransformer.transform(expression, context).get(0);
                 }
                 value = expression.evaluate(context);
             }
-            catch (LessCssException ex) {
+            catch ( final LessCssException ex) {
                 ErrorUtils.handleError(context.getErrorHandler(), (PositionAware) value, ex);
             }
         }

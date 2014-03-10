@@ -45,7 +45,7 @@ public class LessCssStyleSheetParser implements StyleSheetParser, StyleSheetTree
         return _defaultEncoding;
     }
 
-    public void setDefaultEncoding(String defaultEncoding) {
+    public void setDefaultEncoding( final String defaultEncoding) {
         _defaultEncoding = defaultEncoding;
     }
 
@@ -53,7 +53,7 @@ public class LessCssStyleSheetParser implements StyleSheetParser, StyleSheetTree
         return _initialBufferSize;
     }
 
-    public void setInitialBufferSize(int initialBufferSize) {
+    public void setInitialBufferSize( final int initialBufferSize) {
         _initialBufferSize = initialBufferSize;
     }
 
@@ -61,7 +61,7 @@ public class LessCssStyleSheetParser implements StyleSheetParser, StyleSheetTree
         return _readBufferSize;
     }
 
-    public void setReadBufferSize(int readBufferSize) {
+    public void setReadBufferSize( final int readBufferSize) {
         _readBufferSize = readBufferSize;
     }
 
@@ -72,18 +72,18 @@ public class LessCssStyleSheetParser implements StyleSheetParser, StyleSheetTree
         return _styleSheetFactory;
     }
 
-    public void setStyleSheetFactory(ObjectFactory<StyleSheet> styleSheetFactory) {
+    public void setStyleSheetFactory( final ObjectFactory<StyleSheet> styleSheetFactory) {
         _styleSheetFactory = styleSheetFactory;
     }
 
     protected ObjectFactory<StyleSheet> createDefaultStyleSheetFactory() {
-        StyleSheetFactory styleSheetObjectFactory = (StyleSheetFactory) StyleSheetFactory.createDefaultObjectFactory();
+        final StyleSheetFactory styleSheetObjectFactory = (StyleSheetFactory) StyleSheetFactory.createDefaultObjectFactory();
         styleSheetObjectFactory.setStyleSheetTreeParser(this);
         return styleSheetObjectFactory;
     }
 
-    public StyleSheet parse(StyleSheetResource input, ErrorHandler errorHandler) throws IOException {
-        Tree parseTree = parseTree(input, errorHandler);
+    public StyleSheet parse( final StyleSheetResource input, final ErrorHandler errorHandler) throws IOException {
+        final Tree parseTree = parseTree(input, errorHandler);
         StyleSheet styleSheet = null;
         if (parseTree != null) {
             styleSheet = getStyleSheetFactory().create(new StyleSheetTree(parseTree, input), errorHandler);
@@ -91,46 +91,50 @@ public class LessCssStyleSheetParser implements StyleSheetParser, StyleSheetTree
         return styleSheet;
     }
 
-    public Tree parseTree(StyleSheetResource input, ErrorHandler errorHandler) throws IOException {
-        LessCssLexer lexer = new LessCssLexer(createANTLRInputStream(input.getInputStream()));
-        LessCssParser parser = new LessCssParser(new CommonTokenStream(lexer));
+    public Tree parseTree( final StyleSheetResource input, final ErrorHandler errorHandler) throws IOException {
+        final LessCssLexer lexer = new LessCssLexer(createANTLRInputStream(input.getInputStream()));
+        final LessCssParser parser = new LessCssParser(new CommonTokenStream(lexer));
         try {
             parser.setErrorHandler(errorHandler);
-            LessCssParser.styleSheet_return result = parser.styleSheet();
+            final LessCssParser.styleSheet_return result = parser.styleSheet();
             Tree parseTree = null;
             if (parser.getErrorCount() == 0) {
                 parseTree = (Tree) result.getTree();
             }
             return parseTree;
         }
-        catch (RecognitionException e) {
+        catch ( final RecognitionException e) {
             ErrorUtils.handleError(errorHandler, e, parser);
         }
-        catch (LessCssException e) {
+        catch ( final LessCssException e) {
             ErrorUtils.handleError(errorHandler, e);
         }
         return null;
     }
 
-    protected ANTLRInputStream createANTLRInputStream(InputStream input) throws IOException {
+    protected ANTLRInputStream createANTLRInputStream( final InputStream input) throws IOException {
         String encoding = null;
 
         // Read a buffer of data to see if we can find the @charset symbol in the beginning of the file.
         // Otherwise just use the default encoding.
-        PushbackInputStream pushbackStream = new PushbackInputStream(input, getReadBufferSize());
-        byte[] buf = new byte[getReadBufferSize()];
-        int len = pushbackStream.read(buf, 0, buf.length);
-        if (len >= 0) {
-            pushbackStream.unread(buf, 0, len);
-            String bufStr = new String(buf, 0, len, "ASCII");
-            encoding = parseCharset(bufStr);
+      try ( final PushbackInputStream pushbackStream = new PushbackInputStream( input, getReadBufferSize() ) )
+      {
+        final byte[] buf = new byte[ getReadBufferSize() ];
+        final int len = pushbackStream.read( buf, 0, buf.length );
+        if ( len >= 0 )
+        {
+          pushbackStream.unread( buf, 0, len );
+          final String bufStr = new String( buf, 0, len, "ASCII" );
+          encoding = parseCharset( bufStr );
         }
 
-        if (encoding == null) {
-            encoding = getDefaultEncoding();
+        if ( encoding == null )
+        {
+          encoding = getDefaultEncoding();
         }
 
-        return new ANTLRInputStream(pushbackStream, getInitialBufferSize(), getReadBufferSize(), encoding);
+        return new ANTLRInputStream( pushbackStream, getInitialBufferSize(), getReadBufferSize(), encoding );
+      }
     }
 
     /**
@@ -139,7 +143,7 @@ public class LessCssStyleSheetParser implements StyleSheetParser, StyleSheetTree
      * @return The parsed charset name
      * @throws IOException
      */
-    protected String parseCharset(String buffer) throws IOException {
+    protected String parseCharset( final String buffer) throws IOException {
         int idx = 0;
         boolean comment = false;
         while (idx < buffer.length()) {
@@ -176,13 +180,13 @@ public class LessCssStyleSheetParser implements StyleSheetParser, StyleSheetTree
                 }
 
                 // We should be at either a single quote or double quote
-                char quoteChar = buffer.charAt(idx++);
+                final char quoteChar = buffer.charAt(idx++);
                 if (quoteChar != '\'' && quoteChar != '"') {
                     throw new IOException("Invalid " + CHARSET_SYM + " specification");
                 }
 
                 // Find the closing quote
-                int startIdx = idx;
+                final int startIdx = idx;
                 while (idx < buffer.length() &&
                        NEWLINE_CHARS.indexOf(buffer.charAt(idx)) < 0 &&
                        buffer.charAt(idx) != quoteChar) {

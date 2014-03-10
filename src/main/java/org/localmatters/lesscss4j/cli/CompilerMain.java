@@ -83,11 +83,11 @@ public class CompilerMain
     new CLOptionDescriptor( "single-line",
                             CLOptionDescriptor.ARGUMENT_DISALLOWED,
                             SINGLE_LINE_OPT,
-                            "Place single declarations rulesets on one line" ),
+                            "Place single declarations rule sets on one line" ),
     new CLOptionDescriptor( "no-single-line",
                             CLOptionDescriptor.ARGUMENT_DISALLOWED,
                             NO_SINGLE_LINE_OPT,
-                            "Don't place single declaration rulesets on one line" ),
+                            "Don't place single declaration rule sets on one line" ),
     new CLOptionDescriptor( "brace-newline",
                             CLOptionDescriptor.ARGUMENT_DISALLOWED,
                             BRACE_NEWLINE_OPT,
@@ -103,22 +103,22 @@ public class CompilerMain
   private String _inputFilename;
   private String _outputFilename;
 
-  public PrettyPrintOptions getPrettyPrintOptions()
+  PrettyPrintOptions getPrettyPrintOptions()
   {
     return _prettyPrintOptions;
   }
 
-  public void setPrettyPrintOptions( final PrettyPrintOptions prettyPrintOptions )
+  void setPrettyPrintOptions( final PrettyPrintOptions prettyPrintOptions )
   {
     _prettyPrintOptions = prettyPrintOptions;
   }
 
-  public boolean isPrettyPrint()
+  boolean isPrettyPrint()
   {
     return _prettyPrint;
   }
 
-  public void setPrettyPrint( boolean prettyPrint )
+  void setPrettyPrint( final boolean prettyPrint )
   {
     _prettyPrint = prettyPrint;
   }
@@ -141,12 +141,12 @@ public class CompilerMain
     System.out.println( msg.toString() );
   }
 
-  protected void printVersion()
+  void printVersion()
   {
     System.out.println( "jlessc <todo:VERSION>" );
   }
 
-  public int run( final String[] args )
+  int run( final String[] args )
   {
     if ( !processOptions( args ) )
     {
@@ -157,9 +157,9 @@ public class CompilerMain
     {
       compile();
     }
-    catch ( IOException io )
+    catch ( final Throwable t )
     {
-      System.err.println( io.toString() );
+      System.err.println( t.toString() );
       return -1;
     }
 
@@ -234,12 +234,12 @@ public class CompilerMain
         }
         case BRACE_NEWLINE_OPT:
         {
-          formatOptions.setSingleDeclarationOnOneLine( true );
+          formatOptions.setOpeningBraceOnNewLine( true );
           break;
         }
         case NO_BRACE_NEWLINE_OPT:
         {
-          formatOptions.setSingleDeclarationOnOneLine( false );
+          formatOptions.setOpeningBraceOnNewLine( false );
           break;
         }
         case INDENT_OPT:
@@ -273,30 +273,27 @@ public class CompilerMain
     return true;
   }
 
-  public void compile()
-    throws IOException
+  void compile()
   {
     compile( _inputFilename, _outputFilename );
   }
 
-  public void compile( String inputFilename, String outputFilename )
-    throws IOException
+  void compile( final String inputFilename, String outputFilename )
   {
-    StyleSheetResource input;
     OutputStream output = null;
     boolean outputFileExisted = false;
     File outputFile = null;
     try
     {
-      // todo: verify that inputfilename and outputfilename don't correspond to directories
+      // todo: verify that inputFilename and outputFilename don't correspond to directories
 
       // Generate an output filename from the input filename
-      if ( outputFilename == null && inputFilename != null )
+      if ( null == outputFilename && null != inputFilename )
       {
         outputFilename = generateOutputFilename( inputFilename );
       }
 
-      if ( outputFilename != null )
+      if ( null != outputFilename )
       {
         outputFile = new File( outputFilename );
         if ( outputFile.exists() )
@@ -305,25 +302,24 @@ public class CompilerMain
         }
       }
 
-      input = createInput( inputFilename );
+      final StyleSheetResource input = createInput( inputFilename );
       output = createOutputStream( outputFilename );
 
-
-      DefaultLessCssCompilerFactory factory = new DefaultLessCssCompilerFactory();
+      final DefaultLessCssCompilerFactory factory = new DefaultLessCssCompilerFactory();
       factory.setPrettyPrintEnabled( isPrettyPrint() );
 
-      if ( isPrettyPrint() && getPrettyPrintOptions() != null )
+      if ( isPrettyPrint() && null != getPrettyPrintOptions() )
       {
         factory.setPrettyPrintOptions( getPrettyPrintOptions() );
       }
 
-      LessCssCompiler compiler = factory.create();
+      final LessCssCompiler compiler = factory.create();
       compiler.compile( input, output, null );
     }
-    catch ( IOException ex )
+    catch ( final IOException ioe )
     {
       // delete the bogus output file if we're not writing to stdout and it didn't exist before.
-      if ( outputFile != null && !outputFileExisted )
+      if ( null != outputFile && !outputFileExisted )
       {
         FileUtils.deleteQuietly( outputFile );
       }
@@ -334,7 +330,7 @@ public class CompilerMain
     }
   }
 
-  protected OutputStream createOutputStream( String outputFilename )
+  OutputStream createOutputStream( final String outputFilename )
     throws IOException
   {
     if ( outputFilename == null || "-".equals( outputFilename ) )
@@ -347,8 +343,7 @@ public class CompilerMain
     }
   }
 
-  protected StyleSheetResource createInput( String inputFilename )
-    throws IOException
+  StyleSheetResource createInput( final String inputFilename )
   {
     if ( inputFilename == null || inputFilename.equals( "-" ) )
     {
@@ -360,11 +355,11 @@ public class CompilerMain
     }
   }
 
-  protected String generateOutputFilename( final String inputFilename )
+  private String generateOutputFilename( final String inputFilename )
   {
-    String extension = FilenameUtils.getExtension( inputFilename );
+    final String extension = FilenameUtils.getExtension( inputFilename );
 
-    StringBuilder outputFilename = new StringBuilder();
+    final StringBuilder outputFilename = new StringBuilder();
     outputFilename.append( inputFilename, 0, inputFilename.length() - extension.length() );
     if ( outputFilename.charAt( outputFilename.length() - 1 ) == '.' )
     {
@@ -382,7 +377,7 @@ public class CompilerMain
     return outputFilename.toString();
   }
 
-  public static void main( String[] args )
+  public static void main( final String[] args )
   {
     System.exit( new CompilerMain().run( args ) );
   }

@@ -22,25 +22,25 @@ import org.localmatters.lesscss4j.model.PositionAware;
 
 public abstract class ErrorUtils {
 
-    public static void handleError(ErrorHandler errorHandler, LessCssException error) {
+    public static void handleError( final ErrorHandler errorHandler, final LessCssException error) {
         handleError(errorHandler, null, null, error);
 
     }
 
-    public static void handleError(ErrorHandler errorHandler, String message, LessCssException error) {
+    public static void handleError( final ErrorHandler errorHandler, final String message, final LessCssException error) {
         handleError(errorHandler, null, message, error);
     }
 
-    public static void handleError(ErrorHandler errorHandler,
-                                   PositionAware pos,
-                                   LessCssException error) {
+    public static void handleError( final ErrorHandler errorHandler,
+                                   final PositionAware pos,
+                                   final LessCssException error) {
         handleError(errorHandler, pos, null, error);
     }
 
-    public static void handleError(ErrorHandler errorHandler,
+    public static void handleError( final ErrorHandler errorHandler,
                                    PositionAware pos,
                                    String message,
-                                   LessCssException error) {
+                                   final LessCssException error) {
         if (errorHandler != null) {
             if (error.getPosition() != null) {
                 pos = error.getPosition();
@@ -56,13 +56,13 @@ public abstract class ErrorUtils {
         }
     }
 
-    public static void handleError(ErrorHandler errorHandler, RecognitionException error, BaseRecognizer parser) {
+    public static void handleError( final ErrorHandler errorHandler, final RecognitionException error, final BaseRecognizer parser) {
         handleError(errorHandler, null, null,
                     new ParseError(formatPosition(error.line, error.charPositionInLine) + " - " +
                                    parser.getErrorMessage(error, parser.getTokenNames()), error));
     }
 
-    public static String formatPosition(int lineNum, int charPos) {
+    public static String formatPosition( final int lineNum, final int charPos) {
         return "[" + lineNum + ":" + charPos + "]";
     }
 }

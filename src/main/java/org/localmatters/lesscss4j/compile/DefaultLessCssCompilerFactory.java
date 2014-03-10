@@ -89,7 +89,7 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
      *
      * @param functions Map of function name to {@link Function} instances.
      */
-    public void setFunctions(Map<String, Function> functions) {
+    public void setFunctions( final Map<String, Function> functions) {
         _functions = functions;
     }
 
@@ -103,9 +103,9 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
      * @param name     Name of the function
      * @param function The function instance to associate with the given name.
      */
-    public void addFunction(String name, Function function) {
+    public void addFunction( final String name, final Function function) {
         if (_functions == null) {
-            _functions = new LinkedHashMap<String, Function>();
+            _functions = new LinkedHashMap<>();
         }
         _functions.put(name, function);
     }
@@ -117,7 +117,7 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
      *
      * @param transformerManager The custom {@link TransformerManager} to use.
      */
-    public void setTransformerManager(TransformerManager transformerManager) {
+    public void setTransformerManager( final TransformerManager transformerManager) {
         _transformerManager = transformerManager;
     }
 
@@ -128,7 +128,7 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
      *
      * @param styleSheetResourceLoader The custom resource loader to use.
      */
-    public void setStyleSheetResourceLoader(StyleSheetResourceLoader styleSheetResourceLoader) {
+    public void setStyleSheetResourceLoader( final StyleSheetResourceLoader styleSheetResourceLoader) {
         _styleSheetResourceLoader = styleSheetResourceLoader;
     }
 
@@ -139,7 +139,7 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
      *
      * @param defaultEncoding The default encoding to use.  UTF-8 by default.
      */
-    public void setDefaultEncoding(String defaultEncoding) {
+    public void setDefaultEncoding( final String defaultEncoding) {
         _defaultEncoding = defaultEncoding;
     }
 
@@ -149,7 +149,7 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
      *
      * @param initialBufferSize The initial size of the buffer.
      */
-    public void setInitialBufferSize(Integer initialBufferSize) {
+    public void setInitialBufferSize( final Integer initialBufferSize) {
         _initialBufferSize = initialBufferSize;
     }
 
@@ -158,7 +158,7 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
      *
      * @param readBufferSize The number of bytes to read at a time.
      */
-    public void setReadBufferSize(Integer readBufferSize) {
+    public void setReadBufferSize( final Integer readBufferSize) {
         _readBufferSize = readBufferSize;
     }
 
@@ -167,7 +167,7 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
      *
      * @param prettyPrintEnabled Set to true if pretty printing should be enabled.  If null, the default of the
      */
-    public void setPrettyPrintEnabled(Boolean prettyPrintEnabled) {
+    public void setPrettyPrintEnabled( final Boolean prettyPrintEnabled) {
         _prettyPrintEnabled = prettyPrintEnabled;
     }
 
@@ -176,7 +176,7 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
      *
      * @param compressionEnabled If non-null and set to true, enable compression (i.e. disable pretty printing)
      */
-    public void setCompressionEnabled(Boolean compressionEnabled) {
+    public void setCompressionEnabled( final Boolean compressionEnabled) {
         setPrettyPrintEnabled(compressionEnabled == null ? null : !compressionEnabled);
     }
 
@@ -185,7 +185,7 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
      *
      * @param prettyPrintOptions Options for pretty-printing CSS.
      */
-    public void setPrettyPrintOptions(PrettyPrintOptions prettyPrintOptions) {
+    public void setPrettyPrintOptions( final PrettyPrintOptions prettyPrintOptions) {
         _prettyPrintOptions = prettyPrintOptions;
     }
 
@@ -193,10 +193,8 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
      * Provide custom {@link Transformer} instances.  The elements in this map will override the values used when
      * creating the default {@link TransformerManager}.  If a custom {@link TransformerManager} is specified using
      * {@link #setTransformerManager}, this map is ignored.
-     *
-     * @param transformers
      */
-    public void setTransformers(Map<Class, Transformer> transformers) {
+    public void setTransformers( final Map<Class, Transformer> transformers) {
         _transformers = transformers;
     }
 
@@ -204,7 +202,7 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
      * Creates and initializes the compiler
      */
     public LessCssCompiler create() {
-        LessCssCompilerImpl compiler = new LessCssCompilerImpl();
+        final LessCssCompilerImpl compiler = new LessCssCompilerImpl();
         initializeCompiler(compiler);
         return compiler;
     }
@@ -214,7 +212,7 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
      *
      * @param compiler The compiler to initialize.
      */
-    protected void initializeCompiler(LessCssCompilerImpl compiler) {
+    protected void initializeCompiler( final LessCssCompilerImpl compiler) {
         initializeParser(compiler.getStyleSheetParser());
         initializeWriter(compiler.getStyleSheetWriter());
         TransformerManager transformerManager = _transformerManager;
@@ -231,7 +229,7 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
      * @return The default {@link TransformerManager} instance.
      */
     protected TransformerManager createDefaultTransformManager() {
-        ClassTransformerManager transformerManager = new ClassTransformerManager();
+        final ClassTransformerManager transformerManager = new ClassTransformerManager();
         transformerManager.setClassTransformerMap(createDefaultClassTransformerMap());
         return transformerManager;
     }
@@ -243,7 +241,7 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
      * called when using the default {@link TransformerManager}.
      */
     protected Map<Class, Transformer> createDefaultClassTransformerMap() {
-        Map<Class, Transformer> transformerMap = new LinkedHashMap<Class, Transformer>();
+        final Map<Class, Transformer> transformerMap = new LinkedHashMap<>();
         transformerMap.put(Declaration.class, new DeclarationTransformer());
         transformerMap.put(RuleSet.class, new RuleSetTransformer());
         transformerMap.put(Page.class, new PageTransformer());
@@ -266,7 +264,7 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
      * potentially overriding default functions.
      */
     protected Transformer createFunctionTransformer() {
-        Map<String, Function> functions = new HashMap<String, Function>();
+        final Map<String, Function> functions = new HashMap<>();
         functions.put("%", new Format());
         functions.put("e", new Escape());
         functions.put("lighten", new Lighten());
@@ -274,7 +272,7 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
         functions.put("saturate", new Saturate());
         functions.put("desaturate", new Desaturate());
 
-        Grayscale grayscale = new Grayscale();
+        final Grayscale grayscale = new Grayscale();
         functions.put("grayscale", grayscale);
         functions.put("greyscale", grayscale);
 
@@ -285,13 +283,13 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
             functions.putAll(_functions);
         }
 
-        FunctionTransformer transformer = new FunctionTransformer();
+        final FunctionTransformer transformer = new FunctionTransformer();
         transformer.setFunctionMap(functions);
         return transformer;
     }
 
-    protected void initializeWriter(StyleSheetWriter styleSheetWriter) {
-        StyleSheetWriterImpl writer = (StyleSheetWriterImpl) styleSheetWriter;
+    protected void initializeWriter( final StyleSheetWriter styleSheetWriter) {
+        final StyleSheetWriterImpl writer = (StyleSheetWriterImpl) styleSheetWriter;
         if (_prettyPrintEnabled != null) {
             writer.setPrettyPrintEnabled(_prettyPrintEnabled);
         }
@@ -303,8 +301,8 @@ public class DefaultLessCssCompilerFactory implements LessCssCompilerFactory {
         }
     }
 
-    protected void initializeParser(StyleSheetParser styleSheetParser) {
-        LessCssStyleSheetParser parser = (LessCssStyleSheetParser) styleSheetParser;
+    protected void initializeParser( final StyleSheetParser styleSheetParser) {
+        final LessCssStyleSheetParser parser = (LessCssStyleSheetParser) styleSheetParser;
         if (_defaultEncoding != null) {
             parser.setDefaultEncoding(_defaultEncoding);
         }

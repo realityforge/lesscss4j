@@ -21,13 +21,13 @@ import java.util.List;
 
 public class StyleSheet extends BodyElementContainer {
     private String _charset;
-    private List<String> _imports = new ArrayList<String>();
+    private List<String> _imports = new ArrayList<>();
 
     public String getCharset() {
         return _charset;
     }
 
-    public void setCharset(String charset) {
+    public void setCharset( final String charset) {
         _charset = charset;
     }
 
@@ -35,7 +35,7 @@ public class StyleSheet extends BodyElementContainer {
         return _imports;
     }
 
-    public void setImports(List<String> imports) {
+    public void setImports( final List<String> imports) {
         if (imports == null) {
             _imports.clear();
         }
@@ -44,9 +44,9 @@ public class StyleSheet extends BodyElementContainer {
         }
     }
 
-    public void addImport(String importValue) {
+    public void addImport( final String importValue) {
         if (_imports == null) {
-            _imports = new ArrayList<String>();
+            _imports = new ArrayList<>();
         }
         _imports.add(importValue);
     }

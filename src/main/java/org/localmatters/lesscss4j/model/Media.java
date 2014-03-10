@@ -20,17 +20,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Media extends BodyElementContainer implements BodyElement {
-    private List<String> _mediums = new ArrayList<String>();
+    private List<String> _mediums = new ArrayList<>();
 
     public Media() {
     }
 
 
-    public Media(Media copy) {
+    public Media( final Media copy) {
         this(copy, true);
     }
 
-    public Media(Media copy, boolean copyBodyElements) {
+    public Media( final Media copy, final boolean copyBodyElements) {
         super(copy, copyBodyElements);
         _mediums.addAll(copy._mediums);
     }
@@ -39,16 +39,16 @@ public class Media extends BodyElementContainer implements BodyElement {
         return _mediums;
     }
 
-    public void setMediums(List<String> mediums) {
+    public void setMediums( final List<String> mediums) {
         _mediums = mediums;
         if (_mediums == null) {
-            _mediums = new ArrayList<String>();
+            _mediums = new ArrayList<>();
         }
     }
 
-    public void addMedium(String medium) {
+    public void addMedium( final String medium) {
         if (_mediums == null) {
-            _mediums = new ArrayList<String>();
+            _mediums = new ArrayList<>();
         }
         _mediums.add(medium);
     }

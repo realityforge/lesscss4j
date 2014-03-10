@@ -31,7 +31,7 @@ public class AccessorExpression extends AbstractElement implements Expression {
     public AccessorExpression() {
     }
 
-    public AccessorExpression(AccessorExpression copy) {
+    public AccessorExpression( final AccessorExpression copy) {
         super(copy);
         _selector = copy._selector.clone();
         _property = copy._property;
@@ -42,7 +42,7 @@ public class AccessorExpression extends AbstractElement implements Expression {
         return _selector;
     }
 
-    public void setSelector(Selector selector) {
+    public void setSelector( final Selector selector) {
         _selector = selector;
     }
 
@@ -50,7 +50,7 @@ public class AccessorExpression extends AbstractElement implements Expression {
         return _property;
     }
 
-    public void setProperty(String property) {
+    public void setProperty( final String property) {
         _property = property;
     }
 
@@ -58,12 +58,12 @@ public class AccessorExpression extends AbstractElement implements Expression {
         return _variable;
     }
 
-    public void setVariable(boolean variable) {
+    public void setVariable( final boolean variable) {
         _variable = variable;
     }
 
-    public Expression evaluate(EvaluationContext context) {
-        List<RuleSet> ruleSetList = context.getRuleSet(getSelector());
+    public Expression evaluate( final EvaluationContext context) {
+        final List<RuleSet> ruleSetList = context.getRuleSet(getSelector());
         if (ruleSetList == null || ruleSetList.size() == 0) {
             // todo: error
         }
@@ -71,9 +71,9 @@ public class AccessorExpression extends AbstractElement implements Expression {
             // todo: error
         }
         else {
-            RuleSet ruleSet = ruleSetList.get(0);
+            final RuleSet ruleSet = ruleSetList.get(0);
             if (isVariable()) {
-                Expression var = ruleSet.getVariable(getProperty());
+                final Expression var = ruleSet.getVariable(getProperty());
                 if (var == null) {
                     // todo: error
                 }
@@ -82,7 +82,7 @@ public class AccessorExpression extends AbstractElement implements Expression {
                 }
             }
             else {
-                Declaration declaration = ruleSet.getDeclaration(getProperty());
+                final Declaration declaration = ruleSet.getDeclaration(getProperty());
                 if (declaration == null) {
                     // todo: error
                 }

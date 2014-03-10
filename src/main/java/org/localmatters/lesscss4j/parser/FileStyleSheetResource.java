@@ -23,13 +23,13 @@ import java.net.URL;
 import org.apache.commons.io.FileUtils;
 
 public class FileStyleSheetResource implements StyleSheetResource {
-    private File _file;
+    private final File _file;
 
-    public FileStyleSheetResource(String filename) {
+    public FileStyleSheetResource( final String filename) {
         this(new File(filename));
     }
 
-    public FileStyleSheetResource(File file) {
+    public FileStyleSheetResource( final File file) {
         _file = file;
     }
 

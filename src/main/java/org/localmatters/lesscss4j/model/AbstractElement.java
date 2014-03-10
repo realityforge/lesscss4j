@@ -24,12 +24,12 @@ public class AbstractElement implements PositionAware {
         this(-1, -1);
     }
 
-    public AbstractElement(AbstractElement copy) {
+    public AbstractElement( final AbstractElement copy) {
         _line = copy._line;
         _char = copy._char;
     }
 
-    public AbstractElement(int line, int aChar) {
+    public AbstractElement( final int line, final int aChar) {
         _line = line;
         _char = aChar;
     }
@@ -38,7 +38,7 @@ public class AbstractElement implements PositionAware {
         return _line;
     }
 
-    public void setLine(int line) {
+    public void setLine( final int line) {
         _line = line;
     }
 
@@ -46,7 +46,7 @@ public class AbstractElement implements PositionAware {
         return _char;
     }
 
-    public void setChar(int aChar) {
+    public void setChar( final int aChar) {
         _char = aChar;
     }
 }

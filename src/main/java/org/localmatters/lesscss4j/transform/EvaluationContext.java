@@ -34,11 +34,11 @@ public class EvaluationContext {
         this(null);
     }
 
-    public EvaluationContext(VariableContainer variableContainer) {
+    public EvaluationContext( final VariableContainer variableContainer) {
         this(variableContainer, null);
     }
 
-    public EvaluationContext(VariableContainer variableContainer, EvaluationContext parent) {
+    public EvaluationContext( final VariableContainer variableContainer, final EvaluationContext parent) {
         setParentContext(parent);
         setVariableContainer(variableContainer);
     }
@@ -47,7 +47,7 @@ public class EvaluationContext {
         return _parentContext;
     }
 
-    public void setParentContext(EvaluationContext parentContext) {
+    public void setParentContext( final EvaluationContext parentContext) {
         _parentContext = parentContext;
     }
 
@@ -55,7 +55,7 @@ public class EvaluationContext {
         return _variableContainer;
     }
 
-    public void setVariableContainer(VariableContainer variableContainer) {
+    public void setVariableContainer( final VariableContainer variableContainer) {
         _variableContainer = variableContainer;
     }
 
@@ -63,11 +63,11 @@ public class EvaluationContext {
         return _ruleSetContainer;
     }
 
-    public void setRuleSetContainer(RuleSetContainer ruleSetContainer) {
+    public void setRuleSetContainer( final RuleSetContainer ruleSetContainer) {
         _ruleSetContainer = ruleSetContainer;
     }
 
-    public Expression getVariable(String name) {
+    public Expression getVariable( final String name) {
         Expression value = null;
         if (getVariableContainer() != null) {
             value = getVariableContainer().getVariable(name);
@@ -78,7 +78,7 @@ public class EvaluationContext {
         return value;
     }
 
-    public List<RuleSet> getRuleSet(Selector selector) {
+    public List<RuleSet> getRuleSet( final Selector selector) {
 
         List<RuleSet> ruleSet = null;
         if (getRuleSetContainer() != null) {
@@ -102,7 +102,7 @@ public class EvaluationContext {
         }
     }
 
-    public void setErrorHandler(ErrorHandler errorHandler) {
+    public void setErrorHandler( final ErrorHandler errorHandler) {
         _errorHandler = errorHandler;
     }
 }

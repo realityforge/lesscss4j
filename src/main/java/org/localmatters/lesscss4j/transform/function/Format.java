@@ -23,19 +23,19 @@ import org.localmatters.lesscss4j.model.expression.Expression;
 import org.localmatters.lesscss4j.model.expression.LiteralExpression;
 
 public class Format implements Function {
-    public Expression evaluate(String name, Expression... args) {
-        int numArgs = args.length;
+    public Expression evaluate( final String name, final Expression... args) {
+        final int numArgs = args.length;
         if (numArgs < 1) {
             throw new FunctionException("Function '%s' requires at least one argument", name);
         }
 
-        Expression value = args[0];
+        final Expression value = args[0];
 
-        StringBuilder result = new StringBuilder();
+        final StringBuilder result = new StringBuilder();
 
         // We have our own scaled down version of String.format here because String.format won't cast the arguments
         // into the correct type.  For example, String.format("%d", new Double(123)) will throw an exception.
-        String valueStr = value.toString();
+        final String valueStr = value.toString();
         int index = valueStr.indexOf('%');
         int lastIndex = 0;
         int argIndex = 1;
@@ -43,7 +43,7 @@ public class Format implements Function {
             result.append(valueStr, lastIndex, index);
             index++;
             if (index < valueStr.length()) {
-                char formatCode = valueStr.charAt(index);
+                final char formatCode = valueStr.charAt(index);
                 if (formatCode != '%' && argIndex >= args.length) {
                     throw new FunctionException("Not enough arguments provided for function '%s' with format: %s",
                                                 name, valueStr);
@@ -59,7 +59,7 @@ public class Format implements Function {
                         break;
 
                     case 'd': {
-                        Object argValue = getArgValue(args[argIndex++]);
+                        final Object argValue = getArgValue(args[argIndex++]);
                         if (argValue instanceof Number) {
                             result.append(((Number) argValue).intValue());
                         }
@@ -83,7 +83,7 @@ public class Format implements Function {
         return new LiteralExpression(result.toString());
     }
 
-    protected Object getArgValue(Expression arg) {
+    protected Object getArgValue( final Expression arg) {
         Object argValue = arg.toString();
         if (arg instanceof LiteralExpression && ((LiteralExpression) arg).isString()) {
             argValue = ((String) argValue).substring(1, ((String) argValue).length() - 1);

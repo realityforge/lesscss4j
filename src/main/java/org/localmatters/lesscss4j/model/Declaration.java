@@ -28,16 +28,16 @@ public class Declaration extends AbstractElement implements DeclarationElement {
     public Declaration() {
     }
 
-    public Declaration(Declaration copy) {
+    public Declaration( final Declaration copy) {
         this(copy, true);
     }
 
-    public Declaration(Declaration copy, boolean copyValues) {
+    public Declaration( final Declaration copy, final boolean copyValues) {
         _property = copy._property;
         _important = copy._important;
         if (copyValues && copy._values != null) {
-            _values = new ArrayList<Object>(copy._values.size());
-            for (Object value : copy._values) {
+            _values = new ArrayList<>(copy._values.size());
+            for ( final Object value : copy._values) {
                 if (value instanceof Expression) {
                     _values.add(((Expression) value).clone());
                 }
@@ -52,7 +52,7 @@ public class Declaration extends AbstractElement implements DeclarationElement {
         return _property;
     }
 
-    public void setProperty(String property) {
+    public void setProperty( final String property) {
         _property = property;
     }
 
@@ -60,13 +60,13 @@ public class Declaration extends AbstractElement implements DeclarationElement {
         return _values;
     }
 
-    public void setValues(List<Object> values) {
+    public void setValues( final List<Object> values) {
         _values = values;
     }
 
-    public void addValue(Object value) {
+    public void addValue( final Object value) {
         if (_values == null) {
-            _values = new ArrayList<Object>();
+            _values = new ArrayList<>();
         }
         _values.add(value);
     }
@@ -75,7 +75,7 @@ public class Declaration extends AbstractElement implements DeclarationElement {
         return _important;
     }
 
-    public void setImportant(boolean important) {
+    public void setImportant( final boolean important) {
         _important = important;
     }
 
@@ -83,8 +83,8 @@ public class Declaration extends AbstractElement implements DeclarationElement {
         return getValuesAsString(new StringBuilder());
     }
 
-    public String getValuesAsString(StringBuilder buf) {
-        for (Object value : getValues()) {
+    public String getValuesAsString( final StringBuilder buf) {
+        for ( final Object value : getValues()) {
             buf.append(value.toString());
         }
         return buf.toString();
@@ -92,7 +92,7 @@ public class Declaration extends AbstractElement implements DeclarationElement {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
+        final StringBuilder buf = new StringBuilder();
         buf.append(getProperty());
         buf.append(": ");
         getValuesAsString(buf);

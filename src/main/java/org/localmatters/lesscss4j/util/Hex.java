@@ -19,7 +19,7 @@ package org.localmatters.lesscss4j.util;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class Hex {
+public final class Hex {
     /**
      * Used building output as Hex
      */
@@ -37,11 +37,11 @@ public class Hex {
      *                  a byte[] to convert to Hex characters
      * @return A char[] containing hexidecimal characters
      */
-    public static char[] encodeHex(byte[] data) {
+    public static char[] encodeHex( final byte[] data) {
 
-        int l = data.length;
+        final int l = data.length;
 
-           char[] out = new char[l << 1];
+           final char[] out = new char[l << 1];
 
            // two characters form the hex value.
            for (int i = 0, j = 0; i < l; i++) {
@@ -52,11 +52,11 @@ public class Hex {
            return out;
     }
 
-    public static String md5(byte[] value) {
+    public static String md5( final byte[] value) {
         try {
             return new String(Hex.encodeHex(MessageDigest.getInstance("MD5").digest(value)));
         }
-        catch (NoSuchAlgorithmException ex) {
+        catch ( final NoSuchAlgorithmException ex) {
             throw new RuntimeException("Unable to find MD5 MessageDigest instance", ex);
         }
 

@@ -28,10 +28,10 @@ import org.localmatters.lesscss4j.model.expression.Expression;
  */
 public class Spin extends AbstractColorFunction {
     @Override
-    protected Expression evaluate(ConstantColor color, ConstantNumber value) {
-        float[] hsla = color.toHSL();
+    protected Expression evaluate( final ConstantColor color, final ConstantNumber value) {
+        final float[] hsla = color.toHSL();
 
-        ConstantColor newColor = new ConstantColor();
+        final ConstantColor newColor = new ConstantColor();
         newColor.setHSL(((hsla[0] + (float)value.getValue()) % 360.0f), hsla[1], hsla[2]);
         return new ConstantExpression(newColor);
     }

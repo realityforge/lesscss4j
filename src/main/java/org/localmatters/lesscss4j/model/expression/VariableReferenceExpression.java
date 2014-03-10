@@ -27,12 +27,12 @@ public class VariableReferenceExpression extends AbstractElement implements Expr
         this((String)null);
     }
 
-    public VariableReferenceExpression(VariableReferenceExpression copy) {
+    public VariableReferenceExpression( final VariableReferenceExpression copy) {
         super(copy);
         _variableName = copy._variableName;
     }
 
-    public VariableReferenceExpression(String variableName) {
+    public VariableReferenceExpression( final String variableName) {
         _variableName = variableName;
     }
 
@@ -40,12 +40,12 @@ public class VariableReferenceExpression extends AbstractElement implements Expr
         return _variableName;
     }
 
-    public void setVariableName(String variableName) {
+    public void setVariableName( final String variableName) {
         _variableName = variableName;
     }
 
-    public Expression evaluate(EvaluationContext context) {
-        Expression value = context.getVariable(getVariableName());
+    public Expression evaluate( final EvaluationContext context) {
+        final Expression value = context.getVariable(getVariableName());
         if (value == null) {
             throw new UndefinedVariableException(this);
         }

@@ -58,7 +58,7 @@ public class LessCssServlet extends HttpServlet {
 
     public static final String USE_ETAG = "etagEnabled";
 
-    private ConcurrentMap<String, CacheEntry> _cache = new ConcurrentHashMap<String, CacheEntry>();
+    private final ConcurrentMap<String, CacheEntry> _cache = new ConcurrentHashMap<>();
 
     /** Amount of time to wait before checking if a LESS file needs to be recompiled */
     private long _cacheMillis = CACHE_FOREVER;
@@ -78,29 +78,29 @@ public class LessCssServlet extends HttpServlet {
     private StyleSheetResourceLoader _styleSheetResourceLoader = new DefaultStyleSheetResourceLoader();
 
     @Override
-    public void init(ServletConfig config) throws ServletException {
+    public void init( final ServletConfig config) throws ServletException {
         super.init(config);
 
         // Cache entry time
-        Integer cacheMillis = getInitParameterInteger(config, CACHE_MILLISECONDS_PARAM_NAME);
+        final Integer cacheMillis = getInitParameterInteger(config, CACHE_MILLISECONDS_PARAM_NAME);
         if (cacheMillis != null) {
             setCacheMillis(cacheMillis);
         }
 
         // Browser cache entry time
-        Integer httpCacheMillis = getInitParameterInteger(config, HTTP_CACHE_MILLISECONDS_PARAM_NAME);
+        final Integer httpCacheMillis = getInitParameterInteger(config, HTTP_CACHE_MILLISECONDS_PARAM_NAME);
         if (httpCacheMillis != null) {
             setHttpCacheMillis(httpCacheMillis);
         }
 
-        Boolean etagEnabled = getInitParameterBoolean(config, USE_ETAG);
+        final Boolean etagEnabled = getInitParameterBoolean(config, USE_ETAG);
         if (etagEnabled != null && !etagEnabled) {
             _useETag = false;
         }
 
-        DefaultLessCssCompilerFactory factory = new DefaultLessCssCompilerFactory();
+        final DefaultLessCssCompilerFactory factory = new DefaultLessCssCompilerFactory();
 
-        Boolean prettyPrint = getInitParameterBoolean(config, PRETTY_PRINT_PARAM_NAME);
+        final Boolean prettyPrint = getInitParameterBoolean(config, PRETTY_PRINT_PARAM_NAME);
         if (prettyPrint != null) {
             factory.setPrettyPrintEnabled(prettyPrint);
         }
@@ -108,21 +108,21 @@ public class LessCssServlet extends HttpServlet {
         _lessCompiler = factory.create();
     }
 
-    protected Boolean getInitParameterBoolean(ServletConfig config, String name) {
-        String value = config.getInitParameter(name);
+    protected Boolean getInitParameterBoolean( final ServletConfig config, final String name) {
+        final String value = config.getInitParameter(name);
         if (value != null) {
             return value.equals("true");
         }
         return null;
     }
 
-    protected Integer getInitParameterInteger(ServletConfig config, String name) throws ServletException {
-        String value = config.getInitParameter(name);
+    protected Integer getInitParameterInteger( final ServletConfig config, final String name) throws ServletException {
+        final String value = config.getInitParameter(name);
         if (value != null) {
             try {
                 return Integer.parseInt(value);
             }
-            catch (NumberFormatException ex) {
+            catch ( final NumberFormatException ex) {
                 throw new ServletException("Invalid " + name + " value:" + value, ex);
             }
         }
@@ -130,10 +130,10 @@ public class LessCssServlet extends HttpServlet {
     }
 
     @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response)
+    protected void service( final HttpServletRequest request, final HttpServletResponse response)
         throws ServletException, IOException {
 
-        String clearCache = request.getParameter(CLEAR_CACHE);
+        final String clearCache = request.getParameter(CLEAR_CACHE);
         if (clearCache != null && clearCache.equals("true")) {
             clearCache();
         }
@@ -146,10 +146,10 @@ public class LessCssServlet extends HttpServlet {
 
         final long now = getTime();
 
-        CacheEntry cacheEntry = getCacheEntry(resource, now);
+        final CacheEntry cacheEntry = getCacheEntry(resource, now);
 
         if (cacheEntry.getValue() != null) {
-            boolean isHeadRequest = METHOD_HEAD.equalsIgnoreCase(request.getMethod());
+            final boolean isHeadRequest = METHOD_HEAD.equalsIgnoreCase(request.getMethod());
             if (isHeadRequest || isModified(request, cacheEntry)) {
                 response.addDateHeader(LAST_MODIFIED, cacheEntry.getLastUpdate());
                 response.addDateHeader(EXPIRES, now + getHttpCacheMillis());
@@ -170,10 +170,10 @@ public class LessCssServlet extends HttpServlet {
         }
     }
 
-    protected boolean isModified(HttpServletRequest request, CacheEntry cacheEntry) {
-        String etag = request.getHeader(IF_NONE_MATCH);
+    protected boolean isModified( final HttpServletRequest request, final CacheEntry cacheEntry) {
+        final String etag = request.getHeader(IF_NONE_MATCH);
         if (_useETag && etag != null) {
-            String md5Sum = cacheEntry.getMd5Sum();
+            final String md5Sum = cacheEntry.getMd5Sum();
             return !md5Sum.equals(etag);
         }
         else {
@@ -188,8 +188,8 @@ public class LessCssServlet extends HttpServlet {
      * Gets the cache entry from the concurrent map.  Subclasses may override if an alternate cache provider is
      * desired.
      */
-    protected CacheEntry getCacheEntry(String resource, long time) {
-        CacheEntry newCacheEntry = new CacheEntry();
+    protected CacheEntry getCacheEntry( final String resource, final long time) {
+        final CacheEntry newCacheEntry = new CacheEntry();
         newCacheEntry.setPath(resource);
 
         CacheEntry cacheEntry = null;
@@ -211,7 +211,7 @@ public class LessCssServlet extends HttpServlet {
         _cache.clear();
     }
 
-    public void setCacheEnabled(boolean enabled) {
+    public void setCacheEnabled( final boolean enabled) {
         _cacheEnabled = enabled;
     }
 
@@ -225,7 +225,7 @@ public class LessCssServlet extends HttpServlet {
      * @param cacheEntry The entry to check.  The 'path' property must be populated
      * @param time       The current time
      */
-    protected void maybeRefreshCacheEntry(CacheEntry cacheEntry, long time) {
+    protected void maybeRefreshCacheEntry( final CacheEntry cacheEntry, final long time) {
         if (shouldRefresh(cacheEntry, time, false)) {
             synchronized (cacheEntry) {
                 // Now that we have the lock, see if we still need to refresh.
@@ -239,11 +239,8 @@ public class LessCssServlet extends HttpServlet {
 
     /**
      * Refreshes the cache entry by compiling the resource.
-     *
-     * @param time
-     * @param cacheEntry
      */
-    protected void refreshCacheEntry(long time, CacheEntry cacheEntry) {
+    protected void refreshCacheEntry( final long time, final CacheEntry cacheEntry) {
         cacheEntry.setValue(compileResource(cacheEntry.getPath()));
         cacheEntry.setLastUpdate(time);
     }
@@ -259,7 +256,7 @@ public class LessCssServlet extends HttpServlet {
      *                           from the servlet context and getting the file's last modified time.
      * @return True if the cache entry should be refreshed.
      */
-    protected boolean shouldRefresh(CacheEntry cacheEntry, long time, boolean checkFileTimestamp) {
+    protected boolean shouldRefresh( final CacheEntry cacheEntry, final long time, final boolean checkFileTimestamp) {
         if (cacheEntry.getValue() == null) return true;
 
         if (cacheEntry.getLastUpdate() != time &&
@@ -269,11 +266,11 @@ public class LessCssServlet extends HttpServlet {
             // Try to see if we can get the timestamp off the resource to see if it's *really* changed
             // todo: this doesn't handle the case of @import-ed files that have changed.
             if (checkFileTimestamp) {
-                String fsPath = getServletContext().getRealPath(cacheEntry.getPath());
+                final String fsPath = getServletContext().getRealPath(cacheEntry.getPath());
                 if (fsPath != null) {
 
                     // Last modified of 0 means we couldn't get the time or there was an IO error
-                    long lastModified = new File(fsPath).lastModified();
+                    final long lastModified = new File(fsPath).lastModified();
                     if (lastModified > 0L && lastModified <= cacheEntry.getLastUpdate()) {
                         return false;
                     }
@@ -291,11 +288,11 @@ public class LessCssServlet extends HttpServlet {
         return System.currentTimeMillis();
     }
 
-    protected byte[] compileResource(String resource) {
+    protected byte[] compileResource( final String resource) {
         try {
-            URL url = getServletContext().getResource(resource);
+            final URL url = getServletContext().getResource(resource);
             if (url != null) {
-                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                final ByteArrayOutputStream output = new ByteArrayOutputStream();
                 getLessCompiler().compile(getStyleSheetResourceLoader().getResource(url), output, null);
                 return output.toByteArray();
             }
@@ -303,7 +300,7 @@ public class LessCssServlet extends HttpServlet {
                 getServletContext().log("Unable to find resource: " + resource);
             }
         }
-        catch (Exception ex) {
+        catch ( final Exception ex) {
             getServletContext().log("Unable to compile resource: " + resource, ex);
         }
         return null;
@@ -313,7 +310,7 @@ public class LessCssServlet extends HttpServlet {
         return _styleSheetResourceLoader;
     }
 
-    public void setStyleSheetResourceLoader(StyleSheetResourceLoader styleSheetResourceLoader) {
+    public void setStyleSheetResourceLoader( final StyleSheetResourceLoader styleSheetResourceLoader) {
         _styleSheetResourceLoader = styleSheetResourceLoader;
     }
 
@@ -321,7 +318,7 @@ public class LessCssServlet extends HttpServlet {
         return _cacheMillis;
     }
 
-    public void setCacheMillis(long cacheMillis) {
+    public void setCacheMillis( final long cacheMillis) {
         _cacheMillis = cacheMillis < 0 ? CACHE_FOREVER : cacheMillis;
     }
 
@@ -329,7 +326,7 @@ public class LessCssServlet extends HttpServlet {
         return _httpCacheMillis;
     }
 
-    public void setHttpCacheMillis(long httpCacheMillis) {
+    public void setHttpCacheMillis( final long httpCacheMillis) {
         _httpCacheMillis = httpCacheMillis;
     }
 
@@ -340,7 +337,7 @@ public class LessCssServlet extends HttpServlet {
      * @param request The current request
      * @return The resource to load
      */
-    protected String getRequestedResource(HttpServletRequest request) {
+    protected String getRequestedResource( final HttpServletRequest request) {
         return request.getPathInfo();
     }
 
@@ -348,7 +345,7 @@ public class LessCssServlet extends HttpServlet {
         return _lessCompiler;
     }
 
-    public void setLessCompiler(LessCssCompiler lessCompiler) {
+    public void setLessCompiler( final LessCssCompiler lessCompiler) {
         _lessCompiler = lessCompiler;
     }
 
@@ -363,7 +360,7 @@ public class LessCssServlet extends HttpServlet {
             return _md5Sum;
         }
 
-        public void setMd5Sum(String md5Sum) {
+        public void setMd5Sum( final String md5Sum) {
             _md5Sum = md5Sum;
         }
 
@@ -371,7 +368,7 @@ public class LessCssServlet extends HttpServlet {
             return _path;
         }
 
-        public void setPath(String path) {
+        public void setPath( final String path) {
             _path = path;
         }
 
@@ -379,7 +376,7 @@ public class LessCssServlet extends HttpServlet {
             return _value;
         }
 
-        public void setValue(byte[] value) {
+        public void setValue( final byte[] value) {
             _value = value;
             _md5Sum = Hex.md5(_value);
         }
@@ -388,7 +385,7 @@ public class LessCssServlet extends HttpServlet {
             return _lastUpdate;
         }
 
-        public void setLastUpdate(long lastUpdate) {
+        public void setLastUpdate( final long lastUpdate) {
             _lastUpdate = lastUpdate;
         }
     }

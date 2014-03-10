@@ -32,7 +32,7 @@ import org.localmatters.lesscss4j.model.expression.VariableReferenceExpression;
 import static org.localmatters.lesscss4j.parser.antlr.LessCssLexer.*;
 
 public class ExpressionFactory extends AbstractObjectFactory<Expression> {
-    public Expression create(Tree expression, ErrorHandler errorHandler) {
+    public Expression create( final Tree expression, final ErrorHandler errorHandler) {
 
         switch (expression.getType()) {
             case FUNCTION:
@@ -55,22 +55,22 @@ public class ExpressionFactory extends AbstractObjectFactory<Expression> {
         }
     }
 
-    protected LiteralExpression createLiteral(Tree expression, ErrorHandler errorHandler) {
+    protected LiteralExpression createLiteral( final Tree expression, final ErrorHandler errorHandler) {
         return createLiteral(concatChildNodeText(expression), expression, errorHandler);
     }
 
-    protected LiteralExpression createLiteral(String text, Tree expression, ErrorHandler errorHandler) {
-        LiteralExpression literal = new LiteralExpression(text);
+    protected LiteralExpression createLiteral( final String text, final Tree expression, final ErrorHandler errorHandler) {
+        final LiteralExpression literal = new LiteralExpression(text);
         literal.setType(expression.getType());
         literal.setLine(expression.getLine());
         literal.setChar(expression.getCharPositionInLine());
         return literal;
     }
 
-    protected Expression createListExpression(Tree expression, ErrorHandler errorHandler) {
-        ListExpression listExpr = new ListExpression();
+    protected Expression createListExpression( final Tree expression, final ErrorHandler errorHandler) {
+        final ListExpression listExpr = new ListExpression();
         for (int idx = 0, numChildren = expression.getChildCount(); idx < numChildren; idx++) {
-            Tree child = expression.getChild(idx);
+            final Tree child = expression.getChild(idx);
             switch (child.getType()) {
                 case COMMA:
                 case WS:
@@ -86,8 +86,8 @@ public class ExpressionFactory extends AbstractObjectFactory<Expression> {
         return listExpr;
     }
 
-    protected Expression createExpression(Tree expression, ErrorHandler errorHandler) {
-        Expression result;
+    protected Expression createExpression( final Tree expression, final ErrorHandler errorHandler) {
+        final Expression result;
         switch (expression.getType()) {
             case CONSTANT:
                 result = new ConstantExpression(concatChildNodeText(expression));
@@ -138,11 +138,11 @@ public class ExpressionFactory extends AbstractObjectFactory<Expression> {
         return result;
     }
 
-    protected Expression createFunction(Tree function, ErrorHandler errorHandler) {
-        Tree nameNode = function.getChild(0);
-        FunctionExpression func = new FunctionExpression(concatChildNodeText(nameNode));
+    protected Expression createFunction( final Tree function, final ErrorHandler errorHandler) {
+        final Tree nameNode = function.getChild(0);
+        final FunctionExpression func = new FunctionExpression(concatChildNodeText(nameNode));
         for (int idx = 1, numChildren = function.getChildCount(); idx < numChildren; idx++) {
-            Tree child = function.getChild(idx);
+            final Tree child = function.getChild(idx);
             switch (child.getType()) {
                 case OPEQ:
                 case COLON:
@@ -150,9 +150,9 @@ public class ExpressionFactory extends AbstractObjectFactory<Expression> {
                         func.addArgument(createLiteral(child.getText(), child, errorHandler));
                     }
                     else {
-                        Tree propNode = child.getChild(0);
-                        String prop = propNode.getText();
-                        Expression expr = create(child.getChild(1), null);
+                        final Tree propNode = child.getChild(0);
+                        final String prop = propNode.getText();
+                        final Expression expr = create(child.getChild(1), null);
                         func.addArgument(createLiteral(prop, propNode, errorHandler));
                         func.addArgument(createLiteral(child.getText(), child, errorHandler));
                         func.addArgument(expr);

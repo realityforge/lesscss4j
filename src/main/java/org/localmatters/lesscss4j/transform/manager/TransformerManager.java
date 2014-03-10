@@ -25,7 +25,7 @@ public interface TransformerManager {
     /**
      * Return a transformer for a particular object.
      *
-     * @param The object to transform
+     * @param object The object to transform
      * @return The transformer for the given object.
      */
     <T> Transformer<T> getTransformer(T object);

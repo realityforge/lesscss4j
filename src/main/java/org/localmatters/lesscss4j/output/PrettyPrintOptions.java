@@ -27,7 +27,7 @@ public class PrettyPrintOptions {
     }
 
     /** Set the number of spaces to indent at each level.  Default = 4 */
-    public void setIndentSize(int indentSize) {
+    public void setIndentSize( final int indentSize) {
         _indentSize = indentSize;
     }
 
@@ -36,7 +36,7 @@ public class PrettyPrintOptions {
     }
 
     /** If set to true (default = false), rule sets with only one declaration will be printed entirely on one line. */
-    public void setSingleDeclarationOnOneLine(boolean singleDeclarationOnOneLine) {
+    public void setSingleDeclarationOnOneLine( final boolean singleDeclarationOnOneLine) {
         _singleDeclarationOnOneLine = singleDeclarationOnOneLine;
     }
 
@@ -45,7 +45,7 @@ public class PrettyPrintOptions {
     }
 
     /** If set to true (default = false), opening braces will be printed on their own line. */
-    public void setOpeningBraceOnNewLine(boolean openingBraceOnNewLine) {
+    public void setOpeningBraceOnNewLine( final boolean openingBraceOnNewLine) {
         _openingBraceOnNewLine = openingBraceOnNewLine;
     }
 
@@ -54,7 +54,7 @@ public class PrettyPrintOptions {
     }
 
     /** If set to true (the default), a blank line is written between rule sets */
-    public void setLineBetweenRuleSets(boolean lineBetweenRuleSets) {
+    public void setLineBetweenRuleSets( final boolean lineBetweenRuleSets) {
         _lineBetweenRuleSets = lineBetweenRuleSets;
     }
 }

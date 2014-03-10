@@ -34,7 +34,7 @@ public class ConstantColor implements ConstantValue {
     public static final Pattern RGB_HSL_PATTERN = Pattern.compile(
         "(?i)(?:rgb|hsl)a?\\s*\\(\\s*(-?\\d+%?)\\s*,\\s*(-?\\d+%?)\\s*,\\s*(-?\\d+%?)(?:\\s*,\\s*(-?(?:\\d+(?:\\.\\d*)*|\\.\\d+%?)))?\\s*\\)");
 
-    private static final Map<String, Integer> COLOR_KEYWORDS = new HashMap<String, Integer>();
+    private static final Map<String, Integer> COLOR_KEYWORDS = new HashMap<>();
 
     static {
         COLOR_KEYWORDS.put("maroon", 0x800000);
@@ -61,18 +61,18 @@ public class ConstantColor implements ConstantValue {
         this(0);
     }
 
-    public ConstantColor(ConstantColor copy) {
+    public ConstantColor( final ConstantColor copy) {
         _red = copy._red;
         _green = copy._green;
         _blue = copy._blue;
         _alpha = copy._alpha;
     }
 
-    public ConstantColor(int value) {
+    public ConstantColor( final int value) {
         setValue(value);
     }
 
-    public ConstantColor(int red, int green, int blue) {
+    public ConstantColor( final int red, final int green, final int blue) {
         setRed(red);
         setGreen(green);
         setBlue(blue);
@@ -93,18 +93,18 @@ public class ConstantColor implements ConstantValue {
             setValue(Integer.parseInt(value, 16));
         }
         else if (isRGBFunction(value)) {
-            Matcher matcher = RGB_HSL_PATTERN.matcher(value);
+            final Matcher matcher = RGB_HSL_PATTERN.matcher(value);
             if (matcher.matches()) {
-                String red = matcher.group(1);
-                String green = matcher.group(2);
-                String blue = matcher.group(3);
+                final String red = matcher.group(1);
+                final String green = matcher.group(2);
+                final String blue = matcher.group(3);
 
                 setRed(parseRGBValue(red));
                 setGreen(parseRGBValue(green));
                 setBlue(parseRGBValue(blue));
 
                 if (value.charAt(3) == 'a' || value.charAt(3) == 'A') {
-                    String alpha = matcher.group(4);
+                    final String alpha = matcher.group(4);
                     setAlpha(Float.parseFloat(alpha));
                 }
             }
@@ -113,16 +113,16 @@ public class ConstantColor implements ConstantValue {
             }
         }
         else if (isHSLFunction(value)) {
-            Matcher matcher = RGB_HSL_PATTERN.matcher(value);
+            final Matcher matcher = RGB_HSL_PATTERN.matcher(value);
             if (matcher.matches()) {
                 if (value.charAt(3) == 'a' || value.charAt(3) == 'A') {
-                    String alpha = matcher.group(4);
+                    final String alpha = matcher.group(4);
                     setAlpha(Float.parseFloat(alpha));
                 }
 
-                float hue = Integer.parseInt(matcher.group(1));
-                float saturation = parsePercentage(matcher.group(2));
-                float lightness = parsePercentage(matcher.group(3));
+                final float hue = Integer.parseInt(matcher.group(1));
+                final float saturation = parsePercentage(matcher.group(2));
+                final float lightness = parsePercentage(matcher.group(3));
 
                 setHSL(hue, saturation, lightness);
             }
@@ -131,7 +131,7 @@ public class ConstantColor implements ConstantValue {
             }
         }
         else {
-            Integer keywordValue = COLOR_KEYWORDS.get(value.toLowerCase());
+            final Integer keywordValue = COLOR_KEYWORDS.get(value.toLowerCase());
             if (keywordValue != null) {
                 setValue(keywordValue);
             }
@@ -150,7 +150,7 @@ public class ConstantColor implements ConstantValue {
         saturation = Math.min(1, Math.max(saturation, 0.0f));
         lightness = Math.min(1, Math.max(lightness, 0.0f));
 
-        int[] rgb = hslToRgb(hue, saturation, lightness);
+        final int[] rgb = hslToRgb(hue, saturation, lightness);
         setRed(rgb[0]);
         setGreen(rgb[1]);
         setBlue(rgb[2]);
@@ -165,16 +165,18 @@ public class ConstantColor implements ConstantValue {
      * @param l The lightness
      * @return Integer array with the RGB representation.  0=red, 1=green, 2=blue
      */
-    protected static int[] hslToRgb(float h, float s, float l) {
-        float r, g, b;
+    protected static int[] hslToRgb( final float h, final float s, final float l) {
+        final float r;
+      final float g;
+      final float b;
 
-        if (s == 0) {
+      if (s == 0) {
             r = g = b = l; // achromatic
         }
         else {
 
-            float q = l < 0.5f ? l * (1f + s) : l + s - l * s;
-            float p = 2 * l - q;
+            final float q = l < 0.5f ? l * (1f + s) : l + s - l * s;
+            final float p = 2 * l - q;
             r = hueToRgb(p, q, h + 1f / 3f);
             g = hueToRgb(p, q, h);
             b = hueToRgb(p, q, h - 1f / 3f);
@@ -183,7 +185,7 @@ public class ConstantColor implements ConstantValue {
         return new int[]{Math.round(r * 255f), Math.round(g * 255f), Math.round(b * 255f)};
     }
 
-    protected static float hueToRgb(float p, float q, float t) {
+    protected static float hueToRgb( final float p, final float q, float t) {
         if (t < 0f) t += 1.0;
         if (t > 1f) t -= 1.0;
         if (t < 1f / 6f) return p + (q - p) * 6f * t;
@@ -200,7 +202,7 @@ public class ConstantColor implements ConstantValue {
         return Math.max(0, Math.min(100, Integer.parseInt(value))) / 100.0f;
     }
 
-    protected int parseRGBValue(String value) {
+    protected int parseRGBValue( final String value) {
         if (value.charAt(value.length() - 1) == '%') {
             // colors are in terms of percentage
             return (int) (parsePercentage(value) * 255);
@@ -210,7 +212,7 @@ public class ConstantColor implements ConstantValue {
         }
     }
 
-    public void setValue(int value) {
+    public void setValue( final int value) {
         setRed((value & 0xff0000) >> 16);
         setGreen((value & 0x00ff00) >> 8);
         setBlue(value & 0x0000ff);
@@ -221,17 +223,19 @@ public class ConstantColor implements ConstantValue {
     }
 
     public float[] toHSL() {
-        float r = _red / 255.0f;
-        float g = _green / 255.0f;
-        float b = _blue / 255.0f;
+        final float r = _red / 255.0f;
+        final float g = _green / 255.0f;
+        final float b = _blue / 255.0f;
 
-        float max = Math.max(Math.max(r, g), b);
-        float min = Math.min(Math.min(r, g), b);
+        final float max = Math.max(Math.max(r, g), b);
+        final float min = Math.min(Math.min(r, g), b);
 
-        float h, s, l;
+        float h;
+      final float s;
+      final float l;
 
-        l = (max + min) / 2;
-        float d = max - min;
+      l = (max + min) / 2;
+        final float d = max - min;
 
         if (max == min) {
             h = s = 0;
@@ -254,13 +258,13 @@ public class ConstantColor implements ConstantValue {
         return new float[]{h * 360, s, l, _alpha == null ? 1.0f : _alpha};
     }
 
-    protected void checkUnits(ConstantValue that) {
+    protected void checkUnits( final ConstantValue that) {
         if (that instanceof ConstantNumber && ((ConstantNumber) that).getUnit() != null) {
             throw new UnitMismatchException(this, that);
         }
     }
 
-    public ConstantValue add(ConstantValue right) {
+    public ConstantValue add( final ConstantValue right) {
         checkUnits(right);
         if (right instanceof ConstantNumber) {
             return new ConstantColor((int) (getRed() + right.getValue()),
@@ -268,7 +272,7 @@ public class ConstantColor implements ConstantValue {
                                      (int) (getBlue() + right.getValue()));
         }
         else {
-            ConstantColor color = (ConstantColor) right;
+            final ConstantColor color = (ConstantColor) right;
             return new ConstantColor(getRed() + color.getRed(),
                                      getGreen() + color.getGreen(),
                                      getBlue() + color.getBlue());
@@ -276,7 +280,7 @@ public class ConstantColor implements ConstantValue {
     }
 
 
-    public ConstantValue subtract(ConstantValue right) {
+    public ConstantValue subtract( final ConstantValue right) {
         checkUnits(right);
         if (right instanceof ConstantNumber) {
             return new ConstantColor((int) (getRed() - right.getValue()),
@@ -284,21 +288,21 @@ public class ConstantColor implements ConstantValue {
                                      (int) (getBlue() - right.getValue()));
         }
         else {
-            ConstantColor color = (ConstantColor) right;
+            final ConstantColor color = (ConstantColor) right;
             return new ConstantColor(getRed() - color.getRed(),
                                      getGreen() - color.getGreen(),
                                      getBlue() - color.getBlue());
         }
     }
 
-    public ConstantValue multiply(ConstantValue right) {
+    public ConstantValue multiply( final ConstantValue right) {
         checkUnits(right);
         return new ConstantColor((int) (getRed() * right.getValue()),
                                  (int) (getGreen() * right.getValue()),
                                  (int) (getBlue() * right.getValue()));
     }
 
-    public ConstantValue divide(ConstantValue right) {
+    public ConstantValue divide( final ConstantValue right) {
         checkUnits(right);
         if (right.getValue() == 0.0) {
             throw new DivideByZeroException();
@@ -311,18 +315,18 @@ public class ConstantColor implements ConstantValue {
     @Override
     public String toString() {
         if (getAlpha() != null) {
-            DecimalFormat alphaFormat = new DecimalFormat("0.###");
+            final DecimalFormat alphaFormat = new DecimalFormat("0.###");
             return "rgba(" + getRed() + ',' + getGreen() + ',' + getBlue() + ',' + alphaFormat.format(getAlpha()) + ')';
         }
 
         // Shorten colors of the form #aabbcc to #abc
-        String rs = Integer.toHexString(getRed());
-        String gs = Integer.toHexString(getGreen());
-        String bs = Integer.toHexString(getBlue());
+        final String rs = Integer.toHexString(getRed());
+        final String gs = Integer.toHexString(getGreen());
+        final String bs = Integer.toHexString(getBlue());
 
-        int r = getRed();
-        int g = getGreen();
-        int b = getBlue();
+        final int r = getRed();
+        final int g = getGreen();
+        final int b = getBlue();
 
         if (((r & 0xf0) >> 4) == (r & 0xf) &&
             ((g & 0xf0) >> 4) == (g & 0xf) &&
@@ -331,7 +335,7 @@ public class ConstantColor implements ConstantValue {
         }
         else {
             // String.format("#%06x", (int) getValue()) would do the same thing, but this is much, much faster
-            StringBuilder buf = new StringBuilder("#");
+            final StringBuilder buf = new StringBuilder("#");
             appendColorStr(buf, rs);
             appendColorStr(buf, gs);
             appendColorStr(buf, bs);
@@ -339,7 +343,7 @@ public class ConstantColor implements ConstantValue {
         }
     }
 
-    protected void appendColorStr(StringBuilder buf, String val) {
+    protected void appendColorStr( final StringBuilder buf, final String val) {
         if (val.length() == 1) {
             buf.append('0');
         }
@@ -347,11 +351,11 @@ public class ConstantColor implements ConstantValue {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals( final Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
 
-        ConstantColor that = (ConstantColor) obj;
+        final ConstantColor that = (ConstantColor) obj;
 
         return this.getRed() == that.getRed() &&
                this.getGreen() == that.getGreen() &&
@@ -366,7 +370,7 @@ public class ConstantColor implements ConstantValue {
         return (int) getValue();
     }
 
-    protected int pinColor(int value) {
+    protected int pinColor( final int value) {
         return Math.max(0, Math.min(value, 0xff));
     }
 
@@ -374,7 +378,7 @@ public class ConstantColor implements ConstantValue {
         return _red;
     }
 
-    public void setRed(int red) {
+    public void setRed( final int red) {
         _red = pinColor(red);
     }
 
@@ -382,7 +386,7 @@ public class ConstantColor implements ConstantValue {
         return _green;
     }
 
-    public void setGreen(int green) {
+    public void setGreen( final int green) {
         _green = pinColor(green);
     }
 
@@ -390,7 +394,7 @@ public class ConstantColor implements ConstantValue {
         return _blue;
     }
 
-    public void setBlue(int blue) {
+    public void setBlue( final int blue) {
         _blue = pinColor(blue);
     }
 
@@ -398,7 +402,7 @@ public class ConstantColor implements ConstantValue {
         return _alpha;
     }
 
-    public void setAlpha(Float alpha) {
+    public void setAlpha( final Float alpha) {
         if (alpha != null) {
             _alpha = Math.min(1.0f, Math.max(0.0f, alpha));
         }
@@ -407,18 +411,18 @@ public class ConstantColor implements ConstantValue {
         }
     }
 
-    public static boolean isColorFunction(String value) {
+    public static boolean isColorFunction( final String value) {
         return isRGBFunction(value) || isHSLFunction(value);
     }
 
-    public static boolean isRGBFunction(String value) {
+    public static boolean isRGBFunction( final String value) {
         return value.length() >= 3 &&
                (value.charAt(0) == 'r' || value.charAt(0) == 'R') &&
                (value.charAt(1) == 'g' || value.charAt(1) == 'G') &&
                (value.charAt(2) == 'b' || value.charAt(2) == 'B');
     }
 
-    public static boolean isHSLFunction(String value) {
+    public static boolean isHSLFunction( final String value) {
         return value.length() >= 3 &&
                (value.charAt(0) == 'h' || value.charAt(0) == 'H') &&
                (value.charAt(1) == 's' || value.charAt(1) == 'S') &&

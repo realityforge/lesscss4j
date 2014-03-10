@@ -19,16 +19,15 @@ package org.localmatters.lesscss4j.error;
 import java.io.PrintWriter;
 
 public class WriterErrorHandler extends AbstractErrorHandler {
-    public static final String LESS_CSS_LOG_CATEGORY = "LessCssError";
 
-    private boolean _logStackTrace = false;
+  private boolean _logStackTrace = false;
     private PrintWriter _writer;
 
     public PrintWriter getWriter() {
         return _writer;
     }
 
-    public void setWriter(PrintWriter writer) {
+    public void setWriter( final PrintWriter writer) {
         _writer = writer;
     }
 
@@ -36,11 +35,11 @@ public class WriterErrorHandler extends AbstractErrorHandler {
         return _logStackTrace;
     }
 
-    public void setLogStackTrace(boolean logStackTrace) {
+    public void setLogStackTrace( final boolean logStackTrace) {
         _logStackTrace = logStackTrace;
     }
 
-    public void handleError(String message, Throwable exception) {
+    public void handleError( final String message, final Throwable exception) {
         super.handleError(message, exception);
         if (exception != null) {
             String logMessage = exception.getMessage();

@@ -21,15 +21,15 @@ public class DivideByZeroException extends ExpressionException {
         super("Division by zero.");
     }
 
-    public DivideByZeroException(String message) {
+    public DivideByZeroException( final String message) {
         super("Division by zero. " + message);
     }
 
-    public DivideByZeroException(String message, Throwable cause) {
+    public DivideByZeroException( final String message, final Throwable cause) {
         super("Division by zero. " + message, cause);
     }
 
-    public DivideByZeroException(Throwable cause) {
+    public DivideByZeroException( final Throwable cause) {
         super("Division by zero.", cause);
     }
 }

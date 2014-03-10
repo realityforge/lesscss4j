@@ -23,21 +23,21 @@ import java.util.List;
 import java.util.Map;
 
 public class DeclarationContainer extends BodyElementContainer {
-    private Map<String, Declaration> _declarationMap = new LinkedHashMap<String, Declaration>();
-    private List<DeclarationElement> _declarations = new ArrayList<DeclarationElement>();
+    private final Map<String, Declaration> _declarationMap = new LinkedHashMap<>();
+    private final List<DeclarationElement> _declarations = new ArrayList<>();
     private boolean _mixinReferenceUsed = false;
 
     public DeclarationContainer() {
     }
 
-    public DeclarationContainer(DeclarationContainer copy) {
+    public DeclarationContainer( final DeclarationContainer copy) {
         this(copy, true);
     }
 
-    public DeclarationContainer(DeclarationContainer copy, boolean copyDeclarations) {
+    public DeclarationContainer( final DeclarationContainer copy, final boolean copyDeclarations) {
         super(copy);
         if (copyDeclarations) {
-            for (DeclarationElement declaration : copy._declarations) {
+            for ( final DeclarationElement declaration : copy._declarations) {
                 addDeclaration(declaration.clone());
             }
         }
@@ -57,15 +57,15 @@ public class DeclarationContainer extends BodyElementContainer {
         _mixinReferenceUsed = false;
     }
 
-    public void addDeclarations(Collection<? extends DeclarationElement> declarations) {
+    public void addDeclarations( final Collection<? extends DeclarationElement> declarations) {
         if (declarations != null) {
-            for (DeclarationElement declaration : declarations) {
+            for ( final DeclarationElement declaration : declarations) {
                 addDeclaration(declaration);
             }
         }
     }
 
-    public void addDeclaration(DeclarationElement declaration) {
+    public void addDeclaration( final DeclarationElement declaration) {
         _declarations.add(declaration);
         addDeclarationMapEntry(declaration);
 
@@ -74,13 +74,13 @@ public class DeclarationContainer extends BodyElementContainer {
         }
     }
 
-    protected void addDeclarationMapEntry(DeclarationElement declaration) {
+    protected void addDeclarationMapEntry( final DeclarationElement declaration) {
         if (declaration instanceof Declaration) {
             _declarationMap.put(((Declaration) declaration).getProperty(), (Declaration) declaration);
         }
     }
 
-    public Declaration getDeclaration(String property) {
+    public Declaration getDeclaration( final String property) {
         return _declarationMap.get(property);
     }
 }

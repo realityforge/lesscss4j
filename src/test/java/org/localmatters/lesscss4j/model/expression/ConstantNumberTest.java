@@ -21,7 +21,7 @@ import junit.framework.TestCase;
 import org.localmatters.lesscss4j.error.UnitMismatchException;
 
 public class ConstantNumberTest extends TestCase {
-    protected void validateNumber(double expectedValue, String expectedUnit, ConstantNumber actual) {
+    protected void validateNumber( final double expectedValue, final String expectedUnit, final ConstantNumber actual) {
         assertEquals("Unexpected value", expectedValue, actual.getValue());
         assertEquals("Unexpected unit", expectedUnit, actual.getUnit());
     }
@@ -100,7 +100,7 @@ public class ConstantNumberTest extends TestCase {
             new ConstantNumber(3, "px").add(new ConstantNumber(2, "em"));
             fail("expected UnitMismatchException");
         }
-        catch (UnitMismatchException ex) {
+        catch ( final UnitMismatchException ex) {
             // expected
         }
     }
@@ -110,7 +110,7 @@ public class ConstantNumberTest extends TestCase {
             new ConstantNumber(3, "px").add(new ConstantColor(0xffffff));
             fail("expected exception");
         }
-        catch (UnitMismatchException ex) {
+        catch ( final UnitMismatchException ex) {
             // expected
         }
     }
@@ -127,7 +127,7 @@ public class ConstantNumberTest extends TestCase {
             new ConstantNumber(3, "px").subtract(new ConstantNumber(2, "em"));
             fail("expected UnitMismatchException");
         }
-        catch (UnitMismatchException ex) {
+        catch ( final UnitMismatchException ex) {
             // expected
         }
     }
@@ -137,7 +137,7 @@ public class ConstantNumberTest extends TestCase {
             new ConstantNumber(3, "px").subtract(new ConstantColor(0xffffff));
             fail("expected exception");
         }
-        catch (UnitMismatchException ex) {
+        catch ( final UnitMismatchException ex) {
             // expected
         }
     }
@@ -154,7 +154,7 @@ public class ConstantNumberTest extends TestCase {
             new ConstantNumber(3, "px").divide(new ConstantNumber(2, "em"));
             fail("expected UnitMismatchException");
         }
-        catch (UnitMismatchException ex) {
+        catch ( final UnitMismatchException ex) {
             // expected
         }
     }
@@ -164,7 +164,7 @@ public class ConstantNumberTest extends TestCase {
             new ConstantNumber(3, "px").divide(new ConstantColor(0xffffff));
             fail("expected exception");
         }
-        catch (UnitMismatchException ex) {
+        catch ( final UnitMismatchException ex) {
             // expected
         }
     }
@@ -181,7 +181,7 @@ public class ConstantNumberTest extends TestCase {
             new ConstantNumber(3, "px").multiply(new ConstantNumber(2, "em"));
             fail("expected UnitMismatchException");
         }
-        catch (UnitMismatchException ex) {
+        catch ( final UnitMismatchException ex) {
             // expected
         }
     }

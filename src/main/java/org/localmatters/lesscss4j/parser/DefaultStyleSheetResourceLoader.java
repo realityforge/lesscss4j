@@ -19,7 +19,7 @@ package org.localmatters.lesscss4j.parser;
 import java.net.URL;
 
 public class DefaultStyleSheetResourceLoader implements StyleSheetResourceLoader {
-    public StyleSheetResource getResource(URL url) {
+    public StyleSheetResource getResource( final URL url) {
         if ("file".equals(url.getProtocol())) {
             return new FileStyleSheetResource(url.getPath());
         }

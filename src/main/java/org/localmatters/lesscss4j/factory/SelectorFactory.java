@@ -21,10 +21,10 @@ import org.localmatters.lesscss4j.error.ErrorHandler;
 import org.localmatters.lesscss4j.model.Selector;
 
 public class SelectorFactory extends AbstractObjectFactory<Selector> {
-    public Selector create(Tree selectorNode, ErrorHandler errorHandler) {
+    public Selector create( final Tree selectorNode, final ErrorHandler errorHandler) {
         Selector selector = null;
 
-        String selectorText = concatChildNodeText(selectorNode);
+        final String selectorText = concatChildNodeText(selectorNode);
         if (selectorText.length() > 0) {
             selector = new Selector( selectorText );
             selector.setLine(selectorNode.getLine());

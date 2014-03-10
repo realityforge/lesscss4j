@@ -59,14 +59,14 @@ public class StyleSheetFactory extends AbstractObjectFactory<StyleSheet> {
      * <li>'some/path'</li>
      * </ul>
      */
-    private Pattern _importCleanupPattern =
+    private final Pattern _importCleanupPattern =
         Pattern.compile("(?i:u\\s*r\\s*l\\(\\s*['\"]?|['\"])(.*?)(?:['\"]?\\s*\\)|['\"])");
 
     public StyleSheetTreeParser getStyleSheetTreeParser() {
         return _styleSheetTreeParser;
     }
 
-    public void setStyleSheetTreeParser(StyleSheetTreeParser styleSheetTreeParser) {
+    public void setStyleSheetTreeParser( final StyleSheetTreeParser styleSheetTreeParser) {
         _styleSheetTreeParser = styleSheetTreeParser;
     }
 
@@ -74,7 +74,7 @@ public class StyleSheetFactory extends AbstractObjectFactory<StyleSheet> {
         return _expressionFactory;
     }
 
-    public void setExpressionFactory(ObjectFactory<Expression> expressionFactory) {
+    public void setExpressionFactory( final ObjectFactory<Expression> expressionFactory) {
         _expressionFactory = expressionFactory;
     }
 
@@ -82,7 +82,7 @@ public class StyleSheetFactory extends AbstractObjectFactory<StyleSheet> {
         return _ruleSetFactory;
     }
 
-    public void setRuleSetFactory(ObjectFactory<RuleSet> ruleSetFactory) {
+    public void setRuleSetFactory( final ObjectFactory<RuleSet> ruleSetFactory) {
         _ruleSetFactory = ruleSetFactory;
     }
 
@@ -90,7 +90,7 @@ public class StyleSheetFactory extends AbstractObjectFactory<StyleSheet> {
         return _mediaFactory;
     }
 
-    public void setMediaFactory(ObjectFactory<Media> mediaFactory) {
+    public void setMediaFactory( final ObjectFactory<Media> mediaFactory) {
         _mediaFactory = mediaFactory;
     }
 
@@ -98,7 +98,7 @@ public class StyleSheetFactory extends AbstractObjectFactory<StyleSheet> {
         return _keyframesFactory;
     }
 
-    public void setKeyframesFactory(ObjectFactory<Keyframes> keyframesFactory) {
+    public void setKeyframesFactory( final ObjectFactory<Keyframes> keyframesFactory) {
         _keyframesFactory = keyframesFactory;
     }
 
@@ -106,12 +106,12 @@ public class StyleSheetFactory extends AbstractObjectFactory<StyleSheet> {
         return _pageFactory;
     }
 
-    public void setPageFactory(ObjectFactory<Page> pageFactory) {
+    public void setPageFactory( final ObjectFactory<Page> pageFactory) {
         _pageFactory = pageFactory;
     }
 
-    public StyleSheet create(Tree styleSheetNode, ErrorHandler errorHandler) {
-        StyleSheet stylesheet = new StyleSheet();
+    public StyleSheet create( final Tree styleSheetNode, final ErrorHandler errorHandler) {
+        final StyleSheet stylesheet = new StyleSheet();
         if (styleSheetNode == null) {
             return stylesheet;
         }
@@ -129,21 +129,21 @@ public class StyleSheetFactory extends AbstractObjectFactory<StyleSheet> {
         return stylesheet;
     }
 
-    protected void processStyleSheet(StyleSheet stylesheet,
-                                     Tree styleSheetNode,
-                                     StyleSheetResource resource,
-                                     ErrorHandler errorHandler) {
+    protected void processStyleSheet( final StyleSheet stylesheet,
+                                     final Tree styleSheetNode,
+                                     final StyleSheetResource resource,
+                                     final ErrorHandler errorHandler) {
         for (int idx = 0, numChildren = styleSheetNode.getChildCount(); idx < numChildren; idx++) {
-            Tree child = styleSheetNode.getChild(idx);
+            final Tree child = styleSheetNode.getChild(idx);
             processStyleSheetNode(stylesheet, child, resource, errorHandler);
         }
     }
 
 
-    protected void processStyleSheetNode(StyleSheet stylesheet,
-                                         Tree child,
-                                         StyleSheetResource resource,
-                                         ErrorHandler errorHandler) {
+    protected void processStyleSheetNode( final StyleSheet stylesheet,
+                                         final Tree child,
+                                         final StyleSheetResource resource,
+                                         final ErrorHandler errorHandler) {
         switch (child.getType()) {
             case CHARSET:
                 String charset = child.getChild(0).getText();
@@ -158,8 +158,8 @@ public class StyleSheetFactory extends AbstractObjectFactory<StyleSheet> {
                 break;
 
             case VAR:
-                Tree exprNode = child.getChild(1);
-                Expression expr = getExpressionFactory().create(exprNode, errorHandler);
+                final Tree exprNode = child.getChild(1);
+                final Expression expr = getExpressionFactory().create(exprNode, errorHandler);
                 if (expr != null) {
                     stylesheet.setVariable(child.getChild(0).getText(), expr);
                 }
@@ -167,28 +167,28 @@ public class StyleSheetFactory extends AbstractObjectFactory<StyleSheet> {
 
             case MIXIN_MACRO:
             case RULESET:
-                RuleSet ruleSet = getRuleSetFactory().create(child, errorHandler);
+                final RuleSet ruleSet = getRuleSetFactory().create(child, errorHandler);
                 if (ruleSet != null) {
                     stylesheet.addBodyElement(ruleSet);
                 }
                 break;
 
             case MEDIA_SYM:
-                Media media = getMediaFactory().create(child, errorHandler);
+                final Media media = getMediaFactory().create(child, errorHandler);
                 if (media != null) {
                     stylesheet.addBodyElement(media);
                 }
                 break;
 
             case KEYFRAMES:
-                Keyframes keyframes = getKeyframesFactory().create(child, errorHandler);
+                final Keyframes keyframes = getKeyframesFactory().create(child, errorHandler);
                 if (keyframes != null) {
                     stylesheet.addBodyElement(keyframes);
                 }
                 break;
 
             case PAGE_SYM:
-                Page page = getPageFactory().create(child, errorHandler);
+                final Page page = getPageFactory().create(child, errorHandler);
                 if (page != null) {
                     stylesheet.addBodyElement(page);
                 }
@@ -200,13 +200,13 @@ public class StyleSheetFactory extends AbstractObjectFactory<StyleSheet> {
         }
     }
 
-    protected void handleImport(StyleSheet stylesheet,
-                                Tree importNode,
-                                StyleSheetResource resource,
-                                ErrorHandler errorHandler) {
-        String importUrl = importNode.getChild(0).getText();
+    protected void handleImport( final StyleSheet stylesheet,
+                                final Tree importNode,
+                                final StyleSheetResource resource,
+                                final ErrorHandler errorHandler) {
+        final String importUrl = importNode.getChild(0).getText();
         try {
-            String path = cleanImportPath( importUrl );
+            final String path = cleanImportPath( importUrl );
 
             // circular/duplicate import check
             if (!stylesheet.getImports().contains(path)) {
@@ -214,26 +214,26 @@ public class StyleSheetFactory extends AbstractObjectFactory<StyleSheet> {
                 importStylesheet( path, resource, stylesheet, errorHandler );
             }
         }
-        catch (IOException e) {
+        catch ( final IOException e) {
             ErrorUtils.handleError(errorHandler,
                                    new AbstractElement(importNode.getLine(), importNode.getCharPositionInLine()),
                                    new ImportException(e.getMessage(), importUrl, e));
         }
     }
 
-    protected void importStylesheet(String path,
-                                          StyleSheetResource relativeTo,
-                                          StyleSheet stylesheet,
-                                          ErrorHandler errorHandler) throws IOException {
+    protected void importStylesheet( final String path,
+                                          final StyleSheetResource relativeTo,
+                                          final StyleSheet stylesheet,
+                                          final ErrorHandler errorHandler) throws IOException {
         Object saveContext = null;
         if (errorHandler != null) {
             saveContext = errorHandler.getContext();
             errorHandler.setContext(path);
         }
         try {
-            StyleSheetResource importResource = getImportResource(path, relativeTo);
-            int preImportErrorCount = errorHandler != null ? errorHandler.getErrorCount() : 0;
-            Tree result = getStyleSheetTreeParser().parseTree(importResource, errorHandler);
+            final StyleSheetResource importResource = getImportResource(path, relativeTo);
+            final int preImportErrorCount = errorHandler != null ? errorHandler.getErrorCount() : 0;
+            final Tree result = getStyleSheetTreeParser().parseTree(importResource, errorHandler);
             if (errorHandler == null || preImportErrorCount == errorHandler.getErrorCount()) {
                 processStyleSheet(stylesheet, result, importResource, errorHandler);
             }
@@ -245,13 +245,13 @@ public class StyleSheetFactory extends AbstractObjectFactory<StyleSheet> {
         }
     }
 
-    protected StyleSheetResource getImportResource(String path, StyleSheetResource relativeTo) throws IOException {
-        URL importUrl;
+    protected StyleSheetResource getImportResource(String path, final StyleSheetResource relativeTo) throws IOException {
+        final URL importUrl;
         if (isAbsoluteUrl(path)) {
             importUrl = new URL(path);
         }
         else {
-            String extension = FilenameUtils.getExtension( path );
+            final String extension = FilenameUtils.getExtension( path );
             if (extension == null || (!extension.equals("css") && !extension.equals("less"))) {
                 path = path + ".less";
             }
@@ -261,8 +261,8 @@ public class StyleSheetFactory extends AbstractObjectFactory<StyleSheet> {
         return getStyleSheetResourceLoader().getResource(importUrl);
     }
 
-    protected String cleanImportPath(String path) {
-        Matcher matcher = _importCleanupPattern.matcher(path);
+    protected String cleanImportPath( final String path) {
+        final Matcher matcher = _importCleanupPattern.matcher(path);
         if (matcher.matches()) {
             return matcher.group(1);
         }
@@ -275,7 +275,7 @@ public class StyleSheetFactory extends AbstractObjectFactory<StyleSheet> {
         return _styleSheetResourceLoader;
     }
 
-    public void setStyleSheetResourceLoader(StyleSheetResourceLoader styleSheetResourceLoader) {
+    public void setStyleSheetResourceLoader( final StyleSheetResourceLoader styleSheetResourceLoader) {
         _styleSheetResourceLoader = styleSheetResourceLoader;
     }
 
@@ -303,14 +303,14 @@ public class StyleSheetFactory extends AbstractObjectFactory<StyleSheet> {
      * @param url The url to check
      * @return True if the url is an absolute url.
      */
-    public static boolean isAbsoluteUrl(String url) {
+    public static boolean isAbsoluteUrl( final String url) {
         // a null URL is not absolute, by our definition
         if (url == null) {
             return false;
         }
 
         // do a fast, simple check first
-        int colonPos;
+        final int colonPos;
         if ((colonPos = url.indexOf(":")) == -1) {
             return false;
         }
@@ -328,31 +328,31 @@ public class StyleSheetFactory extends AbstractObjectFactory<StyleSheet> {
     }
 
     public static ObjectFactory<StyleSheet> createDefaultObjectFactory() {
-        ExpressionFactory expressionFactory = new ExpressionFactory();
-        SelectorFactory selectorFactory = new SelectorFactory();
+        final ExpressionFactory expressionFactory = new ExpressionFactory();
+        final SelectorFactory selectorFactory = new SelectorFactory();
 
-        DeclarationFactory declarationFactory = new DeclarationFactory();
+        final DeclarationFactory declarationFactory = new DeclarationFactory();
         declarationFactory.setExpressionFactory(expressionFactory);
         declarationFactory.setSelectorFactory(selectorFactory);
 
-        RuleSetFactory ruleSetFactory = new RuleSetFactory();
+        final RuleSetFactory ruleSetFactory = new RuleSetFactory();
         ruleSetFactory.setSelectorFactory(selectorFactory);
         ruleSetFactory.setDeclarationFactory(declarationFactory);
         ruleSetFactory.setExpressionFactory(expressionFactory);
 
-        MediaFactory mediaFactory = new MediaFactory();
+        final MediaFactory mediaFactory = new MediaFactory();
         mediaFactory.setRuleSetFactory(ruleSetFactory);
         mediaFactory.setExpressionFactory(expressionFactory);
 
-        KeyframesFactory keyframesFactory = new KeyframesFactory();
+        final KeyframesFactory keyframesFactory = new KeyframesFactory();
         keyframesFactory.setRuleSetFactory(ruleSetFactory);
         keyframesFactory.setExpressionFactory(expressionFactory);
 
-        PageFactory pageFactory = new PageFactory();
+        final PageFactory pageFactory = new PageFactory();
         pageFactory.setDeclarationFactory(declarationFactory);
         pageFactory.setExpressionFactory(expressionFactory);
 
-        StyleSheetFactory styleSheetFactory = new StyleSheetFactory();
+        final StyleSheetFactory styleSheetFactory = new StyleSheetFactory();
         styleSheetFactory.setRuleSetFactory(ruleSetFactory);
         styleSheetFactory.setMediaFactory(mediaFactory);
         styleSheetFactory.setPageFactory(pageFactory);

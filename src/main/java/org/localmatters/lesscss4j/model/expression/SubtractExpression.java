@@ -20,16 +20,16 @@ public class SubtractExpression extends CompoundExpression {
     public SubtractExpression() {
     }
 
-    public SubtractExpression(SubtractExpression copy) {
+    public SubtractExpression( final SubtractExpression copy) {
         super(copy);
     }
 
-    public SubtractExpression(Expression left, Expression right) {
+    public SubtractExpression( final Expression left, final Expression right) {
         super(left, right);
     }
 
     @Override
-    public ConstantValue evaluate(ConstantValue left, ConstantValue right) {
+    public ConstantValue evaluate( final ConstantValue left, final ConstantValue right) {
         return left.subtract(right);
     }
 

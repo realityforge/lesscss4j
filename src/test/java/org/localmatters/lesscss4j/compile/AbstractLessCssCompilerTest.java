@@ -44,14 +44,14 @@ public abstract class AbstractLessCssCompilerTest extends TestCase {
         _printOptions.setOpeningBraceOnNewLine(false);
         _printOptions.setIndentSize(2);
 
-        DefaultLessCssCompilerFactory factoryBean = new DefaultLessCssCompilerFactory();
+        final DefaultLessCssCompilerFactory factoryBean = new DefaultLessCssCompilerFactory();
         factoryBean.setDefaultEncoding(ENCODING);
         factoryBean.setPrettyPrintEnabled(true);
         factoryBean.setPrettyPrintOptions(_printOptions);
         _compiler = factoryBean.create();
     }
 
-    protected String readCss(String cssFile) throws IOException {
+    protected String readCss( final String cssFile) throws IOException {
         InputStream input = null;
         try {
             input = getClass().getClassLoader().getResourceAsStream(cssFile);
@@ -63,23 +63,23 @@ public abstract class AbstractLessCssCompilerTest extends TestCase {
         }
     }
 
-    protected void compileAndValidate(String lessFile, String cssFile) throws IOException {
+    protected void compileAndValidate( final String lessFile, final String cssFile) throws IOException {
         compileAndValidate(lessFile, cssFile, null);
     }
 
-    protected void compileAndValidate(String lessFile, String cssFile, Comparator<String> comparator) throws IOException {
-        URL url = getClass().getClassLoader().getResource(lessFile);
+    protected void compileAndValidate( final String lessFile, final String cssFile, final Comparator<String> comparator) throws IOException {
+        final URL url = getClass().getClassLoader().getResource(lessFile);
         assertNotNull("Unable to open " + lessFile, url);
 
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         _compiler.compile(new UrlStyleSheetResource(url), output, _errorHandler);
 
         output.close();
 
         if (_errorHandler == null || _errorHandler.getErrorCount() == 0) {
-            String expected = readCss(cssFile);
-            String actual = output.toString(ENCODING);
+            final String expected = readCss(cssFile);
+            final String actual = output.toString(ENCODING);
             if (comparator == null) {
                 assertEquals(expected, actual);
             }

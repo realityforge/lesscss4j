@@ -43,7 +43,7 @@ public class DeclarationFactory extends AbstractObjectFactory<Declaration> {
         return _selectorFactory;
     }
 
-    public void setSelectorFactory(ObjectFactory<Selector> selectorFactory) {
+    public void setSelectorFactory( final ObjectFactory<Selector> selectorFactory) {
         _selectorFactory = selectorFactory;
     }
 
@@ -51,22 +51,22 @@ public class DeclarationFactory extends AbstractObjectFactory<Declaration> {
         return _expressionFactory;
     }
 
-    public void setExpressionFactory(ObjectFactory<Expression> expressionFactory) {
+    public void setExpressionFactory( final ObjectFactory<Expression> expressionFactory) {
         _expressionFactory = expressionFactory;
     }
 
-    public Declaration create(Tree declarationNode, ErrorHandler errorHandler) {
-        Declaration declaration = new Declaration();
+    public Declaration create( final Tree declarationNode, final ErrorHandler errorHandler) {
+        final Declaration declaration = new Declaration();
         declaration.setLine(declarationNode.getLine());
         declaration.setChar(declarationNode.getCharPositionInLine());
 
         for (int idx = 0, numChildren = declarationNode.getChildCount(); idx < numChildren; idx++) {
-            Tree child = declarationNode.getChild(idx);
+            final Tree child = declarationNode.getChild(idx);
             switch (child.getType()) {
                 case IDENT:
                 case FONT:
                     String propName = child.getText();
-                    Tree propChild = child.getChild(0);
+                    final Tree propChild = child.getChild(0);
                     if (propChild != null) {
                         propName = propChild.getText() + propName;
                     }
@@ -74,7 +74,7 @@ public class DeclarationFactory extends AbstractObjectFactory<Declaration> {
                     break;
 
                 case PROP_VALUE:
-                    List<Object> values = createPropValues(child, errorHandler);
+                    final List<Object> values = createPropValues(child, errorHandler);
                     if (values != null) {
                         declaration.setValues(values);
                     }
@@ -93,11 +93,11 @@ public class DeclarationFactory extends AbstractObjectFactory<Declaration> {
         return declaration.getValues() == null ? null : declaration;
     }
 
-    protected List<Object> createPropValues(Tree valueNode, ErrorHandler errorHandler) {
-        int numChildren = valueNode.getChildCount();
-        List<Object> values = new ArrayList<Object>(numChildren);
+    protected List<Object> createPropValues( final Tree valueNode, final ErrorHandler errorHandler) {
+        final int numChildren = valueNode.getChildCount();
+        final List<Object> values = new ArrayList<>(numChildren);
         for (int idx = 0; idx < numChildren; idx++) {
-            Tree child = valueNode.getChild(idx);
+            final Tree child = valueNode.getChild(idx);
             switch (child.getType()) {
                 case LITERAL:
                 case EXPR:
@@ -106,7 +106,7 @@ public class DeclarationFactory extends AbstractObjectFactory<Declaration> {
                 {
                     Expression expression = getExpressionFactory().create(child, errorHandler);
                     if (expression != null) {
-                        Expression ieFilter = parseIE8AlphaFilter(expression, errorHandler);
+                        final Expression ieFilter = parseIE8AlphaFilter(expression, errorHandler);
                         if (ieFilter != null) {
                             expression = ieFilter;
                         }
@@ -117,7 +117,7 @@ public class DeclarationFactory extends AbstractObjectFactory<Declaration> {
 
                 case MIXIN_ACCESSOR:
                 {
-                    AccessorExpression accessor = createMixinAccessor(child, errorHandler);
+                    final AccessorExpression accessor = createMixinAccessor(child, errorHandler);
                     if (accessor != null) {
                         values.add(accessor);
                     }
@@ -146,10 +146,10 @@ public class DeclarationFactory extends AbstractObjectFactory<Declaration> {
         return values.size() > 0 ? values : null;
     }
 
-    protected AccessorExpression createMixinAccessor(Tree accessorNode, ErrorHandler errorHandler) {
-        AccessorExpression expression = new AccessorExpression();
+    protected AccessorExpression createMixinAccessor( final Tree accessorNode, final ErrorHandler errorHandler) {
+        final AccessorExpression expression = new AccessorExpression();
         expression.setSelector(getSelectorFactory().create(accessorNode.getChild(0), errorHandler));
-        Tree propertyNode = accessorNode.getChild(1);
+        final Tree propertyNode = accessorNode.getChild(1);
         switch (propertyNode.getType()) {
             case VAR:
                 expression.setProperty(propertyNode.getChild(0).getText());
@@ -157,7 +157,7 @@ public class DeclarationFactory extends AbstractObjectFactory<Declaration> {
                 break;
 
             case STRING:
-                String str = propertyNode.getText();
+                final String str = propertyNode.getText();
                 expression.setProperty(str.substring(1, str.length() - 1)); // strip off quotes
                 expression.setVariable(false);
                 break;
@@ -171,7 +171,7 @@ public class DeclarationFactory extends AbstractObjectFactory<Declaration> {
         return expression;
     }
 
-    private Pattern _ieAlphaPattern =
+    private final Pattern _ieAlphaPattern =
         Pattern.compile("(?i)['\"]progid:DXImageTransform\\.Microsoft\\.(Alpha\\(.*\\))['\"]");
 
     /**
@@ -182,28 +182,28 @@ public class DeclarationFactory extends AbstractObjectFactory<Declaration> {
      * @param value The Literal expression to parse
      * @return The parsed Expression.  Null if it isn't an Alpha expression or it cannot be parsed.
      */
-    protected Expression parseIE8AlphaFilter(Expression value, ErrorHandler errorHandler) {
+    protected Expression parseIE8AlphaFilter( final Expression value, final ErrorHandler errorHandler) {
         if (value instanceof LiteralExpression) {
-            String text = ((LiteralExpression) value).getValue();
+            final String text = ((LiteralExpression) value).getValue();
 
             // Short circuit test to avoid doing the regex match if we don't have to
             if ((text.charAt(0) == '"' || text.charAt(0) == '\'') &&
                 text.length() > "'progid:DXImageTransform.Microsoft.Alpha()'".length() &&
                 (text.charAt(text.length() - 1) == '"' || text.charAt(text.length() - 1) == '\'')) {
 
-                Matcher matcher = _ieAlphaPattern.matcher(text);
+                final Matcher matcher = _ieAlphaPattern.matcher(text);
                 if (matcher.matches()) {
-                    LessCssLexer lexer = new LessCssLexer(new ANTLRStringStream(matcher.group(1)));
-                    LessCssParser parser = new LessCssParser(new CommonTokenStream(lexer));
+                    final LessCssLexer lexer = new LessCssLexer(new ANTLRStringStream(matcher.group(1)));
+                    final LessCssParser parser = new LessCssParser(new CommonTokenStream(lexer));
                     try {
-                        LessCssParser.propertyValue_return result = parser.propertyValue();
-                        List<Object> propValues = createPropValues((Tree) result.getTree(), errorHandler);
-                        FunctionExpression alphaFunction = (FunctionExpression) propValues.get(0);
+                        final LessCssParser.propertyValue_return result = parser.propertyValue();
+                        final List<Object> propValues = createPropValues((Tree) result.getTree(), errorHandler);
+                        final FunctionExpression alphaFunction = (FunctionExpression) propValues.get(0);
                         alphaFunction.setName("progid:DXImageTransform.Microsoft.Alpha");
                         alphaFunction.setQuoted(true);
                         return alphaFunction;
                     }
-                    catch (RecognitionException e) {
+                    catch ( final RecognitionException e) {
                         // todo: send something to the error handler
                         // Can't do anything with it.  Just leave it alone
                     }

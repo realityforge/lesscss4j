@@ -42,7 +42,7 @@ public class LessCssServletTest extends TestCase {
     HttpServletResponse _response;
     ServletContext _servletContext;
     MockServletConfig _servletConfig;
-    String _path = "less/tiny.less";
+    final String _path = "less/tiny.less";
     URL _url;
     byte[] _cssBytes;
     String _cssStr;
@@ -68,7 +68,7 @@ public class LessCssServletTest extends TestCase {
 
         _url = getClass().getClassLoader().getResource(_path);
 
-        InputStream input = _url.openStream();
+        final InputStream input = _url.openStream();
         try {
             _cssBytes = IOUtils.toByteArray(input);
             _cssStr = new String(_cssBytes, "UTF-8");
@@ -100,7 +100,7 @@ public class LessCssServletTest extends TestCase {
         _response.setContentType("text/css; charset=UTF-8");
         _response.setContentLength(_cssBytes.length);
 
-        MockServletOutputStream responseStream = new MockServletOutputStream();
+        final MockServletOutputStream responseStream = new MockServletOutputStream();
         when(_response.getOutputStream()).thenReturn(responseStream);
 
         doReplay();
@@ -128,7 +128,7 @@ public class LessCssServletTest extends TestCase {
         _response.setContentType("text/css; charset=UTF-8");
         _response.setContentLength(_cssBytes.length);
 
-        MockServletOutputStream responseStream = new MockServletOutputStream();
+        final MockServletOutputStream responseStream = new MockServletOutputStream();
       when( _response.getOutputStream() ).thenReturn( responseStream );
 
         doReplay();
@@ -178,7 +178,7 @@ public class LessCssServletTest extends TestCase {
         _response.setContentType("text/css; charset=UTF-8");
         _response.setContentLength(_cssBytes.length);
 
-        MockServletOutputStream responseStream = new MockServletOutputStream();
+        final MockServletOutputStream responseStream = new MockServletOutputStream();
         when(_response.getOutputStream()).thenReturn(responseStream);
 
         doReplay();
@@ -212,7 +212,7 @@ public class LessCssServletTest extends TestCase {
         _response.setContentType("text/css; charset=UTF-8");
         _response.setContentLength(_cssBytes.length);
 
-        MockServletOutputStream responseStream = new MockServletOutputStream();
+        final MockServletOutputStream responseStream = new MockServletOutputStream();
         when(_response.getOutputStream()).thenReturn(responseStream);
 
         doReplay();
@@ -288,7 +288,7 @@ public class LessCssServletTest extends TestCase {
     private static class MockServletConfig implements ServletConfig {
         private String _servletName;
         private ServletContext _servletContext;
-        private Map<String, String> _initParameters = new LinkedHashMap<String, String>();
+        private final Map<String, String> _initParameters = new LinkedHashMap<String, String>();
 
         public String getServletName() {
             return _servletName;
@@ -298,25 +298,25 @@ public class LessCssServletTest extends TestCase {
             return _servletContext;
         }
 
-        public void setServletName(String servletName) {
+        public void setServletName( final String servletName) {
             _servletName = servletName;
         }
 
-        public void setServletContext(ServletContext servletContext) {
+        public void setServletContext( final ServletContext servletContext) {
             _servletContext = servletContext;
         }
 
-        public void setInitParameter(String name, String value) {
+        public void setInitParameter( final String name, final String value) {
             _initParameters.put(name, value);
         }
 
-        public String getInitParameter(String name) {
+        public String getInitParameter( final String name) {
             return _initParameters.get(name);
         }
 
         public Enumeration getInitParameterNames() {
             return new Enumeration() {
-                Iterator _iter = _initParameters.keySet().iterator();
+                final Iterator _iter = _initParameters.keySet().iterator();
 
                 public boolean hasMoreElements() {
                     return _iter.hasNext();
@@ -330,10 +330,10 @@ public class LessCssServletTest extends TestCase {
     }
 
     private static class MockServletOutputStream extends ServletOutputStream {
-        private ByteArrayOutputStream output = new ByteArrayOutputStream();
+        private final ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         @Override
-        public void write(int b) throws IOException {
+        public void write( final int b) throws IOException {
             output.write(b);
         }
 

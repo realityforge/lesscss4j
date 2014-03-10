@@ -22,14 +22,14 @@ import org.localmatters.lesscss4j.model.expression.Expression;
 
 public class MixinReference extends AbstractElement implements DeclarationElement {
     private Selector _selector;
-    private List<Expression> _arguments = new ArrayList<Expression>();
+    private List<Expression> _arguments = new ArrayList<>();
 
     public MixinReference() {
     }
 
-    public MixinReference(MixinReference copy) {
+    public MixinReference( final MixinReference copy) {
         _selector = copy._selector.clone();
-        for (Expression argument : copy._arguments) {
+        for ( final Expression argument : copy._arguments) {
             _arguments.add(argument.clone());
         }
     }
@@ -38,7 +38,7 @@ public class MixinReference extends AbstractElement implements DeclarationElemen
         return _selector;
     }
 
-    public void setSelector(Selector selector) {
+    public void setSelector( final Selector selector) {
         _selector = selector;
     }
 
@@ -46,9 +46,9 @@ public class MixinReference extends AbstractElement implements DeclarationElemen
         return _arguments;
     }
 
-    public void addArgument(Expression expression) {
+    public void addArgument( final Expression expression) {
         if (_arguments == null) {
-            _arguments = new ArrayList<Expression>();
+            _arguments = new ArrayList<>();
         }
         _arguments.add(expression);
     }

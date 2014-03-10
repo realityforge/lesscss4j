@@ -27,16 +27,16 @@ public class RuleSetTransformer extends AbstractDeclarationContainerTransformer<
     public RuleSetTransformer() {
     }
 
-    public RuleSetTransformer(TransformerManager transformerManager) {
+    public RuleSetTransformer( final TransformerManager transformerManager) {
         super(transformerManager);
     }
 
-    public List<RuleSet> transform(RuleSet ruleSet, EvaluationContext context) {
-        RuleSet transformed;
+    public List<RuleSet> transform( final RuleSet ruleSet, final EvaluationContext context) {
+        final RuleSet transformed;
 
         // Rule sets with arguments shouldn't be processed since they serve
         // only as a template for use by other rule sets in the stylesheet.
-        List<RuleSet> ruleSetList;
+        final List<RuleSet> ruleSetList;
         if (ruleSet.getArguments().size() > 0) {
             transformed = new RuleSet(ruleSet);
             ruleSetList = Arrays.asList(transformed);
@@ -44,7 +44,7 @@ public class RuleSetTransformer extends AbstractDeclarationContainerTransformer<
         else {
             transformed = new RuleSet(ruleSet, false);
 
-            ruleSetList = new ArrayList<RuleSet>();
+            ruleSetList = new ArrayList<>();
             ruleSetList.add(transformed);
             doTransform(ruleSet, ruleSetList, context);
         }

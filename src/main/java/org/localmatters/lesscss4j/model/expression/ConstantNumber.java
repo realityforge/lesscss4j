@@ -28,12 +28,12 @@ public class ConstantNumber implements ConstantValue {
     }
 
 
-    public ConstantNumber(ConstantNumber copy) {
+    public ConstantNumber( final ConstantNumber copy) {
         _value = copy._value;
         _unit = copy._unit;
     }
 
-    public ConstantNumber(double value, String unit) {
+    public ConstantNumber( final double value, final String unit) {
         setValue(value);
         setUnit(unit);
     }
@@ -47,7 +47,7 @@ public class ConstantNumber implements ConstantValue {
         else {
             int unitIdx = -1;
             for (int numChars = value.length(), idx = numChars - 1; idx >= 0; idx--) {
-                char ch = value.charAt(idx);
+                final char ch = value.charAt(idx);
                 if ('0' <= ch && ch <= '9' || ch == '.') {
                     unitIdx = idx + 1;
                     break;
@@ -65,14 +65,14 @@ public class ConstantNumber implements ConstantValue {
         return _unit;
     }
 
-    public void setUnit(String unit) {
+    public void setUnit( final String unit) {
         _unit = unit != null ? unit.trim() : unit;
         if (_unit != null && _unit.length() == 0) {
             _unit = null;
         }
     }
 
-    public void setValue(double value) {
+    public void setValue( final double value) {
         _value = value;
     }
 
@@ -80,31 +80,31 @@ public class ConstantNumber implements ConstantValue {
         return _value;
     }
 
-    protected boolean hasCompatibleUnits(ConstantNumber that) {
+    protected boolean hasCompatibleUnits( final ConstantNumber that) {
         return this.getUnit() == null || that.getUnit() == null || this.getUnit().equals(that.getUnit());
     }
 
-    protected void checkUnits(ConstantValue that) {
+    protected void checkUnits( final ConstantValue that) {
         if (!(that instanceof ConstantNumber) || !hasCompatibleUnits((ConstantNumber) that)) {
             throw new UnitMismatchException(this, that);
         }
     }
 
-    protected String selectUnit(ConstantValue right) {
+    protected String selectUnit( final ConstantValue right) {
         return this.getUnit() != null ? this.getUnit() : ((ConstantNumber) right).getUnit();
     }
 
-    public ConstantValue add(ConstantValue right) {
+    public ConstantValue add( final ConstantValue right) {
         checkUnits(right);
         return new ConstantNumber(this.getValue() + right.getValue(), selectUnit(right));
     }
 
-    public ConstantValue subtract(ConstantValue right) {
+    public ConstantValue subtract( final ConstantValue right) {
         checkUnits(right);
         return new ConstantNumber(this.getValue() - right.getValue(), selectUnit(right));
     }
 
-    public ConstantValue multiply(ConstantValue right) {
+    public ConstantValue multiply( final ConstantValue right) {
         if (right instanceof ConstantColor && getUnit() == null) {
             return right.multiply(this);
         }
@@ -114,7 +114,7 @@ public class ConstantNumber implements ConstantValue {
         }
     }
 
-    public ConstantValue divide(ConstantValue right) {
+    public ConstantValue divide( final ConstantValue right) {
         checkUnits(right);
         if (right.getValue() == 0.0) {
             throw new DivideByZeroException();
@@ -133,9 +133,9 @@ public class ConstantNumber implements ConstantValue {
         if ((value - ((int) value) * ROUND_MULTIPLIER) > 0) {
             value = Math.round(value * ROUND_MULTIPLIER) / ROUND_MULTIPLIER;
         }
-        String str = Double.toString(value);
+        final String str = Double.toString(value);
 
-        char[] chars = new char[str.length() + (getUnit() != null ? getUnit().length() : 0)];
+        final char[] chars = new char[str.length() + (getUnit() != null ? getUnit().length() : 0)];
         boolean hasInt = false;
         int i = 0;
         boolean negative = false;
@@ -158,7 +158,7 @@ public class ConstantNumber implements ConstantValue {
                 // Found decimal point...see if we have any non-zero values
                 c++;
 
-                int decimalLength = Math.min(DECIMAL_PLACES, str.length() - c);
+                final int decimalLength = Math.min(DECIMAL_PLACES, str.length() - c);
 
                 // Find the last non-zero digit
                 int lastNonZeroIdx = -1;
@@ -187,7 +187,7 @@ public class ConstantNumber implements ConstantValue {
             return "0";
         }
         else {
-            String unit = getUnit();
+            final String unit = getUnit();
             if (unit != null && value != 0.0) {
                 for (int c = 0; c < unit.length(); c++) {
                     chars[i++] = unit.charAt(c);
@@ -207,11 +207,11 @@ public class ConstantNumber implements ConstantValue {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals( final Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
 
-        ConstantNumber that = (ConstantNumber) obj;
+        final ConstantNumber that = (ConstantNumber) obj;
 
         if (Double.compare(that._value, _value) != 0) return false;
       return !( _unit != null ? !_unit.equals( that._unit ) : that._unit != null );
@@ -221,7 +221,7 @@ public class ConstantNumber implements ConstantValue {
     @Override
     public int hashCode() {
         int result;
-        long temp;
+        final long temp;
         temp = _value != +0.0d ? Double.doubleToLongBits(_value) : 0L;
         result = (int) (temp ^ (temp >>> 32));
         result = 31 * result + (_unit != null ? _unit.hashCode() : 0);

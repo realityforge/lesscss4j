@@ -20,16 +20,16 @@ public class AddExpression extends CompoundExpression {
     public AddExpression() {
     }
 
-    public AddExpression(Expression left, Expression right) {
+    public AddExpression( final Expression left, final Expression right) {
         super(left, right);
     }
 
-    public AddExpression(AddExpression copy) {
+    public AddExpression( final AddExpression copy) {
         super(copy);
     }
 
     @Override
-    public ConstantValue evaluate(ConstantValue left, ConstantValue right) {
+    public ConstantValue evaluate( final ConstantValue left, final ConstantValue right) {
         return left.add(right);
     }
 

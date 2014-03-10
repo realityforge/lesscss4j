@@ -27,11 +27,11 @@ public class ListExpression extends AbstractElement implements Expression {
     public ListExpression() {
     }
 
-    public ListExpression(ListExpression copy) {
+    public ListExpression( final ListExpression copy) {
         super(copy);
         if (copy._expressions != null) {
-            _expressions = new ArrayList<Expression>(copy._expressions.size());
-            for (Expression argument : copy._expressions) {
+            _expressions = new ArrayList<>(copy._expressions.size());
+            for ( final Expression argument : copy._expressions) {
                 _expressions.add(argument.clone());
             }
         }
@@ -41,20 +41,20 @@ public class ListExpression extends AbstractElement implements Expression {
         return _expressions;
     }
 
-    public void setExpressions(List<Expression> expressions) {
+    public void setExpressions( final List<Expression> expressions) {
         _expressions = expressions;
     }
 
-    public void addExpression(Expression expression) {
+    public void addExpression( final Expression expression) {
         if (_expressions == null) {
-            _expressions = new ArrayList<Expression>();
+            _expressions = new ArrayList<>();
         }
         _expressions.add(expression);
     }
 
-    public Expression evaluate(EvaluationContext context) {
-        StringBuilder buf = new StringBuilder();
-        for (Expression expression : _expressions) {
+    public Expression evaluate( final EvaluationContext context) {
+        final StringBuilder buf = new StringBuilder();
+        for ( final Expression expression : _expressions) {
             buf.append(expression.evaluate(context).toString());
         }
         return new LiteralExpression(buf.toString());

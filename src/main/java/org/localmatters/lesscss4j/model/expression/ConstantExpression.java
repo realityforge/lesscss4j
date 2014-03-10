@@ -28,16 +28,16 @@ public class ConstantExpression extends AbstractElement implements Expression {
         this((ConstantValue)null);
     }
 
-    public ConstantExpression(ConstantExpression copy) {
+    public ConstantExpression( final ConstantExpression copy) {
         super(copy);
         _value = copy._value.clone();
     }
 
-    public ConstantExpression(ConstantValue value) {
+    public ConstantExpression( final ConstantValue value) {
         _value = value;
     }
 
-    public ConstantExpression(String value) {
+    public ConstantExpression( final String value) {
         if (value.charAt(0) == '#' || ConstantColor.isColorFunction(value)) {
             _value = new ConstantColor(value);
         }
@@ -50,11 +50,11 @@ public class ConstantExpression extends AbstractElement implements Expression {
         return _value;
     }
 
-    public void setValue(ConstantValue value) {
+    public void setValue( final ConstantValue value) {
         _value = value;
     }
 
-    public Expression evaluate(EvaluationContext context) {
+    public Expression evaluate( final EvaluationContext context) {
         // Evaluation of a constant is itself
         return this;
     }

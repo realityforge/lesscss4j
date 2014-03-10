@@ -25,7 +25,7 @@ public class StyleSheetEvaluationContext extends EvaluationContext {
         return _resource;
     }
 
-    public void setResource(StyleSheetResource resource) {
+    public void setResource( final StyleSheetResource resource) {
         _resource = resource;
     }
 }

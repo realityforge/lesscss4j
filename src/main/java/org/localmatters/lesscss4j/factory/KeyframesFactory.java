@@ -31,7 +31,7 @@ public class KeyframesFactory extends AbstractObjectFactory<Keyframes> {
         return _expressionFactory;
     }
 
-    public void setExpressionFactory(ObjectFactory<Expression> expressionFactory) {
+    public void setExpressionFactory( final ObjectFactory<Expression> expressionFactory) {
         _expressionFactory = expressionFactory;
     }
 
@@ -39,30 +39,30 @@ public class KeyframesFactory extends AbstractObjectFactory<Keyframes> {
         return _ruleSetFactory;
     }
 
-    public void setRuleSetFactory(ObjectFactory<RuleSet> ruleSetFactory) {
+    public void setRuleSetFactory( final ObjectFactory<RuleSet> ruleSetFactory) {
         _ruleSetFactory = ruleSetFactory;
     }
 
-    public Keyframes create(Tree mediaNode, ErrorHandler errorHandler) {
-        Keyframes keyframes = new Keyframes();
+    public Keyframes create( final Tree mediaNode, final ErrorHandler errorHandler) {
+        final Keyframes keyframes = new Keyframes();
         keyframes.setLine(mediaNode.getLine());
         keyframes.setChar(mediaNode.getCharPositionInLine());
         for (int idx = 0, numChildren = mediaNode.getChildCount(); idx < numChildren; idx++) {
-            Tree child = mediaNode.getChild(idx);
+            final Tree child = mediaNode.getChild(idx);
             switch (child.getType()) {
                 case SELECTOR:
                     keyframes.setName(concatChildNodeText(child));
                     break;
 
                 case RULESET:
-                    RuleSet ruleSet = getRuleSetFactory().create(child, errorHandler);
+                    final RuleSet ruleSet = getRuleSetFactory().create(child, errorHandler);
                     if (ruleSet != null) {
                         keyframes.addBodyElement(ruleSet);
                     }
                     break;
 
                 case VAR:
-                    Expression expr = getExpressionFactory().create(child.getChild(1), errorHandler);
+                    final Expression expr = getExpressionFactory().create(child.getChild(1), errorHandler);
                     if (expr != null) {
                         keyframes.setVariable(child.getChild(0).getText(), expr);
                     }

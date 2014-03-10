@@ -19,22 +19,22 @@ package org.localmatters.lesscss4j.error;
 import org.localmatters.lesscss4j.model.expression.VariableReferenceExpression;
 
 public class UndefinedVariableException extends LessCssException {
-    public UndefinedVariableException(VariableReferenceExpression variable) {
+    public UndefinedVariableException( final VariableReferenceExpression variable) {
         super("Undefined variable: @" + variable.getVariableName());
         setPosition(variable);
     }
 
-    public UndefinedVariableException(VariableReferenceExpression variable, String message) {
+    public UndefinedVariableException( final VariableReferenceExpression variable, final String message) {
         super("Undefined variable: @" + variable.getVariableName() + ": " + message);
         setPosition(variable);
     }
 
-    public UndefinedVariableException(VariableReferenceExpression variable, String message, Throwable cause) {
+    public UndefinedVariableException( final VariableReferenceExpression variable, final String message, final Throwable cause) {
         super("Undefined variable: @" + variable.getVariableName() + ": " + message, cause);
         setPosition(variable);
     }
 
-    public UndefinedVariableException(VariableReferenceExpression variable, Throwable cause) {
+    public UndefinedVariableException( final VariableReferenceExpression variable, final Throwable cause) {
         super("Undefined variable: @" + variable.getVariableName(), cause);
         setPosition(variable);
     }

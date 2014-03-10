@@ -26,18 +26,18 @@ public class CompositeTransformer<T> implements Transformer<T> {
         return _transformers;
     }
 
-    public void setTransformers(List<Transformer<T>> transformers) {
+    public void setTransformers( final List<Transformer<T>> transformers) {
         _transformers = transformers;
     }
 
-    public List<T> transform(T value, EvaluationContext context) {
-        List<T> transformed = new ArrayList<T>();
+    public List<T> transform( final T value, final EvaluationContext context) {
+        final List<T> transformed = new ArrayList<>();
         transformed.add(value);
 
-        for (Transformer<T> transformer : getTransformers()) {
+        for ( final Transformer<T> transformer : getTransformers()) {
             for (int idx = 0; idx < transformed.size(); idx++) {
-                T val = transformed.get(idx);
-                List<T> result = transformer.transform(val, context);
+                final T val = transformed.get(idx);
+                final List<T> result = transformer.transform(val, context);
                 if (result != null && result.size() > 0) {
                     transformed.set(idx, result.get(0));
                     if (result.size() > 1) {

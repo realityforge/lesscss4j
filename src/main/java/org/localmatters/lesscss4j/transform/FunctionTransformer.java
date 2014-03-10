@@ -29,9 +29,9 @@ import org.localmatters.lesscss4j.transform.function.Function;
 public class FunctionTransformer extends AbstractTransformer<Expression> {
     private Map<String, Function> _functionMap;
 
-    public void addFunction(String name, Function function) {
+    public void addFunction( final String name, final Function function) {
         if (_functionMap == null) {
-            _functionMap = new LinkedHashMap<String, Function>();
+            _functionMap = new LinkedHashMap<>();
         }
         _functionMap.put(name, function);
     }
@@ -40,28 +40,28 @@ public class FunctionTransformer extends AbstractTransformer<Expression> {
         return _functionMap;
     }
 
-    public void setFunctionMap(Map<String, Function> functionMap) {
+    public void setFunctionMap( final Map<String, Function> functionMap) {
         _functionMap = functionMap;
     }
 
-    public List<Expression> transform(Expression expression, EvaluationContext context) {
+    public List<Expression> transform( final Expression expression, final EvaluationContext context) {
         if (!(expression instanceof FunctionExpression)) {
             throw new IllegalArgumentException("Object to transform must be a FunctionExpression");
         }
 
-        FunctionExpression function = (FunctionExpression) expression;
+        final FunctionExpression function = (FunctionExpression) expression;
         Expression result = function;
 
-        String functionName = function.getName();
-        Function func = getFunctionMap().get(functionName);
+        final String functionName = function.getName();
+        final Function func = getFunctionMap().get(functionName);
         if (func != null) {
-            List<Expression> args = new ArrayList<Expression>(function.getArguments().size());
+            final List<Expression> args = new ArrayList<>(function.getArguments().size());
 
             // Evaluate each of the argument expressions before calling the function.
             for (int idx = 0; idx < function.getArguments().size(); idx++) {
                 Expression argExpression = function.getArguments().get(idx);
                 if (!(argExpression instanceof LiteralExpression) || !argExpression.toString().equals(",")) {
-                    Transformer<Expression> transformer = getTransformer(argExpression, false);
+                    final Transformer<Expression> transformer = getTransformer(argExpression, false);
                     if (transformer != null) {
                         argExpression = transformer.transform(argExpression, context).get(0);
                     }
