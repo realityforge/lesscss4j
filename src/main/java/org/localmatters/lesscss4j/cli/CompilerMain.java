@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -29,245 +30,367 @@ import org.localmatters.lesscss4j.output.PrettyPrintOptions;
 import org.localmatters.lesscss4j.parser.FileStyleSheetResource;
 import org.localmatters.lesscss4j.parser.InputStreamStyleSheetResource;
 import org.localmatters.lesscss4j.parser.StyleSheetResource;
+import org.realityforge.getopt4j.CLArgsParser;
+import org.realityforge.getopt4j.CLOption;
+import org.realityforge.getopt4j.CLOptionDescriptor;
+import org.realityforge.getopt4j.CLUtil;
 
 /**
  * Entry point for the command line execution of the LessCSS compiler.
  */
-public class CompilerMain {
-    public boolean _prettyPrint = false;
-    public PrettyPrintOptions _prettyPrintOptions;
-    private String _inputFilename;
-    private String _outputFilename;
+public class CompilerMain
+{
+  private static final int HELP_OPT = 'h';
+  private static final int VERSION_OPT = 'v';
+  private static final int FORMAT_OPT = 'f';
+  private static final int NO_FORMAT_OPT = 1;
+  private static final int INDENT_OPT = 'i';
+  private static final int LINE_BREAK_OPT = 'l';
+  private static final int NO_LINE_BREAK_OPT = 2;
+  private static final int SINGLE_LINE_OPT = 's';
+  private static final int NO_SINGLE_LINE_OPT = 3;
+  private static final int BRACE_NEWLINE_OPT = 'b';
+  private static final int NO_BRACE_NEWLINE_OPT = 4;
 
-    public PrettyPrintOptions getPrettyPrintOptions() {
-        return _prettyPrintOptions;
+  private static final CLOptionDescriptor[] OPTIONS = new CLOptionDescriptor[]{
+    new CLOptionDescriptor( "help",
+                            CLOptionDescriptor.ARGUMENT_DISALLOWED,
+                            HELP_OPT,
+                            "Display this help message" ),
+    new CLOptionDescriptor( "version",
+                            CLOptionDescriptor.ARGUMENT_DISALLOWED,
+                            VERSION_OPT,
+                            "Display the version" ),
+    new CLOptionDescriptor( "format",
+                            CLOptionDescriptor.ARGUMENT_DISALLOWED,
+                            FORMAT_OPT,
+                            "Format (pretty print) the CSS file" ),
+    new CLOptionDescriptor( "no-format",
+                            CLOptionDescriptor.ARGUMENT_DISALLOWED,
+                            NO_FORMAT_OPT,
+                            "Don't format (pretty print) the CSS file" ),
+    new CLOptionDescriptor( "indent",
+                            CLOptionDescriptor.ARGUMENT_REQUIRED,
+                            INDENT_OPT,
+                            "Indent VALUE spaces" ),
+    new CLOptionDescriptor( "line-break",
+                            CLOptionDescriptor.ARGUMENT_DISALLOWED,
+                            LINE_BREAK_OPT,
+                            "Place a blank line between CSS rule sets" ),
+    new CLOptionDescriptor( "no-line-break",
+                            CLOptionDescriptor.ARGUMENT_DISALLOWED,
+                            NO_LINE_BREAK_OPT,
+                            "Don't place a blank line between CSS rule sets" ),
+    new CLOptionDescriptor( "single-line",
+                            CLOptionDescriptor.ARGUMENT_DISALLOWED,
+                            SINGLE_LINE_OPT,
+                            "Place single declarations rulesets on one line" ),
+    new CLOptionDescriptor( "no-single-line",
+                            CLOptionDescriptor.ARGUMENT_DISALLOWED,
+                            NO_SINGLE_LINE_OPT,
+                            "Don't place single declaration rulesets on one line" ),
+    new CLOptionDescriptor( "brace-newline",
+                            CLOptionDescriptor.ARGUMENT_DISALLOWED,
+                            BRACE_NEWLINE_OPT,
+                            "Place opening braces on their own line" ),
+    new CLOptionDescriptor( "no-brace-newline",
+                            CLOptionDescriptor.ARGUMENT_DISALLOWED,
+                            NO_BRACE_NEWLINE_OPT,
+                            "Don't place opening braces on their own line" ),
+  };
+
+  private boolean _prettyPrint = false;
+  private PrettyPrintOptions _prettyPrintOptions;
+  private String _inputFilename;
+  private String _outputFilename;
+
+  public PrettyPrintOptions getPrettyPrintOptions()
+  {
+    return _prettyPrintOptions;
+  }
+
+  public void setPrettyPrintOptions( final PrettyPrintOptions prettyPrintOptions )
+  {
+    _prettyPrintOptions = prettyPrintOptions;
+  }
+
+  public boolean isPrettyPrint()
+  {
+    return _prettyPrint;
+  }
+
+  public void setPrettyPrint( boolean prettyPrint )
+  {
+    _prettyPrint = prettyPrint;
+  }
+
+  private void printUsage()
+  {
+    final String lineSeparator = System.getProperty( "line.separator" );
+
+    final StringBuilder msg = new StringBuilder();
+
+    msg.append( "Usage: " );
+    msg.append( CompilerMain.class.getName() );
+    msg.append( " [options] [input] [output]" );
+    msg.append( lineSeparator );
+    msg.append( "Options: " );
+    msg.append( lineSeparator );
+
+    msg.append( CLUtil.describeOptions( OPTIONS ).toString() );
+
+    System.out.println( msg.toString() );
+  }
+
+  protected void printVersion()
+  {
+    System.out.println( "jlessc <todo:VERSION>" );
+  }
+
+  public int run( final String[] args )
+  {
+    if ( !processOptions( args ) )
+    {
+      return -1;
     }
 
-    public void setPrettyPrintOptions(PrettyPrintOptions prettyPrintOptions) {
-        _prettyPrintOptions = prettyPrintOptions;
+    try
+    {
+      compile();
+    }
+    catch ( IOException io )
+    {
+      System.err.println( io.toString() );
+      return -1;
     }
 
-    public boolean isPrettyPrint() {
-        return _prettyPrint;
-    }
+    return 0;
+  }
 
-    public void setPrettyPrint(boolean prettyPrint) {
-        _prettyPrint = prettyPrint;
-    }
+  private boolean processOptions( final String[] args )
+  {
+    // Parse the arguments
+    final CLArgsParser parser = new CLArgsParser( args, OPTIONS );
 
-    protected void usage() {
-        System.out.println("Usage: jlessc [options] [input] [output]");
-        System.out.println("  -h,  --help               Display this help message");
-        System.out.println("  -v,  --version            Display the version");
-        System.out.println("  -f,  --format             Format (pretty print) the CSS file");
-        System.out.println("  -nf, --no-format          Don't format (pretty print) the CSS file");
-        System.out.println("  -i,  --indent <value>     Indent VALUE spaces");
-        System.out.println("  -l,  --line-break         Place a blank line between CSS rule sets");
-        System.out.println("  -nl, --no-line-break      Don't place a blank line between CSS rule sets");
-        System.out.println("  -s,  --single-line        Place single declarations rulesets on one line");
-        System.out.println("  -ns, --no-single-line     Don't place single declaration rulesets on one line");
-        System.out.println("  -b,  --brace-newline      Place opening braces on their own line");
-        System.out.println("  -nb  --no-brace-newline   Don't place opening braces on their own line");
+    //Make sure that there was no errors parsing arguments
+    if ( null != parser.getErrorString() )
+    {
+      System.err.println( parser.getErrorString() );
+      return false;
     }
+    final PrettyPrintOptions formatOptions = new PrettyPrintOptions();
 
-    protected void version() {
-        System.out.println("jlessc <todo:VERSION>");
-    }
-
-    protected boolean isOption(String arg, String... options) {
-        for (String option : options) {
-            if (option.equals(arg)) {
-                return true;
-            }
+    // Get a list of parsed options
+    final List<CLOption> options = parser.getArguments();
+    for ( final CLOption option : options )
+    {
+      switch ( option.getId() )
+      {
+        case CLOption.TEXT_ARGUMENT:
+        {
+          if ( null == _inputFilename )
+          {
+            _inputFilename = option.getArgument();
+          }
+          else if ( null == _outputFilename )
+          {
+            _outputFilename = option.getArgument();
+          }
+          else
+          {
+            System.err.println( "Unknown parameter specified: " + option.getArgument() );
+            return false;
+          }
+          break;
         }
-        return false;
+        case FORMAT_OPT:
+        {
+          setPrettyPrint( true );
+          break;
+        }
+        case NO_FORMAT_OPT:
+        {
+          setPrettyPrint( false );
+          break;
+        }
+        case LINE_BREAK_OPT:
+        {
+          formatOptions.setLineBetweenRuleSets( true );
+          break;
+        }
+        case NO_LINE_BREAK_OPT:
+        {
+          formatOptions.setLineBetweenRuleSets( false );
+          break;
+        }
+        case SINGLE_LINE_OPT:
+        {
+          formatOptions.setSingleDeclarationOnOneLine( true );
+          break;
+        }
+        case NO_SINGLE_LINE_OPT:
+        {
+          formatOptions.setSingleDeclarationOnOneLine( false );
+          break;
+        }
+        case BRACE_NEWLINE_OPT:
+        {
+          formatOptions.setSingleDeclarationOnOneLine( true );
+          break;
+        }
+        case NO_BRACE_NEWLINE_OPT:
+        {
+          formatOptions.setSingleDeclarationOnOneLine( false );
+          break;
+        }
+        case INDENT_OPT:
+        {
+          final String indent = option.getArgument();
+          try
+          {
+            formatOptions.setIndentSize( Integer.parseInt( indent ) );
+          }
+          catch ( final NumberFormatException nfe )
+          {
+            System.err.println( "Invalid indent value: " + indent );
+            return false;
+          }
+          break;
+        }
+        case VERSION_OPT:
+        {
+          printVersion();
+          return false;
+        }
+        case HELP_OPT:
+        {
+          printUsage();
+          return false;
+        }
+      }
+    }
+    setPrettyPrintOptions( formatOptions );
+
+    return true;
+  }
+
+  public void compile()
+    throws IOException
+  {
+    compile( _inputFilename, _outputFilename );
+  }
+
+  public void compile( String inputFilename, String outputFilename )
+    throws IOException
+  {
+    StyleSheetResource input;
+    OutputStream output = null;
+    boolean outputFileExisted = false;
+    File outputFile = null;
+    try
+    {
+      // todo: verify that inputfilename and outputfilename don't correspond to directories
+
+      URL inputUrl = null;
+      if ( inputFilename != null )
+      {
+        inputUrl = new File( inputFilename ).toURI().toURL();
+      }
+
+      // Generate an output filename from the input filename
+      if ( outputFilename == null && inputFilename != null )
+      {
+        outputFilename = generateOutputFilename( inputFilename );
+      }
+
+      if ( outputFilename != null )
+      {
+        outputFile = new File( outputFilename );
+        if ( outputFile.exists() )
+        {
+          outputFileExisted = true;
+        }
+      }
+
+      input = createInput( inputFilename );
+      output = createOutputStream( outputFilename );
+
+
+      DefaultLessCssCompilerFactory factory = new DefaultLessCssCompilerFactory();
+      factory.setPrettyPrintEnabled( isPrettyPrint() );
+
+      if ( isPrettyPrint() && getPrettyPrintOptions() != null )
+      {
+        factory.setPrettyPrintOptions( getPrettyPrintOptions() );
+      }
+
+      LessCssCompiler compiler = factory.create();
+      compiler.compile( input, output, null );
+    }
+    catch ( IOException ex )
+    {
+      // delete the bogus output file if we're not writing to stdout and it didn't exist before.
+      if ( outputFile != null && !outputFileExisted )
+      {
+        FileUtils.deleteQuietly( outputFile );
+      }
+    }
+    finally
+    {
+      IOUtils.closeQuietly( output );
+    }
+  }
+
+  protected OutputStream createOutputStream( String outputFilename )
+    throws IOException
+  {
+    if ( outputFilename == null || "-".equals( outputFilename ) )
+    {
+      return System.out;
+    }
+    else
+    {
+      return FileUtils.openOutputStream( new File( outputFilename ) );
+    }
+  }
+
+  protected StyleSheetResource createInput( String inputFilename )
+    throws IOException
+  {
+    if ( inputFilename == null || inputFilename.equals( "-" ) )
+    {
+      return new InputStreamStyleSheetResource( System.in );
+    }
+    else
+    {
+      return new FileStyleSheetResource( inputFilename );
+    }
+  }
+
+  protected String generateOutputFilename( final String inputFilename )
+  {
+    String extension = FilenameUtils.getExtension( inputFilename );
+
+    StringBuilder outputFilename = new StringBuilder();
+    outputFilename.append( inputFilename, 0, inputFilename.length() - extension.length() );
+    if ( outputFilename.charAt( outputFilename.length() - 1 ) == '.' )
+    {
+      outputFilename.deleteCharAt( outputFilename.length() - 1 );
     }
 
-    /**
-     * Determines if the argument is an "anti" option, meaning that is disables a regular option.  If the regular options
-     * are --something or -s, the "anti" options are --no-something or -ns.
-     */
-    protected boolean isAntiOption(String arg) {
-        return arg.startsWith("--no") || (arg.startsWith("-n") && arg.length() >= 3);
+    // Don't want to clobber the existing css file.
+    if ( extension.equals( "css" ) )
+    {
+      outputFilename.append( "-min" );
     }
 
+    outputFilename.append( ".css" );
 
-    public int run(String[] args) {
+    return outputFilename.toString();
+  }
 
-        int result = parseCommandLine(args);
-        if (result != 0) {
-            return result;
-        }
-
-        try {
-            compile();
-        }
-        catch (IOException io) {
-            System.err.println(io.toString());
-            return -1;
-        }
-
-        return 0;
-    }
-
-    protected int parseCommandLine(String[] args) {
-        boolean argsFinished = false;
-
-        PrettyPrintOptions formatOptions = new PrettyPrintOptions();
-
-        for (int idx = 0; idx < args.length; idx++) {
-            String arg = args[idx];
-            if (arg.equals("--")) {
-                argsFinished = true;
-            }
-            if (!argsFinished && isOption(arg, "--help", "-h")) {
-                usage();
-                return 1;
-            }
-            else if (!argsFinished && isOption(arg, "--version", "-v")) {
-                version();
-            }
-            else if (!argsFinished && isOption(arg, "--format", "-f", "--no-format", "-nf")) {
-                setPrettyPrint(!isAntiOption(arg));
-            }
-            else if (!argsFinished && isOption(arg, "--indent", "-i")) {
-                String indent = args[++idx];
-                try {
-                    formatOptions.setIndentSize(Integer.parseInt(indent));
-                }
-                catch (NumberFormatException ex) {
-                    System.err.println("Invalid indent value: " + indent);
-                    return -1;
-                }
-            }
-            else if (!argsFinished && isOption(arg, "--line-break", "-l", "--no-line-break", "-nl")) {
-                formatOptions.setLineBetweenRuleSets(!isAntiOption(arg));
-            }
-            else if (!argsFinished && isOption(arg, "--single-line", "-s", "--no-single-line", "-ns")) {
-                formatOptions.setSingleDeclarationOnOneLine(!isAntiOption(arg));
-            }
-            else if (!argsFinished && isOption(arg, "--brace-newline", "-b", "--no-brace-newline", "-nb")) {
-                formatOptions.setOpeningBraceOnNewLine(!isAntiOption(arg));
-            }
-            else if (!argsFinished &&
-                     (arg.startsWith("--") || (arg.startsWith("-") && arg.length() > 1))) {
-                System.err.println("Unknown option: " + arg);
-            }
-            else{
-                if (_inputFilename == null) {
-                    _inputFilename = arg;
-                }
-                else if (_outputFilename == null) {
-                    _outputFilename = arg;
-                }
-                else {
-                    // error
-                }
-            }
-        }
-
-        setPrettyPrintOptions(formatOptions);
-
-        return 0;
-    }
-
-    public void compile() throws IOException {
-        compile(_inputFilename, _outputFilename);
-    }
-
-    public void compile(String inputFilename, String outputFilename) throws IOException {
-        StyleSheetResource input;
-        OutputStream output = null;
-        boolean outputFileExisted = false;
-        File outputFile = null;
-        try {
-            // todo: verify that inputfilename and outputfilename don't correspond to directories
-
-            URL inputUrl = null;
-            if (inputFilename != null) {
-                inputUrl = new File(inputFilename).toURI().toURL();
-            }
-
-            // Generate an output filename from the input filename
-            if (outputFilename == null && inputFilename != null) {
-                outputFilename = generateOutputFilename(inputFilename);
-            }
-
-            if (outputFilename != null) {
-                outputFile = new File(outputFilename);
-                if (outputFile.exists()) {
-                    outputFileExisted = true;
-                }
-            }
-
-            input = createInput(inputFilename);
-            output = createOutputStream(outputFilename);
-
-
-            DefaultLessCssCompilerFactory factory = new DefaultLessCssCompilerFactory();
-            factory.setPrettyPrintEnabled(isPrettyPrint());
-
-            if (isPrettyPrint() && getPrettyPrintOptions() != null) {
-                factory.setPrettyPrintOptions(getPrettyPrintOptions());
-            }
-
-            LessCssCompiler compiler = factory.create();
-            compiler.compile(input, output, null);
-        }
-        catch (IOException ex) {
-            // delete the bogus output file if we're not writing to stdout and it didn't exist before.
-            if (outputFile != null && !outputFileExisted) {
-                FileUtils.deleteQuietly(outputFile);
-            }
-        }
-        finally {
-            IOUtils.closeQuietly(output);
-        }
-    }
-
-    protected OutputStream createOutputStream(String outputFilename) throws IOException {
-        if (outputFilename == null || "-".equals(outputFilename)) {
-            return System.out;
-        }
-        else {
-            return FileUtils.openOutputStream(new File(outputFilename));
-        }
-    }
-
-    protected StyleSheetResource createInput(String inputFilename) throws IOException {
-        if (inputFilename == null || inputFilename.equals("-")) {
-            return new InputStreamStyleSheetResource(System.in);
-        }
-        else {
-            return new FileStyleSheetResource(inputFilename);
-        }
-    }
-
-    protected String generateOutputFilename(String inputFilename) {
-
-        String extension = FilenameUtils.getExtension(inputFilename);
-
-        StringBuilder outputFilename = new StringBuilder();
-        outputFilename.append(inputFilename, 0, inputFilename.length() - extension.length());
-        if (outputFilename.charAt(outputFilename.length() - 1) == '.') {
-            outputFilename.deleteCharAt(outputFilename.length() - 1);
-        }
-
-        // Don't want to clobber the existing css file.
-        if (extension.equals("css")) {
-            outputFilename.append("-min");
-        }
-
-        outputFilename.append(".css");
-
-        return outputFilename.toString();
-    }
-
-    public static void main(String[] args) {
-        int returnValue = new CompilerMain().run(args);
-        if (returnValue != 0) {
-            System.exit(returnValue);
-        }
-    }
-
+  public static void main( String[] args )
+  {
+    System.exit( new CompilerMain().run( args ) );
+  }
 }
