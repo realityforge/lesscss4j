@@ -13,42 +13,51 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.transform;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompositeTransformer<T> implements Transformer<T> {
-    private List<Transformer<T>> _transformers;
+public class CompositeTransformer<T>
+  implements Transformer<T>
+{
+  private List<Transformer<T>> _transformers;
 
-    public List<Transformer<T>> getTransformers() {
-        return _transformers;
-    }
+  public List<Transformer<T>> getTransformers()
+  {
+    return _transformers;
+  }
 
-    public void setTransformers( final List<Transformer<T>> transformers) {
-        _transformers = transformers;
-    }
+  public void setTransformers( final List<Transformer<T>> transformers )
+  {
+    _transformers = transformers;
+  }
 
-    public List<T> transform( final T value, final EvaluationContext context) {
-        final List<T> transformed = new ArrayList<>();
-        transformed.add(value);
+  public List<T> transform( final T value, final EvaluationContext context )
+  {
+    final List<T> transformed = new ArrayList<>();
+    transformed.add( value );
 
-        for ( final Transformer<T> transformer : getTransformers()) {
-            for (int idx = 0; idx < transformed.size(); idx++) {
-                final T val = transformed.get(idx);
-                final List<T> result = transformer.transform(val, context);
-                if (result != null && result.size() > 0) {
-                    transformed.set(idx, result.get(0));
-                    if (result.size() > 1) {
-                        for (int tdx = 1; tdx < result.size(); tdx++) {
-                            transformed.add(idx + tdx, result.get(tdx));
-                        }
-                        idx += result.size() - 1;
-                    }
-                }
+    for ( final Transformer<T> transformer : getTransformers() )
+    {
+      for ( int idx = 0; idx < transformed.size(); idx++ )
+      {
+        final T val = transformed.get( idx );
+        final List<T> result = transformer.transform( val, context );
+        if ( null != result && result.size() > 0 )
+        {
+          transformed.set( idx, result.get( 0 ) );
+          if ( result.size() > 1 )
+          {
+            for ( int tdx = 1; tdx < result.size(); tdx++ )
+            {
+              transformed.add( idx + tdx, result.get( tdx ) );
             }
+            idx += result.size() - 1;
+          }
         }
-        return transformed;
+      }
     }
+    return transformed;
+  }
 }

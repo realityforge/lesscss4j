@@ -13,31 +13,37 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.parser;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-public class InputStreamStyleSheetResource implements StyleSheetResource {
-    private final InputStream _inputStream;
-    private final URL _url;
+public class InputStreamStyleSheetResource
+  implements StyleSheetResource
+{
+  private final InputStream _inputStream;
+  private final URL _url;
 
-    public InputStreamStyleSheetResource( final InputStream inputStream) {
-        this(inputStream, null);
-    }
+  public InputStreamStyleSheetResource( final InputStream inputStream )
+  {
+    this( inputStream, null );
+  }
 
-    public InputStreamStyleSheetResource( final InputStream inputStream, final URL url) {
-        _inputStream = inputStream;
-        _url = url;
-    }
+  public InputStreamStyleSheetResource( final InputStream inputStream, final URL url )
+  {
+    _inputStream = inputStream;
+    _url = url;
+  }
 
-    public InputStream getInputStream() throws IOException {
-        return _inputStream;
-    }
+  public InputStream getInputStream()
+    throws IOException
+  {
+    return _inputStream;
+  }
 
-    public URL getUrl() {
-        return _url;
-    }
+  public URL getUrl()
+  {
+    return _url;
+  }
 }

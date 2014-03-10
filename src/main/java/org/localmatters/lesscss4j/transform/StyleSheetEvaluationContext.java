@@ -13,19 +13,22 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.transform;
 
 import org.localmatters.lesscss4j.parser.StyleSheetResource;
 
-public class StyleSheetEvaluationContext extends EvaluationContext {
-    private StyleSheetResource _resource;
+public class StyleSheetEvaluationContext
+  extends EvaluationContext
+{
+  private StyleSheetResource _resource;
 
-    public StyleSheetResource getResource() {
-        return _resource;
-    }
+  public StyleSheetResource getResource()
+  {
+    return _resource;
+  }
 
-    public void setResource( final StyleSheetResource resource) {
-        _resource = resource;
-    }
+  public void setResource( final StyleSheetResource resource )
+  {
+    _resource = resource;
+  }
 }

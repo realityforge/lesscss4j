@@ -13,40 +13,48 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.model;
 
-public class AbstractElement implements PositionAware {
-    private int _line;
-    private int _char;
+public class AbstractElement
+  implements PositionAware
+{
+  private int _line;
+  private int _char;
 
-    public AbstractElement() {
-        this(-1, -1);
-    }
+  public AbstractElement()
+  {
+    this( -1, -1 );
+  }
 
-    public AbstractElement( final AbstractElement copy) {
-        _line = copy._line;
-        _char = copy._char;
-    }
+  public AbstractElement( final AbstractElement copy )
+  {
+    _line = copy._line;
+    _char = copy._char;
+  }
 
-    public AbstractElement( final int line, final int aChar) {
-        _line = line;
-        _char = aChar;
-    }
+  public AbstractElement( final int line, final int aChar )
+  {
+    _line = line;
+    _char = aChar;
+  }
 
-    public int getLine() {
-        return _line;
-    }
+  public int getLine()
+  {
+    return _line;
+  }
 
-    public void setLine( final int line) {
-        _line = line;
-    }
+  public void setLine( final int line )
+  {
+    _line = line;
+  }
 
-    public int getChar() {
-        return _char;
-    }
+  public int getChar()
+  {
+    return _char;
+  }
 
-    public void setChar( final int aChar) {
-        _char = aChar;
-    }
+  public void setChar( final int aChar )
+  {
+    _char = aChar;
+  }
 }

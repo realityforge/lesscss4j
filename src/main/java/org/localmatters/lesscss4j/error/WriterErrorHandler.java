@@ -13,50 +13,60 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.error;
 
 import java.io.PrintWriter;
 
-public class WriterErrorHandler extends AbstractErrorHandler {
-
+public class WriterErrorHandler
+  extends AbstractErrorHandler
+{
   private boolean _logStackTrace = false;
-    private PrintWriter _writer;
+  private PrintWriter _writer;
 
-    public PrintWriter getWriter() {
-        return _writer;
+  public PrintWriter getWriter()
+  {
+    return _writer;
+  }
+
+  public void setWriter( final PrintWriter writer )
+  {
+    _writer = writer;
+  }
+
+  public boolean isLogStackTrace()
+  {
+    return _logStackTrace;
+  }
+
+  public void setLogStackTrace( final boolean logStackTrace )
+  {
+    _logStackTrace = logStackTrace;
+  }
+
+  public void handleError( final String message, final Throwable exception )
+  {
+    super.handleError( message, exception );
+    if ( null != exception )
+    {
+      String logMessage = exception.getMessage();
+      if ( null != message )
+      {
+        logMessage = message + logMessage;
+      }
+
+      getWriter().println( getContextString() + logMessage );
+      if ( isLogStackTrace() )
+      {
+        exception.printStackTrace( getWriter() );
+      }
     }
-
-    public void setWriter( final PrintWriter writer) {
-        _writer = writer;
+    else if ( null != message )
+    {
+      getWriter().println( getContextString() + message );
     }
-
-    public boolean isLogStackTrace() {
-        return _logStackTrace;
+    else
+    {
+      getWriter().println( getContextString() + "Unknown error" );
     }
-
-    public void setLogStackTrace( final boolean logStackTrace) {
-        _logStackTrace = logStackTrace;
-    }
-
-    public void handleError( final String message, final Throwable exception) {
-        super.handleError(message, exception);
-        if (exception != null) {
-            String logMessage = exception.getMessage();
-            if (message != null) {
-                logMessage = message + logMessage;
-            }
-
-            getWriter().println(getContextString() + logMessage);
-            if (isLogStackTrace()) {
-                exception.printStackTrace(getWriter());
-            }
-        }
-        else if (message != null) {
-            getWriter().println(getContextString() + message);
-        }
-        else {
-            getWriter().println(getContextString() + "Unknown error");
-        }
-    }
+  }
 }

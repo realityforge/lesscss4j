@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.parser;
 
 import java.io.IOException;
@@ -23,6 +22,8 @@ import org.localmatters.lesscss4j.model.StyleSheet;
 /**
  * Parses the given input into a StyleSheet object
  */
-public interface StyleSheetParser {
-    StyleSheet parse(StyleSheetResource input, ErrorHandler errorHandler) throws IOException;
+public interface StyleSheetParser
+{
+  StyleSheet parse( StyleSheetResource input, ErrorHandler errorHandler )
+    throws IOException;
 }

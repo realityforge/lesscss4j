@@ -13,48 +13,64 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.output;
 
-public class PrettyPrintOptions {
-    private boolean _singleDeclarationOnOneLine = false;
-    private boolean _openingBraceOnNewLine = false;
-    private boolean _lineBetweenRuleSets = true;
-    private int _indentSize = 4;
+public class PrettyPrintOptions
+{
+  private boolean _singleDeclarationOnOneLine = false;
+  private boolean _openingBraceOnNewLine = false;
+  private boolean _lineBetweenRuleSets = true;
+  private int _indentSize = 4;
 
-    public int getIndentSize() {
-        return _indentSize;
-    }
+  public int getIndentSize()
+  {
+    return _indentSize;
+  }
 
-    /** Set the number of spaces to indent at each level.  Default = 4 */
-    public void setIndentSize( final int indentSize) {
-        _indentSize = indentSize;
-    }
+  /**
+   * Set the number of spaces to indent at each level.  Default = 4
+   */
+  public void setIndentSize( final int indentSize )
+  {
+    _indentSize = indentSize;
+  }
 
-    public boolean isSingleDeclarationOnOneLine() {
-        return _singleDeclarationOnOneLine;
-    }
+  public boolean isSingleDeclarationOnOneLine()
+  {
+    return _singleDeclarationOnOneLine;
+  }
 
-    /** If set to true (default = false), rule sets with only one declaration will be printed entirely on one line. */
-    public void setSingleDeclarationOnOneLine( final boolean singleDeclarationOnOneLine) {
-        _singleDeclarationOnOneLine = singleDeclarationOnOneLine;
-    }
+  /**
+   * If set to true (default = false), rule sets with only one declaration will be printed entirely on one line.
+   */
+  public void setSingleDeclarationOnOneLine( final boolean singleDeclarationOnOneLine )
+  {
+    _singleDeclarationOnOneLine = singleDeclarationOnOneLine;
+  }
 
-    public boolean isOpeningBraceOnNewLine() {
-        return _openingBraceOnNewLine;
-    }
+  public boolean isOpeningBraceOnNewLine()
+  {
+    return _openingBraceOnNewLine;
+  }
 
-    /** If set to true (default = false), opening braces will be printed on their own line. */
-    public void setOpeningBraceOnNewLine( final boolean openingBraceOnNewLine) {
-        _openingBraceOnNewLine = openingBraceOnNewLine;
-    }
+  /**
+   * If set to true (default = false), opening braces will be printed on their own line.
+   */
+  public void setOpeningBraceOnNewLine( final boolean openingBraceOnNewLine )
+  {
+    _openingBraceOnNewLine = openingBraceOnNewLine;
+  }
 
-    public boolean isLineBetweenRuleSets() {
-        return _lineBetweenRuleSets;
-    }
+  public boolean isLineBetweenRuleSets()
+  {
+    return _lineBetweenRuleSets;
+  }
 
-    /** If set to true (the default), a blank line is written between rule sets */
-    public void setLineBetweenRuleSets( final boolean lineBetweenRuleSets) {
-        _lineBetweenRuleSets = lineBetweenRuleSets;
-    }
+  /**
+   * If set to true (the default), a blank line is written between rule sets
+   */
+  public void setLineBetweenRuleSets( final boolean lineBetweenRuleSets )
+  {
+    _lineBetweenRuleSets = lineBetweenRuleSets;
+  }
 }

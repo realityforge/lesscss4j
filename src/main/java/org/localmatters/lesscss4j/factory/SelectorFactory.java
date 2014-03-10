@@ -13,24 +13,27 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.factory;
 
 import org.antlr.runtime.tree.Tree;
 import org.localmatters.lesscss4j.error.ErrorHandler;
 import org.localmatters.lesscss4j.model.Selector;
 
-public class SelectorFactory extends AbstractObjectFactory<Selector> {
-    public Selector create( final Tree selectorNode, final ErrorHandler errorHandler) {
-        Selector selector = null;
+public class SelectorFactory
+  extends AbstractObjectFactory<Selector>
+{
+  public Selector create( final Tree selectorNode, final ErrorHandler errorHandler )
+  {
+    Selector selector = null;
 
-        final String selectorText = concatChildNodeText(selectorNode);
-        if (selectorText.length() > 0) {
-            selector = new Selector( selectorText );
-            selector.setLine(selectorNode.getLine());
-            selector.setChar(selectorNode.getCharPositionInLine());
-        }
-        return selector;
+    final String selectorText = concatChildNodeText( selectorNode );
+    if ( selectorText.length() > 0 )
+    {
+      selector = new Selector( selectorText );
+      selector.setLine( selectorNode.getLine() );
+      selector.setChar( selectorNode.getCharPositionInLine() );
     }
+    return selector;
+  }
 }
 

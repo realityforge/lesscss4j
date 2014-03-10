@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.factory;
 
 import org.antlr.runtime.tree.Tree;
@@ -23,58 +22,69 @@ import org.localmatters.lesscss4j.model.RuleSet;
 import org.localmatters.lesscss4j.model.expression.Expression;
 import static org.localmatters.lesscss4j.parser.antlr.LessCssLexer.*;
 
-public class KeyframesFactory extends AbstractObjectFactory<Keyframes> {
-    private ObjectFactory<Expression> _expressionFactory;
-    private ObjectFactory<RuleSet> _ruleSetFactory;
+public class KeyframesFactory
+  extends AbstractObjectFactory<Keyframes>
+{
+  private ObjectFactory<Expression> _expressionFactory;
+  private ObjectFactory<RuleSet> _ruleSetFactory;
 
-    public ObjectFactory<Expression> getExpressionFactory() {
-        return _expressionFactory;
+  public ObjectFactory<Expression> getExpressionFactory()
+  {
+    return _expressionFactory;
+  }
+
+  public void setExpressionFactory( final ObjectFactory<Expression> expressionFactory )
+  {
+    _expressionFactory = expressionFactory;
+  }
+
+  public ObjectFactory<RuleSet> getRuleSetFactory()
+  {
+    return _ruleSetFactory;
+  }
+
+  public void setRuleSetFactory( final ObjectFactory<RuleSet> ruleSetFactory )
+  {
+    _ruleSetFactory = ruleSetFactory;
+  }
+
+  public Keyframes create( final Tree mediaNode, final ErrorHandler errorHandler )
+  {
+    final Keyframes keyframes = new Keyframes();
+    keyframes.setLine( mediaNode.getLine() );
+    keyframes.setChar( mediaNode.getCharPositionInLine() );
+    for ( int idx = 0, numChildren = mediaNode.getChildCount(); idx < numChildren; idx++ )
+    {
+      final Tree child = mediaNode.getChild( idx );
+      switch ( child.getType() )
+      {
+        case SELECTOR:
+          keyframes.setName( concatChildNodeText( child ) );
+          break;
+
+        case RULESET:
+          final RuleSet ruleSet = getRuleSetFactory().create( child, errorHandler );
+          if ( null != ruleSet )
+          {
+            keyframes.addBodyElement( ruleSet );
+          }
+          break;
+
+        case VAR:
+          final Expression expr = getExpressionFactory().create( child.getChild( 1 ), errorHandler );
+          if ( null != expr )
+          {
+            keyframes.setVariable( child.getChild( 0 ).getText(), expr );
+          }
+          break;
+
+        default:
+          handleUnexpectedChild( "Unexpected media child:", child );
+          break;
+      }
     }
 
-    public void setExpressionFactory( final ObjectFactory<Expression> expressionFactory) {
-        _expressionFactory = expressionFactory;
-    }
-
-    public ObjectFactory<RuleSet> getRuleSetFactory() {
-        return _ruleSetFactory;
-    }
-
-    public void setRuleSetFactory( final ObjectFactory<RuleSet> ruleSetFactory) {
-        _ruleSetFactory = ruleSetFactory;
-    }
-
-    public Keyframes create( final Tree mediaNode, final ErrorHandler errorHandler) {
-        final Keyframes keyframes = new Keyframes();
-        keyframes.setLine(mediaNode.getLine());
-        keyframes.setChar(mediaNode.getCharPositionInLine());
-        for (int idx = 0, numChildren = mediaNode.getChildCount(); idx < numChildren; idx++) {
-            final Tree child = mediaNode.getChild(idx);
-            switch (child.getType()) {
-                case SELECTOR:
-                    keyframes.setName(concatChildNodeText(child));
-                    break;
-
-                case RULESET:
-                    final RuleSet ruleSet = getRuleSetFactory().create(child, errorHandler);
-                    if (ruleSet != null) {
-                        keyframes.addBodyElement(ruleSet);
-                    }
-                    break;
-
-                case VAR:
-                    final Expression expr = getExpressionFactory().create(child.getChild(1), errorHandler);
-                    if (expr != null) {
-                        keyframes.setVariable(child.getChild(0).getText(), expr);
-                    }
-                    break;
-
-                default:
-                    handleUnexpectedChild("Unexpected media child:", child);
-                    break;
-            }
-        }
-
-        // ignore empty keyframes elements
-        return keyframes.getBodyElements() != null && keyframes.getBodyElements().size() > 0 ? keyframes : null;
-    }
+    // ignore empty keyframes elements
+    return null != keyframes.getBodyElements() && keyframes.getBodyElements().size() > 0 ? keyframes : null;
+  }
 }

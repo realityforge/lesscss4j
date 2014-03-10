@@ -13,22 +13,27 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.error;
 
-public abstract class ExpressionException extends LessCssException {
-    public ExpressionException() {
-    }
+public abstract class ExpressionException
+  extends LessCssException
+{
+  public ExpressionException()
+  {
+  }
 
-    public ExpressionException( final String message) {
-        super(message);
-    }
+  public ExpressionException( final String message )
+  {
+    super( message );
+  }
 
-    public ExpressionException( final String message, final Throwable cause) {
-        super(message, cause);
-    }
+  public ExpressionException( final String message, final Throwable cause )
+  {
+    super( message, cause );
+  }
 
-    public ExpressionException( final Throwable cause) {
-        super(cause);
-    }
+  public ExpressionException( final Throwable cause )
+  {
+    super( cause );
+  }
 }

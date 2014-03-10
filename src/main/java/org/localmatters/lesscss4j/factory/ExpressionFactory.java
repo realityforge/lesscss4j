@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.factory;
 
 import org.antlr.runtime.tree.Tree;
@@ -31,153 +30,171 @@ import org.localmatters.lesscss4j.model.expression.SubtractExpression;
 import org.localmatters.lesscss4j.model.expression.VariableReferenceExpression;
 import static org.localmatters.lesscss4j.parser.antlr.LessCssLexer.*;
 
-public class ExpressionFactory extends AbstractObjectFactory<Expression> {
-    public Expression create( final Tree expression, final ErrorHandler errorHandler) {
+public class ExpressionFactory
+  extends AbstractObjectFactory<Expression>
+{
+  public Expression create( final Tree expression, final ErrorHandler errorHandler )
+  {
+    switch ( expression.getType() )
+    {
+      case FUNCTION:
+        return createFunction( expression, errorHandler );
 
-        switch (expression.getType()) {
-            case FUNCTION:
-                return createFunction(expression, errorHandler);
-
-            case EXPR:
-                if (expression.getChildCount() > 1) {
-                    return createListExpression(expression, errorHandler);
-                }
-                else {
-                    return createExpression(expression.getChild(0), errorHandler);
-                }
-
-            case LITERAL:
-                return createLiteral(expression, errorHandler);
-
-            default:
-                handleUnexpectedChild("Unexpected expression type", expression);
-                return null; // shouldn't get here
+      case EXPR:
+        if ( expression.getChildCount() > 1 )
+        {
+          return createListExpression( expression, errorHandler );
         }
-    }
-
-    protected LiteralExpression createLiteral( final Tree expression, final ErrorHandler errorHandler) {
-        return createLiteral(concatChildNodeText(expression), expression, errorHandler);
-    }
-
-    protected LiteralExpression createLiteral( final String text, final Tree expression, final ErrorHandler errorHandler) {
-        final LiteralExpression literal = new LiteralExpression(text);
-        literal.setType(expression.getType());
-        literal.setLine(expression.getLine());
-        literal.setChar(expression.getCharPositionInLine());
-        return literal;
-    }
-
-    protected Expression createListExpression( final Tree expression, final ErrorHandler errorHandler) {
-        final ListExpression listExpr = new ListExpression();
-        for (int idx = 0, numChildren = expression.getChildCount(); idx < numChildren; idx++) {
-            final Tree child = expression.getChild(idx);
-            switch (child.getType()) {
-                case COMMA:
-                case WS:
-                    listExpr.addExpression(createLiteral(child.getText(), child, errorHandler));
-                    break;
-
-                default:
-                    listExpr.addExpression(createExpression(child, errorHandler));
-                    break;
-            }
+        else
+        {
+          return createExpression( expression.getChild( 0 ), errorHandler );
         }
 
-        return listExpr;
+      case LITERAL:
+        return createLiteral( expression, errorHandler );
+
+      default:
+        handleUnexpectedChild( "Unexpected expression type", expression );
+        return null; // shouldn't get here
+    }
+  }
+
+  protected LiteralExpression createLiteral( final Tree expression, final ErrorHandler errorHandler )
+  {
+    return createLiteral( concatChildNodeText( expression ), expression, errorHandler );
+  }
+
+  protected LiteralExpression createLiteral( final String text, final Tree expression, final ErrorHandler errorHandler )
+  {
+    final LiteralExpression literal = new LiteralExpression( text );
+    literal.setType( expression.getType() );
+    literal.setLine( expression.getLine() );
+    literal.setChar( expression.getCharPositionInLine() );
+    return literal;
+  }
+
+  protected Expression createListExpression( final Tree expression, final ErrorHandler errorHandler )
+  {
+    final ListExpression listExpr = new ListExpression();
+    for ( int idx = 0, numChildren = expression.getChildCount(); idx < numChildren; idx++ )
+    {
+      final Tree child = expression.getChild( idx );
+      switch ( child.getType() )
+      {
+        case COMMA:
+        case WS:
+          listExpr.addExpression( createLiteral( child.getText(), child, errorHandler ) );
+          break;
+
+        default:
+          listExpr.addExpression( createExpression( child, errorHandler ) );
+          break;
+      }
     }
 
-    protected Expression createExpression( final Tree expression, final ErrorHandler errorHandler) {
-        final Expression result;
-        switch (expression.getType()) {
-            case CONSTANT:
-                result = new ConstantExpression(concatChildNodeText(expression));
-                break;
+    return listExpr;
+  }
 
-            case LITERAL:
-                result = createLiteral(expression, errorHandler);
-                break;
+  protected Expression createExpression( final Tree expression, final ErrorHandler errorHandler )
+  {
+    final Expression result;
+    switch ( expression.getType() )
+    {
+      case CONSTANT:
+        result = new ConstantExpression( concatChildNodeText( expression ) );
+        break;
 
-            case STAR:
-                result = new MultiplyExpression(createExpression(expression.getChild(0), errorHandler),
-                                                createExpression(expression.getChild(1), errorHandler));
-                break;
+      case LITERAL:
+        result = createLiteral( expression, errorHandler );
+        break;
 
-            case SOLIDUS:
-                result = new DivideExpression(createExpression(expression.getChild(0), errorHandler),
-                                              createExpression(expression.getChild(1), errorHandler));
-                break;
+      case STAR:
+        result = new MultiplyExpression( createExpression( expression.getChild( 0 ), errorHandler ),
+                                         createExpression( expression.getChild( 1 ), errorHandler ) );
+        break;
 
-            case PLUS:
-                result = new AddExpression(createExpression(expression.getChild(0), errorHandler),
-                                           createExpression(expression.getChild(1), errorHandler));
-                break;
+      case SOLIDUS:
+        result = new DivideExpression( createExpression( expression.getChild( 0 ), errorHandler ),
+                                       createExpression( expression.getChild( 1 ), errorHandler ) );
+        break;
 
-            case MINUS:
-                result = new SubtractExpression(createExpression(expression.getChild(0), errorHandler),
-                                                createExpression(expression.getChild(1), errorHandler));
-                break;
+      case PLUS:
+        result = new AddExpression( createExpression( expression.getChild( 0 ), errorHandler ),
+                                    createExpression( expression.getChild( 1 ), errorHandler ) );
+        break;
 
-            case VAR:
-                result = new VariableReferenceExpression(expression.getChild(0).getText());
-                break;
+      case MINUS:
+        result = new SubtractExpression( createExpression( expression.getChild( 0 ), errorHandler ),
+                                         createExpression( expression.getChild( 1 ), errorHandler ) );
+        break;
 
-            case EXPR:
-                result = createExpression(expression.getChild(0), errorHandler);
-                break;
+      case VAR:
+        result = new VariableReferenceExpression( expression.getChild( 0 ).getText() );
+        break;
 
-            default:
-                handleUnexpectedChild("Unexpected expression type", expression);
-                return null; // shouldn't get here
-        }
+      case EXPR:
+        result = createExpression( expression.getChild( 0 ), errorHandler );
+        break;
 
-        if (result instanceof AbstractElement) {
-            ((AbstractElement) result).setLine(expression.getLine());
-            ((AbstractElement) result).setChar(expression.getCharPositionInLine());
-        }
-
-        return result;
+      default:
+        handleUnexpectedChild( "Unexpected expression type", expression );
+        return null; // shouldn't get here
     }
 
-    protected Expression createFunction( final Tree function, final ErrorHandler errorHandler) {
-        final Tree nameNode = function.getChild(0);
-        final FunctionExpression func = new FunctionExpression(concatChildNodeText(nameNode));
-        for (int idx = 1, numChildren = function.getChildCount(); idx < numChildren; idx++) {
-            final Tree child = function.getChild(idx);
-            switch (child.getType()) {
-                case OPEQ:
-                case COLON:
-                    if (child.getChildCount() == 0) {
-                        func.addArgument(createLiteral(child.getText(), child, errorHandler));
-                    }
-                    else {
-                        final Tree propNode = child.getChild(0);
-                        final String prop = propNode.getText();
-                        final Expression expr = create(child.getChild(1), null);
-                        func.addArgument(createLiteral(prop, propNode, errorHandler));
-                        func.addArgument(createLiteral(child.getText(), child, errorHandler));
-                        func.addArgument(expr);
-                    }
-                    break;
-
-                case FUNCTION:
-                    func.addArgument(createFunction(child, errorHandler));
-                    break;
-
-                case VAR:
-                case LITERAL:
-                case EXPR:
-                    func.addArgument(createExpression(child, errorHandler));
-                    break;
-
-                default:
-                    func.addArgument(createLiteral(child.getText(), child, errorHandler));
-                    break;
-
-            }
-        }
-
-        func.setLine(function.getLine());
-        func.setChar(function.getCharPositionInLine());
-        return func;
+    if ( result instanceof AbstractElement )
+    {
+      ( (AbstractElement) result ).setLine( expression.getLine() );
+      ( (AbstractElement) result ).setChar( expression.getCharPositionInLine() );
     }
+
+    return result;
+  }
+
+  protected Expression createFunction( final Tree function, final ErrorHandler errorHandler )
+  {
+    final Tree nameNode = function.getChild( 0 );
+    final FunctionExpression func = new FunctionExpression( concatChildNodeText( nameNode ) );
+    for ( int idx = 1, numChildren = function.getChildCount(); idx < numChildren; idx++ )
+    {
+      final Tree child = function.getChild( idx );
+      switch ( child.getType() )
+      {
+        case OPEQ:
+        case COLON:
+          if ( child.getChildCount() == 0 )
+          {
+            func.addArgument( createLiteral( child.getText(), child, errorHandler ) );
+          }
+          else
+          {
+            final Tree propNode = child.getChild( 0 );
+            final String prop = propNode.getText();
+            final Expression expr = create( child.getChild( 1 ), null );
+            func.addArgument( createLiteral( prop, propNode, errorHandler ) );
+            func.addArgument( createLiteral( child.getText(), child, errorHandler ) );
+            func.addArgument( expr );
+          }
+          break;
+
+        case FUNCTION:
+          func.addArgument( createFunction( child, errorHandler ) );
+          break;
+
+        case VAR:
+        case LITERAL:
+        case EXPR:
+          func.addArgument( createExpression( child, errorHandler ) );
+          break;
+
+        default:
+          func.addArgument( createLiteral( child.getText(), child, errorHandler ) );
+          break;
+
+      }
+    }
+
+    func.setLine( function.getLine() );
+    func.setChar( function.getCharPositionInLine() );
+    return func;
+  }
 }

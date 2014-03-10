@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.model.expression;
 
 import java.util.ArrayList;
@@ -21,46 +20,60 @@ import java.util.List;
 import org.localmatters.lesscss4j.model.AbstractElement;
 import org.localmatters.lesscss4j.transform.EvaluationContext;
 
-public class ListExpression extends AbstractElement implements Expression {
-    private List<Expression> _expressions;
+public class ListExpression
+  extends AbstractElement
+  implements Expression
+{
+  private List<Expression> _expressions;
 
-    public ListExpression() {
-    }
+  public ListExpression()
+  {
+  }
 
-    public ListExpression( final ListExpression copy) {
-        super(copy);
-        if (copy._expressions != null) {
-            _expressions = new ArrayList<>(copy._expressions.size());
-            for ( final Expression argument : copy._expressions) {
-                _expressions.add(argument.clone());
-            }
-        }
+  public ListExpression( final ListExpression copy )
+  {
+    super( copy );
+    if ( null != copy._expressions )
+    {
+      _expressions = new ArrayList<>( copy._expressions.size() );
+      for ( final Expression argument : copy._expressions )
+      {
+        _expressions.add( argument.clone() );
+      }
     }
+  }
 
-    public List<Expression> getExpressions() {
-        return _expressions;
-    }
+  public List<Expression> getExpressions()
+  {
+    return _expressions;
+  }
 
-    public void setExpressions( final List<Expression> expressions) {
-        _expressions = expressions;
-    }
+  public void setExpressions( final List<Expression> expressions )
+  {
+    _expressions = expressions;
+  }
 
-    public void addExpression( final Expression expression) {
-        if (_expressions == null) {
-            _expressions = new ArrayList<>();
-        }
-        _expressions.add(expression);
+  public void addExpression( final Expression expression )
+  {
+    if ( null == _expressions )
+    {
+      _expressions = new ArrayList<>();
     }
+    _expressions.add( expression );
+  }
 
-    public Expression evaluate( final EvaluationContext context) {
-        final StringBuilder buf = new StringBuilder();
-        for ( final Expression expression : _expressions) {
-            buf.append(expression.evaluate(context).toString());
-        }
-        return new LiteralExpression(buf.toString());
+  public Expression evaluate( final EvaluationContext context )
+  {
+    final StringBuilder buf = new StringBuilder();
+    for ( final Expression expression : _expressions )
+    {
+      buf.append( expression.evaluate( context ).toString() );
     }
+    return new LiteralExpression( buf.toString() );
+  }
 
-    public ListExpression clone() {
-        return new ListExpression(this);
-    }
+  public ListExpression clone()
+  {
+    return new ListExpression( this );
+  }
 }

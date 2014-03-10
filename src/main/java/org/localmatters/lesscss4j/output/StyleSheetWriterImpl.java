@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.output;
 
 import java.io.BufferedWriter;
@@ -35,328 +34,423 @@ import org.localmatters.lesscss4j.model.Selector;
 import org.localmatters.lesscss4j.model.StyleSheet;
 
 // todo: It might make sense to break this up into separate writers for each type of element in the stylesheet
-public class StyleSheetWriterImpl implements StyleSheetWriter {
-    private boolean _prettyPrintEnabled = false;
-    private String _defaultEncoding = "UTF-8";
-    private String _newline = "\n";
-    private PrettyPrintOptions _prettyPrintOptions;
+public class StyleSheetWriterImpl
+  implements StyleSheetWriter
+{
+  private boolean _prettyPrintEnabled = false;
+  private String _defaultEncoding = "UTF-8";
+  private String _newline = "\n";
+  private PrettyPrintOptions _prettyPrintOptions;
 
-    public PrettyPrintOptions getPrettyPrintOptions() {
-        if (_prettyPrintOptions == null) {
-            _prettyPrintOptions = new PrettyPrintOptions();
+  public PrettyPrintOptions getPrettyPrintOptions()
+  {
+    if ( null == _prettyPrintOptions )
+    {
+      _prettyPrintOptions = new PrettyPrintOptions();
+    }
+    return _prettyPrintOptions;
+  }
+
+  public void setPrettyPrintOptions( final PrettyPrintOptions prettyPrintOptions )
+  {
+    _prettyPrintOptions = prettyPrintOptions;
+  }
+
+  public String getNewline()
+  {
+    return _newline;
+  }
+
+  public void setNewline( final String newline )
+  {
+    _newline = newline;
+  }
+
+  public String getDefaultEncoding()
+  {
+    return _defaultEncoding;
+  }
+
+  public void setDefaultEncoding( final String defaultEncoding )
+  {
+    _defaultEncoding = defaultEncoding;
+  }
+
+  public boolean isPrettyPrintEnabled()
+  {
+    return _prettyPrintEnabled;
+  }
+
+  public void setPrettyPrintEnabled( final boolean prettyPrintEnabled )
+  {
+    _prettyPrintEnabled = prettyPrintEnabled;
+  }
+
+  public void write( final OutputStream output, final StyleSheet styleSheet, final ErrorHandler errorHandler )
+    throws IOException
+  {
+    String encoding = styleSheet.getCharset();
+    if ( null == encoding || 0 == encoding.length() )
+    {
+      encoding = getDefaultEncoding();
+    }
+
+    Writer writer = null;
+    try
+    {
+      writer = new BufferedWriter( new OutputStreamWriter( output, encoding ) );
+      write( writer, styleSheet );
+    }
+    finally
+    {
+      IOUtils.closeQuietly( writer );
+    }
+  }
+
+  protected void writeBreak( final Writer writer, final int indent )
+    throws IOException
+  {
+    if ( isPrettyPrintEnabled() )
+    {
+      writer.write( getNewline() );
+      if ( indent > 0 )
+      {
+        writeIndent( writer, indent );
+      }
+    }
+  }
+
+  protected void writeBreak( final Writer writer )
+    throws IOException
+  {
+    writeBreak( writer, 0 );
+  }
+
+  protected void writeSpace( final Writer writer )
+    throws IOException
+  {
+    if ( isPrettyPrintEnabled() )
+    {
+      writer.write( " " );
+    }
+  }
+
+  protected void writeSemi( final Writer writer, final boolean withBreak )
+    throws IOException
+  {
+    writer.write( ";" );
+    if ( withBreak )
+    {
+      writeBreak( writer );
+    }
+  }
+
+  protected void writeSemi( final Writer writer )
+    throws IOException
+  {
+    writeSemi( writer, true );
+  }
+
+  private void writeSeparator( final Writer writer, final String separator )
+    throws IOException
+  {
+    writer.write( separator );
+    writeSpace( writer );
+  }
+
+  protected void writeIndent( final Writer writer, final int level )
+    throws IOException
+  {
+    if ( isPrettyPrintEnabled() )
+    {
+      for ( int idx = 0; idx < level; idx++ )
+      {
+        for ( int jdx = 0; jdx < getPrettyPrintOptions().getIndentSize(); jdx++ )
+        {
+          writer.write( ' ' );
         }
-        return _prettyPrintOptions;
+      }
+    }
+  }
+
+  protected void write( final Writer writer, final StyleSheet styleSheet )
+    throws IOException
+  {
+    writeCharset( writer, styleSheet );
+    writeImports( writer, styleSheet );
+
+    writeBodyElements( writer, styleSheet.getBodyElements(), 0 );
+  }
+
+  private void writeImports( final Writer writer, final StyleSheet styleSheet )
+    throws IOException
+  {
+    for ( final String importElement : styleSheet.getImports() )
+    {
+      writer.write( "@import " );
+      if ( "'\"".indexOf( importElement.charAt( 0 ) ) < 0 && !importElement.startsWith( "url" ) )
+      {
+        writer.write( "'" );
+        writer.write( importElement );
+        writer.write( "'" );
+      }
+      else
+      {
+        writer.write( importElement );
+      }
+      writeSemi( writer );
+    }
+  }
+
+  private void writeCharset( final Writer writer, final StyleSheet styleSheet )
+    throws IOException
+  {
+    if ( null != styleSheet.getCharset() && 0 < styleSheet.getCharset().length() )
+    {
+      writer.write( "@charset '" );
+      writer.write( styleSheet.getCharset() );
+      writeSemi( writer );
+    }
+  }
+
+  protected void writeBodyElements( final Writer writer,
+                                    final List<BodyElement> bodyElements,
+                                    final int indent )
+    throws IOException
+  {
+    if ( null == bodyElements )
+    {
+      return;
     }
 
-    public void setPrettyPrintOptions( final PrettyPrintOptions prettyPrintOptions) {
-        _prettyPrintOptions = prettyPrintOptions;
+    for ( int i = 0, bodyElementsSize = bodyElements.size(); i < bodyElementsSize; i++ )
+    {
+      final BodyElement element = bodyElements.get( i );
+      if ( i > 0 && isPrettyPrintEnabled() && getPrettyPrintOptions().isLineBetweenRuleSets() )
+      {
+        writeBreak( writer );
+      }
+      writeIndent( writer, indent );
+      if ( element instanceof Media )
+      {
+        writeMedia( writer, (Media) element, indent );
+      }
+      else if ( element instanceof Page )
+      {
+        writePage( writer, (Page) element, indent );
+      }
+      else if ( element instanceof Keyframes )
+      {
+        writeKeyframes( writer, (Keyframes) element, indent );
+      }
+      else if ( element instanceof RuleSet )
+      {
+        writeRuleSet( writer, (RuleSet) element, indent );
+      }
+    }
+  }
+
+  protected void writePage( final Writer writer, final Page page, final int indent )
+    throws IOException
+  {
+    final List<DeclarationElement> declarations = page.getDeclarations();
+    if ( null == declarations || 0 == declarations.size() )
+    {
+      return;
     }
 
-    public String getNewline() {
-        return _newline;
+    writer.write( "@page" );
+
+    if ( null != page.getPseudoPage() )
+    {
+      writer.write( " :" );
+      writer.write( page.getPseudoPage() );
     }
 
-    public void setNewline( final String newline) {
-        _newline = newline;
+    writeOpeningBrace( writer, indent, declarations );
+    writeBreak( writer, indent );
+
+    writeDeclarations( writer, declarations, indent );
+
+    writeDeclarationBraceSpace( writer, declarations );
+
+    if ( !isOneLineDeclarationList( declarations ) )
+    {
+      writeIndent( writer, indent );
+    }
+    writeClosingBrace( writer, indent );
+
+  }
+
+  protected void writeMedia( final Writer writer, final Media media, final int indent )
+    throws IOException
+  {
+    writer.write( "@media " );
+
+
+    boolean first = true;
+    for ( final String medium : media.getMediums() )
+    {
+      if ( !first )
+      {
+        writeSeparator( writer, "," );
+      }
+      writer.write( medium );
+      first = false;
+    }
+    writeOpeningBrace( writer, indent, null );
+    writeBreak( writer, indent );
+
+    writeBodyElements( writer, media.getBodyElements(), indent + 1 );
+
+    writeClosingBrace( writer, indent );
+  }
+
+  protected void writeKeyframes( final Writer writer, final Keyframes media, final int indent )
+    throws IOException
+  {
+    writer.write( media.getName() );
+
+
+    writeOpeningBrace( writer, indent, null );
+    writeBreak( writer, indent );
+
+    writeBodyElements( writer, media.getBodyElements(), indent + 1 );
+
+    writeClosingBrace( writer, indent );
+  }
+
+  protected void writeRuleSet( final Writer writer, final RuleSet ruleSet, final int indent )
+    throws IOException
+  {
+    // Don't write rule sets with empty bodies
+    final List<DeclarationElement> declarations = ruleSet.getDeclarations();
+    if ( null == declarations || 0 == declarations.size() )
+    {
+      return;
     }
 
-    public String getDefaultEncoding() {
-        return _defaultEncoding;
+    if ( ruleSet.getArguments().size() > 0 )
+    {
+      return;
     }
 
-    public void setDefaultEncoding( final String defaultEncoding) {
-        _defaultEncoding = defaultEncoding;
+    for ( int idx = 0, selectorsSize = ruleSet.getSelectors().size(); idx < selectorsSize; idx++ )
+    {
+      final Selector selector = ruleSet.getSelectors().get( idx );
+      if ( idx > 0 )
+      {
+        writeSeparator( writer, "," );
+      }
+      writer.write( selector.getText() );
     }
 
-    public boolean isPrettyPrintEnabled() {
-        return _prettyPrintEnabled;
-    }
 
-    public void setPrettyPrintEnabled( final boolean prettyPrintEnabled) {
-        _prettyPrintEnabled = prettyPrintEnabled;
-    }
+    writeOpeningBrace( writer, indent, declarations );
+    writeDeclarationBraceSpace( writer, declarations );
 
-    public void write( final OutputStream output, final StyleSheet styleSheet, final ErrorHandler errorHandler) throws IOException {
-        String encoding = styleSheet.getCharset();
-        if (encoding == null || encoding.length() == 0) {
-            encoding = getDefaultEncoding();
+    writeDeclarations( writer, declarations, indent );
+
+    writeDeclarationBraceSpace( writer, declarations );
+
+    if ( !isOneLineDeclarationList( declarations ) )
+    {
+      writeIndent( writer, indent );
+    }
+    writeClosingBrace( writer, 0 );
+
+  }
+
+  private void writeDeclarations( final Writer writer,
+                                  final List<DeclarationElement> declarations,
+                                  final int indent )
+    throws IOException
+  {
+    final boolean oneLineDeclarationList = isOneLineDeclarationList( declarations );
+
+    boolean first = true;
+    for ( final DeclarationElement declaration : declarations )
+    {
+      if ( declaration instanceof Declaration )
+      {
+        if ( !first )
+        {
+          writeBreak( writer );
         }
 
-        Writer writer = null;
-        try {
-            writer = new BufferedWriter(new OutputStreamWriter(output, encoding));
-            write(writer, styleSheet);
+        int declarationIndent = indent + 1;
+        if ( oneLineDeclarationList )
+        {
+          declarationIndent = 0;
         }
-        finally {
-            IOUtils.closeQuietly(writer);
-        }
+        writeDeclaration( writer, (Declaration) declaration, declarationIndent );
+
+        first = false;
+      }
     }
+  }
 
-    protected void writeBreak( final Writer writer, final int indent) throws IOException {
-        if (isPrettyPrintEnabled()) {
-            writer.write(getNewline());
-            if (indent > 0) {
-                writeIndent(writer, indent);
-            }
-        }
+  protected void writeOpeningBrace( final Writer writer, final int indent, final List<DeclarationElement> declarations )
+    throws IOException
+  {
+    if ( isPrettyPrintEnabled() &&
+         getPrettyPrintOptions().isOpeningBraceOnNewLine() &&
+         !isOneLineDeclarationList( declarations ) )
+    {
+      writeBreak( writer, indent );
     }
-
-    protected void writeBreak( final Writer writer) throws IOException {
-        writeBreak(writer, 0);
+    else
+    {
+      writeSpace( writer );
     }
+    writer.write( '{' );
+  }
 
-    protected void writeSpace( final Writer writer) throws IOException {
-        if (isPrettyPrintEnabled()) {
-            writer.write(" ");
-        }
+  protected void writeClosingBrace( final Writer writer, final int indent )
+    throws IOException
+  {
+    writer.write( "}" );
+    writeBreak( writer, indent );
+  }
+
+  protected void writeDeclaration( final Writer writer, final Declaration declaration, final int indent )
+    throws IOException
+  {
+    writeIndent( writer, indent );
+    writer.write( declaration.getProperty() );
+    writer.write( ':' );
+    writeSpace( writer );
+    for ( final Object value : declaration.getValues() )
+    {
+      writer.write( value.toString() );
     }
-
-    protected void writeSemi( final Writer writer, final boolean withBreak) throws IOException {
-        writer.write(";");
-        if (withBreak) {
-            writeBreak(writer);
-        }
+    if ( declaration.isImportant() )
+    {
+      writeSpace( writer );
+      writer.write( "!important" );
     }
+    writeSemi( writer, false );
+  }
 
-    protected void writeSemi( final Writer writer) throws IOException {
-        writeSemi(writer, true);
+  protected void writeDeclarationBraceSpace( final Writer writer, final List<DeclarationElement> declarations )
+    throws IOException
+  {
+    if ( isOneLineDeclarationList( declarations ) )
+    {
+      writeSpace( writer );
     }
-
-    private void writeSeparator( final Writer writer, final String separator) throws IOException {
-        writer.write(separator);
-        writeSpace(writer);
+    else
+    {
+      writeBreak( writer );
     }
+  }
 
-    protected void writeIndent( final Writer writer, final int level) throws IOException {
-        if (isPrettyPrintEnabled()) {
-            for (int idx = 0; idx < level; idx++) {
-                for (int jdx = 0; jdx < getPrettyPrintOptions().getIndentSize(); jdx++) {
-                    writer.write(' ');
-                }
-            }
-        }
-    }
-
-    protected void write( final Writer writer, final StyleSheet styleSheet) throws IOException {
-        writeCharset(writer, styleSheet);
-        writeImports(writer, styleSheet);
-
-        writeBodyElements(writer, styleSheet.getBodyElements(), 0);
-    }
-
-    private void writeImports( final Writer writer, final StyleSheet styleSheet) throws IOException {
-        for ( final String importElement : styleSheet.getImports()) {
-            writer.write("@import ");
-            if ("'\"".indexOf(importElement.charAt(0)) < 0 && !importElement.startsWith("url")) {
-                writer.write("'");
-                writer.write(importElement);
-                writer.write("'");
-            }
-            else {
-                writer.write(importElement);
-            }
-            writeSemi(writer);
-        }
-    }
-
-    private void writeCharset( final Writer writer, final StyleSheet styleSheet) throws IOException {
-        if (styleSheet.getCharset() != null && styleSheet.getCharset().length() > 0) {
-            writer.write("@charset '");
-            writer.write(styleSheet.getCharset());
-            writeSemi(writer);
-        }
-    }
-
-    protected void writeBodyElements( final Writer writer,
-                                     final List<BodyElement> bodyElements,
-                                     final int indent) throws IOException {
-        if (bodyElements == null) return;
-
-        for (int i = 0, bodyElementsSize = bodyElements.size(); i < bodyElementsSize; i++) {
-            final BodyElement element = bodyElements.get(i);
-            if (i > 0 && isPrettyPrintEnabled() && getPrettyPrintOptions().isLineBetweenRuleSets()) {
-                writeBreak(writer);
-            }
-            writeIndent(writer, indent);
-            if (element instanceof Media) {
-                writeMedia(writer, (Media) element, indent);
-            }
-            else if (element instanceof Page) {
-                writePage(writer, (Page)element, indent);
-            }
-            else if (element instanceof Keyframes) {
-                writeKeyframes(writer, (Keyframes)element, indent);
-            }
-            else if (element instanceof RuleSet) {
-                writeRuleSet(writer, (RuleSet) element, indent);
-            }
-        }
-    }
-
-    protected void writePage( final Writer writer, final Page page, final int indent) throws IOException {
-        final List<DeclarationElement> declarations = page.getDeclarations();
-        if (declarations == null || declarations.size() == 0) {
-            return;
-        }
-
-        writer.write("@page");
-
-        if (page.getPseudoPage() != null) {
-            writer.write(" :");
-            writer.write(page.getPseudoPage());
-        }
-
-        writeOpeningBrace(writer, indent, declarations);
-        writeBreak(writer, indent);
-
-        writeDeclarations(writer, declarations, indent);
-
-        writeDeclarationBraceSpace(writer, declarations);
-
-        if (!isOneLineDeclarationList(declarations)) {
-            writeIndent(writer, indent);
-        }
-        writeClosingBrace(writer, indent);
-
-    }
-
-    protected void writeMedia( final Writer writer, final Media media, final int indent) throws IOException {
-
-        writer.write("@media ");
-
-
-        boolean first = true;
-        for ( final String medium : media.getMediums()) {
-            if (!first) {
-                writeSeparator(writer, ",");
-            }
-            writer.write(medium);
-            first = false;
-        }
-        writeOpeningBrace(writer, indent, null);
-        writeBreak(writer, indent);
-
-        writeBodyElements(writer, media.getBodyElements(), indent + 1);
-
-        writeClosingBrace(writer, indent);
-    }
-
-    protected void writeKeyframes( final Writer writer, final Keyframes media, final int indent) throws IOException {
-
-        writer.write(media.getName());
-
-
-        writeOpeningBrace(writer, indent, null);
-        writeBreak(writer, indent);
-
-        writeBodyElements(writer, media.getBodyElements(), indent + 1);
-
-        writeClosingBrace(writer, indent);
-    }
-
-    protected void writeRuleSet( final Writer writer, final RuleSet ruleSet, final int indent) throws IOException {
-        // Don't write rule sets with empty bodies
-        final List<DeclarationElement> declarations = ruleSet.getDeclarations();
-        if (declarations == null || declarations.size() == 0) {
-            return;
-        }
-
-        if (ruleSet.getArguments().size() > 0) {
-            return;
-        }
-
-        for (int idx = 0, selectorsSize = ruleSet.getSelectors().size(); idx < selectorsSize; idx++) {
-            final Selector selector = ruleSet.getSelectors().get(idx);
-            if (idx > 0) {
-                writeSeparator(writer, ",");
-            }
-            writer.write(selector.getText());
-        }
-
-
-        writeOpeningBrace(writer, indent, declarations);
-        writeDeclarationBraceSpace(writer, declarations);
-
-        writeDeclarations(writer, declarations, indent);
-
-        writeDeclarationBraceSpace(writer, declarations);
-
-        if (!isOneLineDeclarationList(declarations)) {
-            writeIndent(writer, indent);
-        }
-        writeClosingBrace(writer, 0);
-
-    }
-
-    private void writeDeclarations( final Writer writer,
-                                   final List<DeclarationElement> declarations,
-                                   final int indent) throws IOException {
-        final boolean oneLineDeclarationList = isOneLineDeclarationList(declarations);
-
-        boolean first = true;
-        for ( final DeclarationElement declaration : declarations) {
-            if (declaration instanceof Declaration) {
-                if (!first) {
-                    writeBreak(writer);
-                }
-
-                int declarationIndent = indent + 1;
-                if (oneLineDeclarationList) {
-                    declarationIndent = 0;
-                }
-                writeDeclaration(writer, (Declaration) declaration, declarationIndent);
-
-                first = false;
-            }
-        }
-    }
-
-    protected void writeOpeningBrace( final Writer writer, final int indent, final List<DeclarationElement> declarations) throws IOException {
-        if (isPrettyPrintEnabled() &&
-            getPrettyPrintOptions().isOpeningBraceOnNewLine() &&
-            !isOneLineDeclarationList(declarations)) {
-            writeBreak(writer, indent);
-        }
-        else {
-            writeSpace(writer);
-        }
-        writer.write('{');
-    }
-
-    protected void writeClosingBrace( final Writer writer, final int indent) throws IOException {
-        writer.write("}");
-        writeBreak(writer, indent);
-    }
-
-    protected void writeDeclaration( final Writer writer, final Declaration declaration, final int indent) throws IOException {
-        writeIndent(writer, indent);
-        writer.write(declaration.getProperty());
-        writer.write(':');
-        writeSpace(writer);
-        for ( final Object value : declaration.getValues()) {
-            writer.write(value.toString());
-        }
-        if (declaration.isImportant()) {
-            writeSpace(writer);
-            writer.write("!important");
-        }
-        writeSemi(writer, false);
-    }
-
-    protected void writeDeclarationBraceSpace( final Writer writer, final List<DeclarationElement> declarations) throws IOException {
-        if (isOneLineDeclarationList(declarations)) {
-            writeSpace(writer);
-        }
-        else {
-            writeBreak(writer);
-        }
-    }
-
-    private boolean isOneLineDeclarationList( final List<DeclarationElement> declarations) {
-        return declarations != null &&
-               isPrettyPrintEnabled() &&
-               getPrettyPrintOptions().isSingleDeclarationOnOneLine() &&
-               declarations.size() <= 1;
-    }
+  private boolean isOneLineDeclarationList( final List<DeclarationElement> declarations )
+  {
+    return null != declarations &&
+           isPrettyPrintEnabled() &&
+           getPrettyPrintOptions().isSingleDeclarationOnOneLine() &&
+           1 >= declarations.size();
+  }
 }
 

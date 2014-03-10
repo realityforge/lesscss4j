@@ -13,23 +13,28 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.error;
 
-public class DivideByZeroException extends ExpressionException {
-    public DivideByZeroException() {
-        super("Division by zero.");
-    }
+public class DivideByZeroException
+  extends ExpressionException
+{
+  public DivideByZeroException()
+  {
+    super( "Division by zero." );
+  }
 
-    public DivideByZeroException( final String message) {
-        super("Division by zero. " + message);
-    }
+  public DivideByZeroException( final String message )
+  {
+    super( "Division by zero. " + message );
+  }
 
-    public DivideByZeroException( final String message, final Throwable cause) {
-        super("Division by zero. " + message, cause);
-    }
+  public DivideByZeroException( final String message, final Throwable cause )
+  {
+    super( "Division by zero. " + message, cause );
+  }
 
-    public DivideByZeroException( final Throwable cause) {
-        super("Division by zero.", cause);
-    }
+  public DivideByZeroException( final Throwable cause )
+  {
+    super( "Division by zero.", cause );
+  }
 }

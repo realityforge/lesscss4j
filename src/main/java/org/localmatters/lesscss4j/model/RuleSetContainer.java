@@ -13,12 +13,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.model;
 
 import java.util.List;
 
-public interface RuleSetContainer {
-    void addRuleSet(RuleSet ruleSet, int index);
-    List<RuleSet> getRuleSet(Selector selector);
+public interface RuleSetContainer
+{
+  void addRuleSet( RuleSet ruleSet, int index );
+
+  List<RuleSet> getRuleSet( Selector selector );
 }

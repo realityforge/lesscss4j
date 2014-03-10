@@ -13,44 +13,54 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.error;
 
 import org.localmatters.lesscss4j.model.expression.ConstantValue;
 
-public class UnitMismatchException extends LessCssException {
-    private final ConstantValue _left;
-    private final ConstantValue _right;
+public class UnitMismatchException
+  extends LessCssException
+{
+  private final ConstantValue _left;
+  private final ConstantValue _right;
 
-    public UnitMismatchException( final ConstantValue left, final ConstantValue right) {
-        super("Unit mismatch: " + left.toString() + " " + right.toString());
-        _left = left;
-        _right = right;
-    }
+  public UnitMismatchException( final ConstantValue left, final ConstantValue right )
+  {
+    super( "Unit mismatch: " + left.toString() + " " + right.toString() );
+    _left = left;
+    _right = right;
+  }
 
-    public UnitMismatchException( final String message, final ConstantValue left, final ConstantValue right) {
-        super("Unit mismatch: " + message + ": " + left.toString() + " " + right.toString());
-        _left = left;
-        _right = right;
-    }
+  public UnitMismatchException( final String message, final ConstantValue left, final ConstantValue right )
+  {
+    super( "Unit mismatch: " + message + ": " + left.toString() + " " + right.toString() );
+    _left = left;
+    _right = right;
+  }
 
-    public UnitMismatchException( final String message, final ConstantValue left, final ConstantValue right, final Throwable cause) {
-        super("Unit mismatch:" + message + ": " + left.toString() + " " + right.toString(), cause);
-        _left = left;
-        _right = right;
-    }
+  public UnitMismatchException( final String message,
+                                final ConstantValue left,
+                                final ConstantValue right,
+                                final Throwable cause )
+  {
+    super( "Unit mismatch:" + message + ": " + left.toString() + " " + right.toString(), cause );
+    _left = left;
+    _right = right;
+  }
 
-    public UnitMismatchException( final ConstantValue left, final ConstantValue right, final Throwable cause) {
-        super("Unit mismatch:" + left.toString() + " " + right.toString(),cause);
-        _left = left;
-        _right = right;
-    }
+  public UnitMismatchException( final ConstantValue left, final ConstantValue right, final Throwable cause )
+  {
+    super( "Unit mismatch:" + left.toString() + " " + right.toString(), cause );
+    _left = left;
+    _right = right;
+  }
 
-    public ConstantValue getLeft() {
-        return _left;
-    }
+  public ConstantValue getLeft()
+  {
+    return _left;
+  }
 
-    public ConstantValue getRight() {
-        return _right;
-    }
+  public ConstantValue getRight()
+  {
+    return _right;
+  }
 }

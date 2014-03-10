@@ -13,58 +13,71 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.model.expression;
 
 import org.localmatters.lesscss4j.model.AbstractElement;
 import org.localmatters.lesscss4j.transform.EvaluationContext;
 
-public class ConstantExpression extends AbstractElement implements Expression {
-    public static final String UNIT_COLOR = "color";
+public class ConstantExpression
+  extends AbstractElement
+  implements Expression
+{
+  public static final String UNIT_COLOR = "color";
 
-    private ConstantValue _value;
+  private ConstantValue _value;
 
-    public ConstantExpression() {
-        this((ConstantValue)null);
+  public ConstantExpression()
+  {
+    this( (ConstantValue) null );
+  }
+
+  public ConstantExpression( final ConstantExpression copy )
+  {
+    super( copy );
+    _value = copy._value.clone();
+  }
+
+  public ConstantExpression( final ConstantValue value )
+  {
+    _value = value;
+  }
+
+  public ConstantExpression( final String value )
+  {
+    if ( value.charAt( 0 ) == '#' || ConstantColor.isColorFunction( value ) )
+    {
+      _value = new ConstantColor( value );
     }
-
-    public ConstantExpression( final ConstantExpression copy) {
-        super(copy);
-        _value = copy._value.clone();
+    else
+    {
+      _value = new ConstantNumber( value );
     }
+  }
 
-    public ConstantExpression( final ConstantValue value) {
-        _value = value;
-    }
+  public ConstantValue getValue()
+  {
+    return _value;
+  }
 
-    public ConstantExpression( final String value) {
-        if (value.charAt(0) == '#' || ConstantColor.isColorFunction(value)) {
-            _value = new ConstantColor(value);
-        }
-        else {
-            _value = new ConstantNumber(value);
-        }
-    }
+  public void setValue( final ConstantValue value )
+  {
+    _value = value;
+  }
 
-    public ConstantValue getValue() {
-        return _value;
-    }
+  public Expression evaluate( final EvaluationContext context )
+  {
+    // Evaluation of a constant is itself
+    return this;
+  }
 
-    public void setValue( final ConstantValue value) {
-        _value = value;
-    }
+  public ConstantExpression clone()
+  {
+    return new ConstantExpression( this );
+  }
 
-    public Expression evaluate( final EvaluationContext context) {
-        // Evaluation of a constant is itself
-        return this;
-    }
-
-    public ConstantExpression clone() {
-        return new ConstantExpression(this);
-    }
-
-    @Override
-    public String toString() {
-        return getValue().toString();
-    }
+  @Override
+  public String toString()
+  {
+    return getValue().toString();
+  }
 }

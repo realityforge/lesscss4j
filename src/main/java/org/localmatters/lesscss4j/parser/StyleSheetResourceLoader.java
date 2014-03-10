@@ -13,11 +13,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.parser;
 
 import java.net.URL;
 
-public interface StyleSheetResourceLoader {
-    StyleSheetResource getResource(URL url);
+public interface StyleSheetResourceLoader
+{
+  StyleSheetResource getResource( URL url );
 }

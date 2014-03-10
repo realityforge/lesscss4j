@@ -13,13 +13,15 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.model.expression;
 
 import org.localmatters.lesscss4j.model.PositionAware;
 import org.localmatters.lesscss4j.transform.EvaluationContext;
 
-public interface Expression extends PositionAware, Cloneable {
-    Expression evaluate(EvaluationContext context);
-    Expression clone();
+public interface Expression
+  extends PositionAware, Cloneable
+{
+  Expression evaluate( EvaluationContext context );
+
+  Expression clone();
 }

@@ -13,19 +13,20 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.model.expression;
 
-public interface ConstantValue extends Cloneable {
-    double getValue();
+public interface ConstantValue
+  extends Cloneable
+{
+  double getValue();
 
-    ConstantValue add(ConstantValue right);
+  ConstantValue add( ConstantValue right );
 
-    ConstantValue subtract(ConstantValue right);
+  ConstantValue subtract( ConstantValue right );
 
-    ConstantValue multiply(ConstantValue right);
+  ConstantValue multiply( ConstantValue right );
 
-    ConstantValue divide(ConstantValue right);
+  ConstantValue divide( ConstantValue right );
 
-    ConstantValue clone();
+  ConstantValue clone();
 }

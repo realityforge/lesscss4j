@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.model;
 
 import java.util.ArrayList;
@@ -23,68 +22,87 @@ import java.util.Map;
 import org.localmatters.lesscss4j.model.expression.Expression;
 
 
-public class RuleSet extends DeclarationContainer implements BodyElement, Cloneable {
-    private List<Selector> _selectors;
-    private final Map<String, Expression> _arguments = new LinkedHashMap<>();
+public class RuleSet
+  extends DeclarationContainer
+  implements BodyElement, Cloneable
+{
+  private List<Selector> _selectors;
+  private final Map<String, Expression> _arguments = new LinkedHashMap<>();
 
-    public RuleSet() {
+  public RuleSet()
+  {
+  }
+
+  public RuleSet( final RuleSet copy )
+  {
+    this( copy, true );
+  }
+
+  public RuleSet( final RuleSet copy, final boolean copyDeclarations )
+  {
+    super( copy, copyDeclarations );
+    if ( null != copy._selectors )
+    {
+      _selectors = new ArrayList<>( copy._selectors.size() );
+      for ( final Selector selector : copy._selectors )
+      {
+        _selectors.add( selector.clone() );
+      }
     }
 
-    public RuleSet( final RuleSet copy) {
-        this(copy, true);
+    for ( final Map.Entry<String, Expression> entry : copy._arguments.entrySet() )
+    {
+      _arguments.put( entry.getKey(), entry.getValue().clone() );
     }
+  }
 
-    public RuleSet( final RuleSet copy, final boolean copyDeclarations) {
-        super(copy, copyDeclarations);
-        if (copy._selectors != null) {
-            _selectors = new ArrayList<>(copy._selectors.size());
-            for ( final Selector selector : copy._selectors) {
-                _selectors.add(selector.clone());
-            }
-        }
+  public List<Selector> getSelectors()
+  {
+    return _selectors;
+  }
 
-        for ( final Map.Entry<String, Expression> entry : copy._arguments.entrySet()) {
-            _arguments.put(entry.getKey(), entry.getValue().clone());
-        }
+  public void setSelectors( final List<Selector> selectors )
+  {
+    _selectors = selectors;
+  }
+
+  public void addSelector( final Selector selector )
+  {
+    if ( null == _selectors )
+    {
+      _selectors = new ArrayList<>();
     }
+    _selectors.add( selector );
+  }
 
-    public List<Selector> getSelectors() {
-        return _selectors;
-    }
+  public Map<String, Expression> getArguments()
+  {
+    return _arguments;
+  }
 
-    public void setSelectors( final List<Selector> selectors) {
-        _selectors = selectors;
-    }
+  public void addArgument( final String name, final Expression value )
+  {
+    _arguments.put( name, value );
+  }
 
-    public void addSelector( final Selector selector) {
-        if (_selectors == null) {
-            _selectors = new ArrayList<>();
-        }
-        _selectors.add(selector);
-    }
+  @Override
+  public RuleSet clone()
+  {
+    return new RuleSet( this );
+  }
 
-    public Map<String, Expression> getArguments() {
-        return _arguments;
+  @Override
+  public String toString()
+  {
+    final StringBuilder buf = new StringBuilder();
+    for ( final Selector selector : _selectors )
+    {
+      if ( buf.length() > 0 )
+      {
+        buf.append( ", " );
+      }
+      buf.append( selector.toString() );
     }
-
-    public void addArgument( final String name, final Expression value) {
-        _arguments.put(name, value);
-    }
-
-    @Override
-    public RuleSet clone() {
-        return new RuleSet(this);
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder buf = new StringBuilder();
-        for ( final Selector selector : _selectors) {
-            if (buf.length() > 0) {
-                buf.append(", ");
-            }
-            buf.append(selector.toString());
-        }
-        return buf.toString();
-    }
+    return buf.toString();
+  }
 }

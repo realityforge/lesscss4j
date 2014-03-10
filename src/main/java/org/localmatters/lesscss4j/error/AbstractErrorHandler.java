@@ -13,30 +13,36 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.error;
 
-public class AbstractErrorHandler implements ErrorHandler {
-    private int _errorCount = 0;
-    private Object _context;
+public class AbstractErrorHandler
+  implements ErrorHandler
+{
+  private int _errorCount = 0;
+  private Object _context;
 
-    public Object getContext() {
-        return _context;
-    }
+  public Object getContext()
+  {
+    return _context;
+  }
 
-    public String getContextString() {
-        return _context != null ? _context.toString() + ' ' : "";
-    }
+  public String getContextString()
+  {
+    return null != _context ? _context.toString() + ' ' : "";
+  }
 
-    public void setContext( final Object context) {
-        _context = context;
-    }
+  public void setContext( final Object context )
+  {
+    _context = context;
+  }
 
-    public void handleError( final String message, final Throwable exception) {
-        _errorCount++;
-    }
+  public void handleError( final String message, final Throwable exception )
+  {
+    _errorCount++;
+  }
 
-    public int getErrorCount() {
-        return _errorCount;
-    }
+  public int getErrorCount()
+  {
+    return _errorCount;
+  }
 }

@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.compile;
 
 import java.io.IOException;
@@ -30,59 +29,74 @@ import org.localmatters.lesscss4j.transform.StyleSheetEvaluationContext;
 import org.localmatters.lesscss4j.transform.Transformer;
 import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 
-public class LessCssCompilerImpl implements LessCssCompiler {
-    private StyleSheetParser _styleSheetParser = new LessCssStyleSheetParser();
-    private StyleSheetWriter _styleSheetWriter = new StyleSheetWriterImpl();
-    private TransformerManager _transformerManager;
+public class LessCssCompilerImpl
+  implements LessCssCompiler
+{
+  private StyleSheetParser _styleSheetParser = new LessCssStyleSheetParser();
+  private StyleSheetWriter _styleSheetWriter = new StyleSheetWriterImpl();
+  private TransformerManager _transformerManager;
 
-    public TransformerManager getTransformerManager() {
-        return _transformerManager;
+  public TransformerManager getTransformerManager()
+  {
+    return _transformerManager;
+  }
+
+  public void setTransformerManager( final TransformerManager transformerManager )
+  {
+    _transformerManager = transformerManager;
+  }
+
+  public StyleSheetParser getStyleSheetParser()
+  {
+    return _styleSheetParser;
+  }
+
+  public void setStyleSheetParser( final StyleSheetParser styleSheetParser )
+  {
+    _styleSheetParser = styleSheetParser;
+  }
+
+  public StyleSheetWriter getStyleSheetWriter()
+  {
+    return _styleSheetWriter;
+  }
+
+  public void setStyleSheetWriter( final StyleSheetWriter styleSheetWriter )
+  {
+    _styleSheetWriter = styleSheetWriter;
+  }
+
+  public void compile( final StyleSheetResource input, final OutputStream output, final ErrorHandler errorHandler )
+    throws IOException
+  {
+    if ( null == getTransformerManager() )
+    {
+      throw new IllegalStateException( "No TransformerManager defined in compiler." );
+    }
+    if ( null != errorHandler && null != input.getUrl() )
+    {
+      // Set the context in the error handler to the name of the file we're reading.
+      errorHandler.setContext( FilenameUtils.getName( input.getUrl().getPath() ) );
+    }
+    StyleSheet styleSheet = getStyleSheetParser().parse( input, errorHandler );
+
+    if ( null == errorHandler || 0 == errorHandler.getErrorCount() )
+    {
+      final StyleSheetEvaluationContext context = new StyleSheetEvaluationContext();
+      context.setResource( input );
+      context.setErrorHandler( errorHandler );
+
+      final Transformer<StyleSheet> styleSheetTransformer = getTransformerManager().getTransformer( styleSheet );
+      if ( null == styleSheetTransformer )
+      {
+        throw new IllegalStateException( "No transformer found for class: " + styleSheet.getClass().getName() );
+      }
+      styleSheet = styleSheetTransformer.transform( styleSheet, context ).get( 0 );
     }
 
-    public void setTransformerManager( final TransformerManager transformerManager) {
-        _transformerManager = transformerManager;
+    if ( null == errorHandler || 0 == errorHandler.getErrorCount() )
+    {
+      getStyleSheetWriter().write( output, styleSheet, errorHandler );
     }
-
-    public StyleSheetParser getStyleSheetParser() {
-        return _styleSheetParser;
-    }
-
-    public void setStyleSheetParser( final StyleSheetParser styleSheetParser) {
-        _styleSheetParser = styleSheetParser;
-    }
-
-    public StyleSheetWriter getStyleSheetWriter() {
-        return _styleSheetWriter;
-    }
-
-    public void setStyleSheetWriter( final StyleSheetWriter styleSheetWriter) {
-        _styleSheetWriter = styleSheetWriter;
-    }
-
-    public void compile( final StyleSheetResource input, final OutputStream output, final ErrorHandler errorHandler) throws IOException {
-        if (getTransformerManager() == null) {
-            throw new IllegalStateException("No TransformerManager defined in compiler.");
-        }
-        if (errorHandler != null && input.getUrl() != null) {
-            // Set the context in the error handler to the name of the file we're reading.
-            errorHandler.setContext(FilenameUtils.getName(input.getUrl().getPath()));
-        }
-        StyleSheet styleSheet = getStyleSheetParser().parse(input, errorHandler);
-
-        if (errorHandler == null || errorHandler.getErrorCount() == 0) {
-            final StyleSheetEvaluationContext context = new StyleSheetEvaluationContext();
-            context.setResource(input);
-            context.setErrorHandler(errorHandler);
-
-            final Transformer<StyleSheet> styleSheetTransformer = getTransformerManager().getTransformer(styleSheet);
-            if (styleSheetTransformer == null) {
-                throw new IllegalStateException("No transformer found for class: " + styleSheet.getClass().getName());
-            }
-            styleSheet = styleSheetTransformer.transform(styleSheet, context).get(0);
-        }
-
-        if (errorHandler == null || errorHandler.getErrorCount() == 0) {
-            getStyleSheetWriter().write(output, styleSheet, errorHandler);
-        }
-    }
+  }
 }

@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.transform;
 
 import java.util.ArrayList;
@@ -26,53 +25,65 @@ import org.localmatters.lesscss4j.model.expression.FunctionExpression;
 import org.localmatters.lesscss4j.model.expression.LiteralExpression;
 import org.localmatters.lesscss4j.transform.function.Function;
 
-public class FunctionTransformer extends AbstractTransformer<Expression> {
-    private Map<String, Function> _functionMap;
+public class FunctionTransformer
+  extends AbstractTransformer<Expression>
+{
+  private Map<String, Function> _functionMap;
 
-    public void addFunction( final String name, final Function function) {
-        if (_functionMap == null) {
-            _functionMap = new LinkedHashMap<>();
+  public void addFunction( final String name, final Function function )
+  {
+    if ( null == _functionMap )
+    {
+      _functionMap = new LinkedHashMap<>();
+    }
+    _functionMap.put( name, function );
+  }
+
+  public Map<String, Function> getFunctionMap()
+  {
+    return _functionMap;
+  }
+
+  public void setFunctionMap( final Map<String, Function> functionMap )
+  {
+    _functionMap = functionMap;
+  }
+
+  public List<Expression> transform( final Expression expression, final EvaluationContext context )
+  {
+    if ( !( expression instanceof FunctionExpression ) )
+    {
+      throw new IllegalArgumentException( "Object to transform must be a FunctionExpression" );
+    }
+
+    final FunctionExpression function = (FunctionExpression) expression;
+    Expression result = function;
+
+    final String functionName = function.getName();
+    final Function func = getFunctionMap().get( functionName );
+    if ( null != func )
+    {
+      final List<Expression> args = new ArrayList<>( function.getArguments().size() );
+
+      // Evaluate each of the argument expressions before calling the function.
+      for ( int idx = 0; idx < function.getArguments().size(); idx++ )
+      {
+        Expression argExpression = function.getArguments().get( idx );
+        if ( !( argExpression instanceof LiteralExpression ) || !argExpression.toString().equals( "," ) )
+        {
+          final Transformer<Expression> transformer = getTransformer( argExpression, false );
+          if ( null != transformer )
+          {
+            argExpression = transformer.transform( argExpression, context ).get( 0 );
+          }
+          argExpression = argExpression.evaluate( context );
+          args.add( argExpression );
         }
-        _functionMap.put(name, function);
+      }
+
+      result = func.evaluate( functionName, args.toArray( new Expression[ args.size() ] ) );
     }
 
-    public Map<String, Function> getFunctionMap() {
-        return _functionMap;
-    }
-
-    public void setFunctionMap( final Map<String, Function> functionMap) {
-        _functionMap = functionMap;
-    }
-
-    public List<Expression> transform( final Expression expression, final EvaluationContext context) {
-        if (!(expression instanceof FunctionExpression)) {
-            throw new IllegalArgumentException("Object to transform must be a FunctionExpression");
-        }
-
-        final FunctionExpression function = (FunctionExpression) expression;
-        Expression result = function;
-
-        final String functionName = function.getName();
-        final Function func = getFunctionMap().get(functionName);
-        if (func != null) {
-            final List<Expression> args = new ArrayList<>(function.getArguments().size());
-
-            // Evaluate each of the argument expressions before calling the function.
-            for (int idx = 0; idx < function.getArguments().size(); idx++) {
-                Expression argExpression = function.getArguments().get(idx);
-                if (!(argExpression instanceof LiteralExpression) || !argExpression.toString().equals(",")) {
-                    final Transformer<Expression> transformer = getTransformer(argExpression, false);
-                    if (transformer != null) {
-                        argExpression = transformer.transform(argExpression, context).get(0);
-                    }
-                    argExpression = argExpression.evaluate(context);
-                    args.add(argExpression);
-                }
-            }
-
-            result = func.evaluate(functionName, args.toArray(new Expression[args.size()]));
-        }
-
-        return Arrays.asList(result);
-    }
+    return Arrays.asList( result );
+  }
 }

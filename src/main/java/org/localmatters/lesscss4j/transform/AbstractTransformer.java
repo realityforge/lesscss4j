@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.transform;
 
 import java.util.Iterator;
@@ -24,57 +23,72 @@ import org.localmatters.lesscss4j.model.expression.Expression;
 import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 import org.localmatters.lesscss4j.transform.manager.TransformerManagerAware;
 
-public abstract class AbstractTransformer<T> implements Transformer<T>, TransformerManagerAware {
-    private TransformerManager _transformerManager;
+public abstract class AbstractTransformer<T>
+  implements Transformer<T>, TransformerManagerAware
+{
+  private TransformerManager _transformerManager;
 
-    protected AbstractTransformer() {
-        this(null);
+  protected AbstractTransformer()
+  {
+    this( null );
+  }
+
+  protected AbstractTransformer( final TransformerManager transformerManager )
+  {
+    _transformerManager = transformerManager;
+  }
+
+  public TransformerManager getTransformerManager()
+  {
+    return _transformerManager;
+  }
+
+  public void setTransformerManager( final TransformerManager transformerManager )
+  {
+    _transformerManager = transformerManager;
+  }
+
+  protected <T> Transformer<T> getTransformer( final T obj )
+  {
+    return getTransformer( obj, true );
+  }
+
+  protected <T> Transformer<T> getTransformer( final T obj, final boolean required )
+  {
+    Transformer<T> transformer = null;
+    if ( null != getTransformerManager() )
+    {
+      transformer = getTransformerManager().getTransformer( obj );
     }
 
-    protected AbstractTransformer( final TransformerManager transformerManager) {
-        _transformerManager = transformerManager;
+    if ( required && null == transformer )
+    {
+      throw new IllegalStateException(
+        "Unable to find transformer for object of type " + obj.getClass().getName() );
     }
-
-    public TransformerManager getTransformerManager() {
-        return _transformerManager;
+    else
+    {
+      return transformer;
     }
+  }
 
-    public void setTransformerManager( final TransformerManager transformerManager) {
-        _transformerManager = transformerManager;
+  protected void evaluateVariables( final VariableContainer variableContainer,
+                                    final VariableContainer transformed,
+                                    final EvaluationContext context )
+  {
+    final EvaluationContext varContext = new EvaluationContext( variableContainer, context );
+    for ( final Iterator<String> iter = variableContainer.getVariableNames(); iter.hasNext(); )
+    {
+      final String varName = iter.next();
+      final Expression varExpression = variableContainer.getVariable( varName );
+      try
+      {
+        transformed.setVariable( varName, varExpression.evaluate( varContext ) );
+      }
+      catch ( final LessCssException ex )
+      {
+        ErrorUtils.handleError( context.getErrorHandler(), varExpression, null, ex );
+      }
     }
-
-    protected <T> Transformer<T> getTransformer( final T obj) {
-        return getTransformer(obj, true);
-    }
-
-    protected <T> Transformer<T> getTransformer( final T obj, final boolean required) {
-        Transformer<T> transformer = null;
-        if (getTransformerManager() != null) {
-            transformer = getTransformerManager().getTransformer(obj);
-        }
-
-        if (required && transformer == null) {
-            throw new IllegalStateException(
-                "Unable to find transformer for object of type " + obj.getClass().getName());
-        }
-        else {
-            return transformer;
-        }
-    }
-
-    protected void evaluateVariables( final VariableContainer variableContainer,
-                                     final VariableContainer transformed,
-                                     final EvaluationContext context) {
-        final EvaluationContext varContext = new EvaluationContext(variableContainer, context);
-        for ( final Iterator<String> iter = variableContainer.getVariableNames(); iter.hasNext();) {
-            final String varName = iter.next();
-            final Expression varExpression = variableContainer.getVariable(varName);
-            try {
-                transformed.setVariable(varName, varExpression.evaluate(varContext));
-            }
-            catch ( final LessCssException ex) {
-                ErrorUtils.handleError(context.getErrorHandler(), varExpression, null, ex);
-            }
-        }
-    }
+  }
 }

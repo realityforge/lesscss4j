@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.parser;
 
 import java.io.IOException;
@@ -21,20 +20,26 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class UrlStyleSheetResource implements StyleSheetResource {
-    private final URL _url;
+public class UrlStyleSheetResource
+  implements StyleSheetResource
+{
+  private final URL _url;
 
-    public UrlStyleSheetResource( final URL url) {
-        _url = url;
-    }
+  public UrlStyleSheetResource( final URL url )
+  {
+    _url = url;
+  }
 
-    public InputStream getInputStream() throws IOException {
-        final URLConnection con = getUrl().openConnection();
-        con.setUseCaches(false);
-        return con.getInputStream();
-    }
+  public InputStream getInputStream()
+    throws IOException
+  {
+    final URLConnection con = getUrl().openConnection();
+    con.setUseCaches( false );
+    return con.getInputStream();
+  }
 
-    public URL getUrl() {
-        return _url;
-    }
+  public URL getUrl()
+  {
+    return _url;
+  }
 }

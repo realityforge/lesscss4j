@@ -13,52 +13,55 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public final class Hex {
-    /**
-     * Used building output as Hex
-     */
-    private static final char[] DIGITS = {
-        '0', '1', '2', '3', '4', '5', '6', '7',
-           '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
-    };
+public final class Hex
+{
+  /**
+   * Used building output as Hex
+   */
+  private static final char[] DIGITS = {
+    '0', '1', '2', '3', '4', '5', '6', '7',
+    '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
+  };
 
-    /**
-     * Converts an array of bytes into an array of characters representing the hexidecimal values of each byte in order.
-     * The returned array will be double the length of the passed array, as it takes two characters to represent any
-     * given byte.
-     *
-     * @param data
-     *                  a byte[] to convert to Hex characters
-     * @return A char[] containing hexidecimal characters
-     */
-    public static char[] encodeHex( final byte[] data) {
+  /**
+   * Converts an array of bytes into an array of characters representing the hexidecimal values of each byte in order.
+   * The returned array will be double the length of the passed array, as it takes two characters to represent any
+   * given byte.
+   *
+   * @param data a byte[] to convert to Hex characters
+   * @return A char[] containing hexidecimal characters
+   */
+  public static char[] encodeHex( final byte[] data )
+  {
+    final int l = data.length;
 
-        final int l = data.length;
+    final char[] out = new char[ l << 1 ];
 
-           final char[] out = new char[l << 1];
-
-           // two characters form the hex value.
-           for (int i = 0, j = 0; i < l; i++) {
-               out[j++] = DIGITS[(0xF0 & data[i]) >>> 4 ];
-               out[j++] = DIGITS[ 0x0F & data[i] ];
-           }
-
-           return out;
+    // two characters form the hex value.
+    for ( int i = 0, j = 0; i < l; i++ )
+    {
+      out[ j++ ] = DIGITS[ ( 0xF0 & data[ i ] ) >>> 4 ];
+      out[ j++ ] = DIGITS[ 0x0F & data[ i ] ];
     }
 
-    public static String md5( final byte[] value) {
-        try {
-            return new String(Hex.encodeHex(MessageDigest.getInstance("MD5").digest(value)));
-        }
-        catch ( final NoSuchAlgorithmException ex) {
-            throw new RuntimeException("Unable to find MD5 MessageDigest instance", ex);
-        }
+    return out;
+  }
 
+  public static String md5( final byte[] value )
+  {
+    try
+    {
+      return new String( Hex.encodeHex( MessageDigest.getInstance( "MD5" ).digest( value ) ) );
     }
+    catch ( final NoSuchAlgorithmException ex )
+    {
+      throw new RuntimeException( "Unable to find MD5 MessageDigest instance", ex );
+    }
+
+  }
 }

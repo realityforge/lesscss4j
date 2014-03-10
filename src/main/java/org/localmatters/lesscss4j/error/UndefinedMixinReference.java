@@ -13,35 +13,41 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.error;
 
 import org.localmatters.lesscss4j.model.MixinReference;
 
-public class UndefinedMixinReference extends LessCssException {
-    private final MixinReference _mixin;
+public class UndefinedMixinReference
+  extends LessCssException
+{
+  private final MixinReference _mixin;
 
-    public UndefinedMixinReference( final MixinReference mixin) {
-        super("Undefined mixin: " + mixin.getSelector().getText());
-        _mixin = mixin;
-    }
+  public UndefinedMixinReference( final MixinReference mixin )
+  {
+    super( "Undefined mixin: " + mixin.getSelector().getText() );
+    _mixin = mixin;
+  }
 
-    public UndefinedMixinReference( final String message, final MixinReference mixin) {
-        super("Undefined mixin: " + message + mixin.getSelector().getText());
-        _mixin = mixin;
-    }
+  public UndefinedMixinReference( final String message, final MixinReference mixin )
+  {
+    super( "Undefined mixin: " + message + mixin.getSelector().getText() );
+    _mixin = mixin;
+  }
 
-    public UndefinedMixinReference( final String message, final MixinReference mixin, final Throwable cause) {
-        super("Undefined mixin: " + message + mixin.getSelector().getText(), cause);
-        _mixin = mixin;
-    }
+  public UndefinedMixinReference( final String message, final MixinReference mixin, final Throwable cause )
+  {
+    super( "Undefined mixin: " + message + mixin.getSelector().getText(), cause );
+    _mixin = mixin;
+  }
 
-    public UndefinedMixinReference( final MixinReference mixin, final Throwable cause) {
-        super("Undefined mixin: " + mixin.getSelector().getText(), cause);
-        _mixin = mixin;
-    }
+  public UndefinedMixinReference( final MixinReference mixin, final Throwable cause )
+  {
+    super( "Undefined mixin: " + mixin.getSelector().getText(), cause );
+    _mixin = mixin;
+  }
 
-    public MixinReference getMixin() {
-        return _mixin;
-    }
+  public MixinReference getMixin()
+  {
+    return _mixin;
+  }
 }

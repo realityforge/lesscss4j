@@ -13,28 +13,34 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.model.expression;
 
-public class AddExpression extends CompoundExpression {
-    public AddExpression() {
-    }
+public class AddExpression
+  extends CompoundExpression
+{
+  public AddExpression()
+  {
+  }
 
-    public AddExpression( final Expression left, final Expression right) {
-        super(left, right);
-    }
+  public AddExpression( final Expression left, final Expression right )
+  {
+    super( left, right );
+  }
 
-    public AddExpression( final AddExpression copy) {
-        super(copy);
-    }
+  public AddExpression( final AddExpression copy )
+  {
+    super( copy );
+  }
 
-    @Override
-    public ConstantValue evaluate( final ConstantValue left, final ConstantValue right) {
-        return left.add(right);
-    }
+  @Override
+  public ConstantValue evaluate( final ConstantValue left, final ConstantValue right )
+  {
+    return left.add( right );
+  }
 
-    @Override
-    public AddExpression clone() {
-        return new AddExpression(this);
-    }
+  @Override
+  public AddExpression clone()
+  {
+    return new AddExpression( this );
+  }
 }

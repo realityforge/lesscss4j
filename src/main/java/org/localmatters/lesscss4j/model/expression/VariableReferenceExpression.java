@@ -13,46 +13,56 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.model.expression;
 
 import org.localmatters.lesscss4j.error.UndefinedVariableException;
 import org.localmatters.lesscss4j.model.AbstractElement;
 import org.localmatters.lesscss4j.transform.EvaluationContext;
 
-public class VariableReferenceExpression extends AbstractElement implements Expression {
-    private String _variableName;
+public class VariableReferenceExpression
+  extends AbstractElement
+  implements Expression
+{
+  private String _variableName;
 
-    public VariableReferenceExpression() {
-        this((String)null);
-    }
+  public VariableReferenceExpression()
+  {
+    this( (String) null );
+  }
 
-    public VariableReferenceExpression( final VariableReferenceExpression copy) {
-        super(copy);
-        _variableName = copy._variableName;
-    }
+  public VariableReferenceExpression( final VariableReferenceExpression copy )
+  {
+    super( copy );
+    _variableName = copy._variableName;
+  }
 
-    public VariableReferenceExpression( final String variableName) {
-        _variableName = variableName;
-    }
+  public VariableReferenceExpression( final String variableName )
+  {
+    _variableName = variableName;
+  }
 
-    public String getVariableName() {
-        return _variableName;
-    }
+  public String getVariableName()
+  {
+    return _variableName;
+  }
 
-    public void setVariableName( final String variableName) {
-        _variableName = variableName;
-    }
+  public void setVariableName( final String variableName )
+  {
+    _variableName = variableName;
+  }
 
-    public Expression evaluate( final EvaluationContext context) {
-        final Expression value = context.getVariable(getVariableName());
-        if (value == null) {
-            throw new UndefinedVariableException(this);
-        }
-        return value.evaluate(context);
+  public Expression evaluate( final EvaluationContext context )
+  {
+    final Expression value = context.getVariable( getVariableName() );
+    if ( null == value )
+    {
+      throw new UndefinedVariableException( this );
     }
+    return value.evaluate( context );
+  }
 
-    public VariableReferenceExpression clone() {
-        return new VariableReferenceExpression(this);
-    }
+  public VariableReferenceExpression clone()
+  {
+    return new VariableReferenceExpression( this );
+  }
 }

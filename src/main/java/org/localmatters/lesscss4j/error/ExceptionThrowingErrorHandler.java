@@ -13,25 +13,32 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.error;
 
-public class ExceptionThrowingErrorHandler extends AbstractErrorHandler {
-    public void handleError( final String message, final Throwable exception) {
-        super.handleError(message, exception);
-        if (exception != null) {
-            if (message != null) {
-                throw new LessCssException(getContextString() + message, exception);
-            }
-            else {
-                throw new LessCssException(getContextString(), exception);
-            }
-        }
-        else if (message != null) {
-            throw new LessCssException(getContextString() + message);
-        }
-        else {
-            throw new LessCssException(getContextString() + "Unknown error");
-        }
+public class ExceptionThrowingErrorHandler
+  extends AbstractErrorHandler
+{
+  public void handleError( final String message, final Throwable exception )
+  {
+    super.handleError( message, exception );
+    if ( null != exception )
+    {
+      if ( null != message )
+      {
+        throw new LessCssException( getContextString() + message, exception );
+      }
+      else
+      {
+        throw new LessCssException( getContextString(), exception );
+      }
     }
+    else if ( null != message )
+    {
+      throw new LessCssException( getContextString() + message );
+    }
+    else
+    {
+      throw new LessCssException( getContextString() + "Unknown error" );
+    }
+  }
 }

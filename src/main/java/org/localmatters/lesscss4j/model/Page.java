@@ -13,34 +13,42 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.model;
 
-public class Page extends DeclarationContainer implements BodyElement {
-    private String _pseudoPage;
+public class Page
+  extends DeclarationContainer
+  implements BodyElement
+{
+  private String _pseudoPage;
 
-    public Page() {
-    }
+  public Page()
+  {
+  }
 
-    public Page( final Page copy) {
-        this(copy, true);
-    }
+  public Page( final Page copy )
+  {
+    this( copy, true );
+  }
 
-    public Page( final Page copy, final boolean copyDeclarations) {
-        super(copy, copyDeclarations);
-        _pseudoPage = copy._pseudoPage;
-    }
+  public Page( final Page copy, final boolean copyDeclarations )
+  {
+    super( copy, copyDeclarations );
+    _pseudoPage = copy._pseudoPage;
+  }
 
-    public String getPseudoPage() {
-        return _pseudoPage;
-    }
+  public String getPseudoPage()
+  {
+    return _pseudoPage;
+  }
 
-    public void setPseudoPage( final String pseudoPage) {
-        _pseudoPage = pseudoPage;
-    }
+  public void setPseudoPage( final String pseudoPage )
+  {
+    _pseudoPage = pseudoPage;
+  }
 
-    @Override
-    public Page clone() {
-        return new Page(this);
-    }
+  @Override
+  public Page clone()
+  {
+    return new Page( this );
+  }
 }

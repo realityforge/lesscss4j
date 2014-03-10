@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.model.expression;
 
 import java.util.List;
@@ -23,78 +22,100 @@ import org.localmatters.lesscss4j.model.RuleSet;
 import org.localmatters.lesscss4j.model.Selector;
 import org.localmatters.lesscss4j.transform.EvaluationContext;
 
-public class AccessorExpression extends AbstractElement implements Expression {
-    private Selector _selector;
-    private String _property;
-    private boolean _variable;
+public class AccessorExpression
+  extends AbstractElement
+  implements Expression
+{
+  private Selector _selector;
+  private String _property;
+  private boolean _variable;
 
-    public AccessorExpression() {
+  public AccessorExpression()
+  {
+  }
+
+  public AccessorExpression( final AccessorExpression copy )
+  {
+    super( copy );
+    _selector = copy._selector.clone();
+    _property = copy._property;
+    _variable = copy._variable;
+  }
+
+  public Selector getSelector()
+  {
+    return _selector;
+  }
+
+  public void setSelector( final Selector selector )
+  {
+    _selector = selector;
+  }
+
+  public String getProperty()
+  {
+    return _property;
+  }
+
+  public void setProperty( final String property )
+  {
+    _property = property;
+  }
+
+  public boolean isVariable()
+  {
+    return _variable;
+  }
+
+  public void setVariable( final boolean variable )
+  {
+    _variable = variable;
+  }
+
+  public Expression evaluate( final EvaluationContext context )
+  {
+    final List<RuleSet> ruleSetList = context.getRuleSet( getSelector() );
+    if ( null == ruleSetList || 0 == ruleSetList.size() )
+    {
+      // todo: error
     }
-
-    public AccessorExpression( final AccessorExpression copy) {
-        super(copy);
-        _selector = copy._selector.clone();
-        _property = copy._property;
-        _variable = copy._variable;
+    else if ( ruleSetList.size() > 1 )
+    {
+      // todo: error
     }
-
-    public Selector getSelector() {
-        return _selector;
-    }
-
-    public void setSelector( final Selector selector) {
-        _selector = selector;
-    }
-
-    public String getProperty() {
-        return _property;
-    }
-
-    public void setProperty( final String property) {
-        _property = property;
-    }
-
-    public boolean isVariable() {
-        return _variable;
-    }
-
-    public void setVariable( final boolean variable) {
-        _variable = variable;
-    }
-
-    public Expression evaluate( final EvaluationContext context) {
-        final List<RuleSet> ruleSetList = context.getRuleSet(getSelector());
-        if (ruleSetList == null || ruleSetList.size() == 0) {
-            // todo: error
+    else
+    {
+      final RuleSet ruleSet = ruleSetList.get( 0 );
+      if ( isVariable() )
+      {
+        final Expression var = ruleSet.getVariable( getProperty() );
+        if ( null == var )
+        {
+          // todo: error
         }
-        else if (ruleSetList.size() > 1) {
-            // todo: error
+        else
+        {
+          return var.evaluate( context );
         }
-        else {
-            final RuleSet ruleSet = ruleSetList.get(0);
-            if (isVariable()) {
-                final Expression var = ruleSet.getVariable(getProperty());
-                if (var == null) {
-                    // todo: error
-                }
-                else {
-                    return var.evaluate(context);
-                }
-            }
-            else {
-                final Declaration declaration = ruleSet.getDeclaration(getProperty());
-                if (declaration == null) {
-                    // todo: error
-                }
-                else {
-                    return new LiteralExpression(declaration.getValuesAsString());
-                }
-            }
+      }
+      else
+      {
+        final Declaration declaration = ruleSet.getDeclaration( getProperty() );
+        if ( null == declaration )
+        {
+          // todo: error
         }
-        return this;
+        else
+        {
+          return new LiteralExpression( declaration.getValuesAsString() );
+        }
+      }
     }
+    return this;
+  }
 
-    public AccessorExpression clone() {
-        return new AccessorExpression(this);
-    }
+  public AccessorExpression clone()
+  {
+    return new AccessorExpression( this );
+  }
 }

@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.compile;
 
 import java.io.IOException;
@@ -21,6 +20,8 @@ import java.io.OutputStream;
 import org.localmatters.lesscss4j.error.ErrorHandler;
 import org.localmatters.lesscss4j.parser.StyleSheetResource;
 
-public interface LessCssCompiler {
-    void compile(StyleSheetResource input, OutputStream output, ErrorHandler errorHandler) throws IOException;
+public interface LessCssCompiler
+{
+  void compile( StyleSheetResource input, OutputStream output, ErrorHandler errorHandler )
+    throws IOException;
 }

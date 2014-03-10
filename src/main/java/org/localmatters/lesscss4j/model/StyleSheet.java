@@ -13,42 +13,50 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class StyleSheet extends BodyElementContainer {
-    private String _charset;
-    private List<String> _imports = new ArrayList<>();
+public class StyleSheet
+  extends BodyElementContainer
+{
+  private String _charset;
+  private List<String> _imports = new ArrayList<>();
 
-    public String getCharset() {
-        return _charset;
+  public String getCharset()
+  {
+    return _charset;
+  }
+
+  public void setCharset( final String charset )
+  {
+    _charset = charset;
+  }
+
+  public List<String> getImports()
+  {
+    return _imports;
+  }
+
+  public void setImports( final List<String> imports )
+  {
+    if ( null == imports )
+    {
+      _imports.clear();
     }
-
-    public void setCharset( final String charset) {
-        _charset = charset;
+    else
+    {
+      _imports = imports;
     }
+  }
 
-    public List<String> getImports() {
-        return _imports;
+  public void addImport( final String importValue )
+  {
+    if ( null == _imports )
+    {
+      _imports = new ArrayList<>();
     }
-
-    public void setImports( final List<String> imports) {
-        if (imports == null) {
-            _imports.clear();
-        }
-        else {
-            _imports = imports;
-        }
-    }
-
-    public void addImport( final String importValue) {
-        if (_imports == null) {
-            _imports = new ArrayList<>();
-        }
-        _imports.add(importValue);
-    }
-
+    _imports.add( importValue );
+  }
 }

@@ -13,48 +13,59 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Media extends BodyElementContainer implements BodyElement {
-    private List<String> _mediums = new ArrayList<>();
+public class Media
+  extends BodyElementContainer
+  implements BodyElement
+{
+  private List<String> _mediums = new ArrayList<>();
 
-    public Media() {
+  public Media()
+  {
+  }
+
+
+  public Media( final Media copy )
+  {
+    this( copy, true );
+  }
+
+  public Media( final Media copy, final boolean copyBodyElements )
+  {
+    super( copy, copyBodyElements );
+    _mediums.addAll( copy._mediums );
+  }
+
+  public List<String> getMediums()
+  {
+    return _mediums;
+  }
+
+  public void setMediums( final List<String> mediums )
+  {
+    _mediums = mediums;
+    if ( null == _mediums )
+    {
+      _mediums = new ArrayList<>();
     }
+  }
 
-
-    public Media( final Media copy) {
-        this(copy, true);
+  public void addMedium( final String medium )
+  {
+    if ( null == _mediums )
+    {
+      _mediums = new ArrayList<>();
     }
+    _mediums.add( medium );
+  }
 
-    public Media( final Media copy, final boolean copyBodyElements) {
-        super(copy, copyBodyElements);
-        _mediums.addAll(copy._mediums);
-    }
-
-    public List<String> getMediums() {
-        return _mediums;
-    }
-
-    public void setMediums( final List<String> mediums) {
-        _mediums = mediums;
-        if (_mediums == null) {
-            _mediums = new ArrayList<>();
-        }
-    }
-
-    public void addMedium( final String medium) {
-        if (_mediums == null) {
-            _mediums = new ArrayList<>();
-        }
-        _mediums.add(medium);
-    }
-
-    @Override
-    public Object clone()  {
-        return new Media(this);
-    }
+  @Override
+  public Object clone()
+  {
+    return new Media( this );
+  }
 }

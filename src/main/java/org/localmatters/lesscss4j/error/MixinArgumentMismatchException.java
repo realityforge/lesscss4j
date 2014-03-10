@@ -13,28 +13,32 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.error;
 
 import org.localmatters.lesscss4j.model.MixinReference;
 import org.localmatters.lesscss4j.model.RuleSet;
 
-public class MixinArgumentMismatchException extends LessCssException {
-    private final MixinReference _reference;
-    private final RuleSet _mixin;
+public class MixinArgumentMismatchException
+  extends LessCssException
+{
+  private final MixinReference _reference;
+  private final RuleSet _mixin;
 
-    public MixinArgumentMismatchException( final MixinReference ref, final RuleSet mixin) {
-        super("Mixin argument mismatch. " +
-              "Expected maximum of " + mixin.getArguments().size() + " but got " + ref.getArguments().size() + '.');
-        _reference = ref;
-        _mixin = mixin;
-    }
+  public MixinArgumentMismatchException( final MixinReference ref, final RuleSet mixin )
+  {
+    super( "Mixin argument mismatch. " +
+           "Expected maximum of " + mixin.getArguments().size() + " but got " + ref.getArguments().size() + '.' );
+    _reference = ref;
+    _mixin = mixin;
+  }
 
-    public MixinReference getReference() {
-        return _reference;
-    }
+  public MixinReference getReference()
+  {
+    return _reference;
+  }
 
-    public RuleSet getMixin() {
-        return _mixin;
-    }
+  public RuleSet getMixin()
+  {
+    return _mixin;
+  }
 }

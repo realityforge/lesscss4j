@@ -13,14 +13,17 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.parser;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-public interface StyleSheetResource {
-    InputStream getInputStream() throws IOException;
-    URL getUrl() throws IOException;
+public interface StyleSheetResource
+{
+  InputStream getInputStream()
+    throws IOException;
+
+  URL getUrl()
+    throws IOException;
 }

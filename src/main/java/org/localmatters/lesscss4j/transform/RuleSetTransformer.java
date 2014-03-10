@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.transform;
 
 import java.util.ArrayList;
@@ -22,32 +21,38 @@ import java.util.List;
 import org.localmatters.lesscss4j.model.RuleSet;
 import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 
-public class RuleSetTransformer extends AbstractDeclarationContainerTransformer<RuleSet> {
+public class RuleSetTransformer
+  extends AbstractDeclarationContainerTransformer<RuleSet>
+{
+  public RuleSetTransformer()
+  {
+  }
 
-    public RuleSetTransformer() {
+  public RuleSetTransformer( final TransformerManager transformerManager )
+  {
+    super( transformerManager );
+  }
+
+  public List<RuleSet> transform( final RuleSet ruleSet, final EvaluationContext context )
+  {
+    final RuleSet transformed;
+
+    // Rule sets with arguments shouldn't be processed since they serve
+    // only as a template for use by other rule sets in the stylesheet.
+    final List<RuleSet> ruleSetList;
+    if ( ruleSet.getArguments().size() > 0 )
+    {
+      transformed = new RuleSet( ruleSet );
+      ruleSetList = Arrays.asList( transformed );
     }
+    else
+    {
+      transformed = new RuleSet( ruleSet, false );
 
-    public RuleSetTransformer( final TransformerManager transformerManager) {
-        super(transformerManager);
+      ruleSetList = new ArrayList<>();
+      ruleSetList.add( transformed );
+      doTransform( ruleSet, ruleSetList, context );
     }
-
-    public List<RuleSet> transform( final RuleSet ruleSet, final EvaluationContext context) {
-        final RuleSet transformed;
-
-        // Rule sets with arguments shouldn't be processed since they serve
-        // only as a template for use by other rule sets in the stylesheet.
-        final List<RuleSet> ruleSetList;
-        if (ruleSet.getArguments().size() > 0) {
-            transformed = new RuleSet(ruleSet);
-            ruleSetList = Arrays.asList(transformed);
-        }
-        else {
-            transformed = new RuleSet(ruleSet, false);
-
-            ruleSetList = new ArrayList<>();
-            ruleSetList.add(transformed);
-            doTransform(ruleSet, ruleSetList, context);
-        }
-        return ruleSetList;
-    }
+    return ruleSetList;
+  }
 }

@@ -13,12 +13,12 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.factory;
 
 import org.antlr.runtime.tree.Tree;
 import org.localmatters.lesscss4j.error.ErrorHandler;
 
-public interface ObjectFactory<T> {
-    T create(Tree tree, ErrorHandler errorHandler);
+public interface ObjectFactory<T>
+{
+  T create( Tree tree, ErrorHandler errorHandler );
 }

@@ -13,26 +13,32 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.error;
 
-public class FunctionException extends ExpressionException {
-    public FunctionException() {
-    }
+public class FunctionException
+  extends ExpressionException
+{
+  public FunctionException()
+  {
+  }
 
-    public FunctionException( final String message) {
-        super(message);
-    }
+  public FunctionException( final String message )
+  {
+    super( message );
+  }
 
-    public FunctionException( final String message, final Throwable cause) {
-        super(message, cause);
-    }
+  public FunctionException( final String message, final Throwable cause )
+  {
+    super( message, cause );
+  }
 
-    public FunctionException( final Throwable cause) {
-        super(cause);
-    }
+  public FunctionException( final Throwable cause )
+  {
+    super( cause );
+  }
 
-    public FunctionException( final String message, final Object... args) {
-        super(String.format(message, args));
-    }
+  public FunctionException( final String message, final Object... args )
+  {
+    super( String.format( message, args ) );
+  }
 }

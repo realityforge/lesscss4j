@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.cli;
 
 import java.io.File;
@@ -333,7 +332,7 @@ public class CompilerMain
   OutputStream createOutputStream( final String outputFilename )
     throws IOException
   {
-    if ( outputFilename == null || "-".equals( outputFilename ) )
+    if ( null == outputFilename || "-".equals( outputFilename ) )
     {
       return System.out;
     }
@@ -345,7 +344,7 @@ public class CompilerMain
 
   StyleSheetResource createInput( final String inputFilename )
   {
-    if ( inputFilename == null || inputFilename.equals( "-" ) )
+    if ( ( null == inputFilename ) || "-".equals( inputFilename ) )
     {
       return new InputStreamStyleSheetResource( System.in );
     }
@@ -355,7 +354,7 @@ public class CompilerMain
     }
   }
 
-  private String generateOutputFilename( final String inputFilename )
+  final String generateOutputFilename( final String inputFilename )
   {
     final String extension = FilenameUtils.getExtension( inputFilename );
 

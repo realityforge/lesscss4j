@@ -13,40 +13,49 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.model;
 
-public class Keyframes extends BodyElementContainer implements BodyElement {
-    private String _name;
+public class Keyframes
+  extends BodyElementContainer
+  implements BodyElement
+{
+  private String _name;
 
-    public Keyframes() {
-    }
+  public Keyframes()
+  {
+  }
 
 
-    public Keyframes( final Keyframes copy) {
-        this(copy, true);
-    }
+  public Keyframes( final Keyframes copy )
+  {
+    this( copy, true );
+  }
 
-    public Keyframes( final Keyframes copy, final boolean copyBodyElements) {
-        super(copy, copyBodyElements);
-        _name = copy._name;
-    }
+  public Keyframes( final Keyframes copy, final boolean copyBodyElements )
+  {
+    super( copy, copyBodyElements );
+    _name = copy._name;
+  }
 
-    public String getName() {
-        return _name;
-    }
+  public String getName()
+  {
+    return _name;
+  }
 
-    public void setName( final String name) {
-        _name = name;
-    }
+  public void setName( final String name )
+  {
+    _name = name;
+  }
 
-    @Override
-    public Object clone()  {
-        return new Keyframes(this);
-    }
+  @Override
+  public Object clone()
+  {
+    return new Keyframes( this );
+  }
 
-    @Override
-    public String toString() {
-        return getName();
-    }
+  @Override
+  public String toString()
+  {
+    return getName();
+  }
 }

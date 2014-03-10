@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.transform.function;
 
 import org.localmatters.lesscss4j.error.FunctionException;
@@ -22,57 +21,70 @@ import org.localmatters.lesscss4j.model.expression.ConstantExpression;
 import org.localmatters.lesscss4j.model.expression.ConstantNumber;
 import org.localmatters.lesscss4j.model.expression.Expression;
 
-public abstract class AbstractColorFunction implements Function {
-    private boolean _valueRequired = true;
+public abstract class AbstractColorFunction
+  implements Function
+{
+  private boolean _valueRequired = true;
 
-    public boolean isValueRequired() {
-        return _valueRequired;
+  public boolean isValueRequired()
+  {
+    return _valueRequired;
+  }
+
+  public void setValueRequired( final boolean valueRequired )
+  {
+    _valueRequired = valueRequired;
+  }
+
+  protected ConstantColor getColor( final String name, final int index, final Expression... args )
+  {
+    final Expression expr = args[ index ];
+    if ( !isColor( expr ) )
+    {
+      throw new FunctionException( "Argument %d for function '%s' must be a color: %s", index + 1, name, expr );
+    }
+    return (ConstantColor) ( (ConstantExpression) expr ).getValue();
+  }
+
+  protected ConstantNumber getNumber( final String name, final int index, final Expression... args )
+  {
+    final Expression expr = args[ index ];
+    if ( !isNumber( expr ) )
+    {
+      throw new FunctionException( "Argument %d for function '%s' must be a number: %s", index + 1, name, expr );
+    }
+    return (ConstantNumber) ( (ConstantExpression) expr ).getValue();
+  }
+
+  private boolean isNumber( final Expression arg )
+  {
+    return arg instanceof ConstantExpression &&
+           ( (ConstantExpression) arg ).getValue() instanceof ConstantNumber;
+  }
+
+  private boolean isColor( final Expression arg )
+  {
+    return arg instanceof ConstantExpression &&
+           ( (ConstantExpression) arg ).getValue() instanceof ConstantColor;
+  }
+
+  public Expression evaluate( final String name, final Expression... args )
+  {
+    final int numArgs = args.length;
+    if ( isValueRequired() && numArgs != 2 || !isValueRequired() && numArgs != 1 )
+    {
+      throw new FunctionException( "Invalid number of arguments for function '%s'", name );
     }
 
-    public void setValueRequired( final boolean valueRequired) {
-        _valueRequired = valueRequired;
+    final ConstantColor color = getColor( name, 0, args );
+    ConstantNumber value = null;
+    if ( args.length > 1 )
+    {
+      value = getNumber( name, 1, args );
     }
 
-    protected ConstantColor getColor( final String name, final int index, final Expression...args) {
-        final Expression expr = args[index];
-        if (!isColor(expr)) {
-            throw new FunctionException("Argument %d for function '%s' must be a color: %s", index + 1, name, expr);
-        }
-        return (ConstantColor) ((ConstantExpression) expr).getValue();
-    }
+    return evaluate( color, value );
+  }
 
-    protected ConstantNumber getNumber( final String name, final int index, final Expression...args) {
-        final Expression expr = args[index];
-        if (!isNumber(expr)) {
-            throw new FunctionException("Argument %d for function '%s' must be a number: %s", index + 1, name, expr);
-        }
-        return (ConstantNumber) ((ConstantExpression) expr).getValue();
-    }
-
-    private boolean isNumber( final Expression arg) {
-        return arg instanceof ConstantExpression &&
-               ((ConstantExpression) arg).getValue() instanceof ConstantNumber;
-    }
-
-    private boolean isColor( final Expression arg) {
-        return arg instanceof ConstantExpression &&
-               ((ConstantExpression) arg).getValue() instanceof ConstantColor;
-    }
-
-    public Expression evaluate( final String name, final Expression... args) {
-        final int numArgs = args.length;
-        if (isValueRequired() && numArgs != 2 || !isValueRequired() && numArgs != 1) {
-            throw new FunctionException("Invalid number of arguments for function '%s'", name);
-        }
-
-        final ConstantColor color = getColor(name, 0, args);
-        ConstantNumber value = null;
-        if (args.length > 1) {
-            value = getNumber(name, 1, args);
-        }
-
-        return evaluate(color, value);
-    }
-
-    protected abstract Expression evaluate(ConstantColor color, ConstantNumber value);
+  protected abstract Expression evaluate( ConstantColor color, ConstantNumber value );
 }

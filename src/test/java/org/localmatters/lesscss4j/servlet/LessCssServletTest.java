@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.servlet;
 
 import java.io.IOException;
@@ -36,321 +35,364 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.localmatters.lesscss4j.util.Hex;
 import static org.mockito.Mockito.*;
 
-public class LessCssServletTest extends TestCase {
-    LessCssServlet _servlet;
-    HttpServletRequest _request;
-    HttpServletResponse _response;
-    ServletContext _servletContext;
-    MockServletConfig _servletConfig;
-    final String _path = "less/tiny.less";
-    URL _url;
-    byte[] _cssBytes;
-    String _cssStr;
-    long _systemMillis;
+public class LessCssServletTest
+  extends TestCase
+{
+  LessCssServlet _servlet;
+  HttpServletRequest _request;
+  HttpServletResponse _response;
+  ServletContext _servletContext;
+  MockServletConfig _servletConfig;
+  final String _path = "less/tiny.less";
+  URL _url;
+  byte[] _cssBytes;
+  String _cssStr;
+  long _systemMillis;
 
-    @Override
-    protected void setUp() throws Exception {
-        _request = mock( HttpServletRequest.class );
-        _response = mock( HttpServletResponse.class );
-        _servletContext = mock( ServletContext.class );
+  @Override
+  protected void setUp()
+    throws Exception
+  {
+    _request = mock( HttpServletRequest.class );
+    _response = mock( HttpServletResponse.class );
+    _servletContext = mock( ServletContext.class );
 
-        _servletConfig = new MockServletConfig();
-        _servletConfig.setServletContext(_servletContext);
+    _servletConfig = new MockServletConfig();
+    _servletConfig.setServletContext( _servletContext );
 
-        _systemMillis = System.currentTimeMillis();
+    _systemMillis = System.currentTimeMillis();
 
-        _servlet = new LessCssServlet() {
-            @Override
-            protected long getTime() {
-                return _systemMillis;
-            }
-        };
+    _servlet = new LessCssServlet()
+    {
+      @Override
+      protected long getTime()
+      {
+        return _systemMillis;
+      }
+    };
 
-        _url = getClass().getClassLoader().getResource(_path);
+    _url = getClass().getClassLoader().getResource( _path );
 
-        final InputStream input = _url.openStream();
-        try {
-            _cssBytes = IOUtils.toByteArray(input);
-            _cssStr = new String(_cssBytes, "UTF-8");
-        }
-        finally {
-            IOUtils.closeQuietly(input);
-        }
+    final InputStream input = _url.openStream();
+    try
+    {
+      _cssBytes = IOUtils.toByteArray( input );
+      _cssStr = new String( _cssBytes, "UTF-8" );
     }
-
-    protected void doReplay() {
-        //EasyMock.replay(_request);
-        //EasyMock.replay(_response);
-        //EasyMock.replay(_servletContext);
+    finally
+    {
+      IOUtils.closeQuietly( input );
     }
+  }
 
-  public void testEmptyCacheValidResource() throws IOException, ServletException {
+  protected void doReplay()
+  {
+    //EasyMock.replay(_request);
+    //EasyMock.replay(_response);
+    //EasyMock.replay(_servletContext);
+  }
 
-        when(_request.getPathInfo()).thenReturn(_path);
-        when(_request.getMethod()).thenReturn("GET");
-        when(_request.getDateHeader(LessCssServlet.IF_MOD_SINCE)).thenReturn(-1L);
-        when(_request.getHeader(LessCssServlet.IF_NONE_MATCH)).thenReturn(null);
-        when(_request.getParameter(LessCssServlet.CLEAR_CACHE)).thenReturn(null);
+  public void testEmptyCacheValidResource()
+    throws IOException, ServletException
+  {
+    when( _request.getPathInfo() ).thenReturn( _path );
+    when( _request.getMethod() ).thenReturn( "GET" );
+    when( _request.getDateHeader( LessCssServlet.IF_MOD_SINCE ) ).thenReturn( -1L );
+    when( _request.getHeader( LessCssServlet.IF_NONE_MATCH ) ).thenReturn( null );
+    when( _request.getParameter( LessCssServlet.CLEAR_CACHE ) ).thenReturn( null );
 
-        when(_servletContext.getResource(_path)).thenReturn(_url);
+    when( _servletContext.getResource( _path ) ).thenReturn( _url );
 
-        _response.addDateHeader(LessCssServlet.LAST_MODIFIED, _systemMillis);
-        _response.addDateHeader(LessCssServlet.EXPIRES, _systemMillis + 900000);
-        _response.addHeader(LessCssServlet.CACHE_CONTROL, "max-age=900");
-        _response.setContentType("text/css; charset=UTF-8");
-        _response.setContentLength(_cssBytes.length);
+    _response.addDateHeader( LessCssServlet.LAST_MODIFIED, _systemMillis );
+    _response.addDateHeader( LessCssServlet.EXPIRES, _systemMillis + 900000 );
+    _response.addHeader( LessCssServlet.CACHE_CONTROL, "max-age=900" );
+    _response.setContentType( "text/css; charset=UTF-8" );
+    _response.setContentLength( _cssBytes.length );
 
-        final MockServletOutputStream responseStream = new MockServletOutputStream();
-        when(_response.getOutputStream()).thenReturn(responseStream);
+    final MockServletOutputStream responseStream = new MockServletOutputStream();
+    when( _response.getOutputStream() ).thenReturn( responseStream );
 
-        doReplay();
+    doReplay();
 
-        _servlet.init(_servletConfig);
-        _servlet.service(_request, _response);
+    _servlet.init( _servletConfig );
+    _servlet.service( _request, _response );
 
-        assertEquals(new String(responseStream.getBytes(), "UTF-8"), _cssStr);
+    assertEquals( new String( responseStream.getBytes(), "UTF-8" ), _cssStr );
 
   }
 
-    public void testCachedResource() throws IOException, ServletException {
-        testEmptyCacheValidResource();
+  public void testCachedResource()
+    throws IOException, ServletException
+  {
+    testEmptyCacheValidResource();
 
-        when(_request.getPathInfo()).thenReturn(_path);
-        when(_request.getMethod()).thenReturn("GET");
-        when(_request.getDateHeader(LessCssServlet.IF_MOD_SINCE)).thenReturn(-1L);
-        when(_request.getHeader(LessCssServlet.IF_NONE_MATCH)).thenReturn(null);
-        when(_request.getParameter(LessCssServlet.CLEAR_CACHE)).thenReturn(null);
+    when( _request.getPathInfo() ).thenReturn( _path );
+    when( _request.getMethod() ).thenReturn( "GET" );
+    when( _request.getDateHeader( LessCssServlet.IF_MOD_SINCE ) ).thenReturn( -1L );
+    when( _request.getHeader( LessCssServlet.IF_NONE_MATCH ) ).thenReturn( null );
+    when( _request.getParameter( LessCssServlet.CLEAR_CACHE ) ).thenReturn( null );
 
 
-        _response.addDateHeader(LessCssServlet.LAST_MODIFIED, _systemMillis);
-        _response.addDateHeader(LessCssServlet.EXPIRES, _systemMillis + 900000);
-        _response.addHeader(LessCssServlet.CACHE_CONTROL, "max-age=900");
-        _response.setContentType("text/css; charset=UTF-8");
-        _response.setContentLength(_cssBytes.length);
+    _response.addDateHeader( LessCssServlet.LAST_MODIFIED, _systemMillis );
+    _response.addDateHeader( LessCssServlet.EXPIRES, _systemMillis + 900000 );
+    _response.addHeader( LessCssServlet.CACHE_CONTROL, "max-age=900" );
+    _response.setContentType( "text/css; charset=UTF-8" );
+    _response.setContentLength( _cssBytes.length );
 
-        final MockServletOutputStream responseStream = new MockServletOutputStream();
-      when( _response.getOutputStream() ).thenReturn( responseStream );
+    final MockServletOutputStream responseStream = new MockServletOutputStream();
+    when( _response.getOutputStream() ).thenReturn( responseStream );
 
-        doReplay();
+    doReplay();
 
-        _servlet.init(_servletConfig);
-        _servlet.service(_request, _response);
+    _servlet.init( _servletConfig );
+    _servlet.service( _request, _response );
 
-        assertEquals(new String(responseStream.getBytes(), "UTF-8"), _cssStr);
+    assertEquals( new String( responseStream.getBytes(), "UTF-8" ), _cssStr );
 
+  }
+
+  public void testCachedResourceETag()
+    throws IOException, ServletException
+  {
+    testEmptyCacheValidResource();
+
+    when( _request.getPathInfo() ).thenReturn( _path );
+    when( _request.getMethod() ).thenReturn( "GET" );
+    when( _request.getHeader( LessCssServlet.IF_NONE_MATCH ) ).thenReturn( Hex.md5( _cssBytes ) );
+    when( _request.getParameter( LessCssServlet.CLEAR_CACHE ) ).thenReturn( null );
+
+    _response.setStatus( HttpServletResponse.SC_NOT_MODIFIED );
+
+    doReplay();
+
+    _servlet.init( _servletConfig );
+    _servlet.service( _request, _response );
+
+  }
+
+  public void testCachedResourceETagNeedsRefresh()
+    throws IOException, ServletException
+  {
+    _servlet.setCacheMillis( 10 );
+
+    testEmptyCacheValidResource();
+
+    _systemMillis = _systemMillis - 20;
+
+    when( _request.getPathInfo() ).thenReturn( _path );
+    when( _request.getMethod() ).thenReturn( "GET" );
+    when( _request.getHeader( LessCssServlet.IF_NONE_MATCH ) ).thenReturn( "bogus" );
+    when( _request.getParameter( LessCssServlet.CLEAR_CACHE ) ).thenReturn( null );
+
+    when( _servletContext.getRealPath( _path ) ).thenReturn( _path );
+    when( _servletContext.getResource( _path ) ).thenReturn( _url );
+
+    _response.addDateHeader( LessCssServlet.LAST_MODIFIED, _systemMillis );
+    _response.addDateHeader( LessCssServlet.EXPIRES, _systemMillis + 900000 );
+    _response.addHeader( LessCssServlet.CACHE_CONTROL, "max-age=900" );
+    _response.setContentType( "text/css; charset=UTF-8" );
+    _response.setContentLength( _cssBytes.length );
+
+    final MockServletOutputStream responseStream = new MockServletOutputStream();
+    when( _response.getOutputStream() ).thenReturn( responseStream );
+
+    doReplay();
+
+    _servlet.init( _servletConfig );
+    _servlet.service( _request, _response );
+
+    assertEquals( new String( responseStream.getBytes(), "UTF-8" ), _cssStr );
+
+  }
+
+  public void testCachedResourceNeedsRefresh()
+    throws IOException, ServletException
+  {
+    _servlet.setCacheMillis( 10 );
+
+    testEmptyCacheValidResource();
+
+    _systemMillis = _systemMillis - 20;
+
+    when( _request.getPathInfo() ).thenReturn( _path );
+    when( _request.getMethod() ).thenReturn( "GET" );
+    when( _request.getDateHeader( LessCssServlet.IF_MOD_SINCE ) ).thenReturn( -1L );
+    when( _request.getHeader( LessCssServlet.IF_NONE_MATCH ) ).thenReturn( null );
+    when( _request.getParameter( LessCssServlet.CLEAR_CACHE ) ).thenReturn( null );
+
+    when( _servletContext.getRealPath( _path ) ).thenReturn( _path );
+    when( _servletContext.getResource( _path ) ).thenReturn( _url );
+
+    _response.addDateHeader( LessCssServlet.LAST_MODIFIED, _systemMillis );
+    _response.addDateHeader( LessCssServlet.EXPIRES, _systemMillis + 900000 );
+    _response.addHeader( LessCssServlet.CACHE_CONTROL, "max-age=900" );
+    _response.setContentType( "text/css; charset=UTF-8" );
+    _response.setContentLength( _cssBytes.length );
+
+    final MockServletOutputStream responseStream = new MockServletOutputStream();
+    when( _response.getOutputStream() ).thenReturn( responseStream );
+
+    doReplay();
+
+    _servlet.init( _servletConfig );
+    _servlet.service( _request, _response );
+
+    assertEquals( new String( responseStream.getBytes(), "UTF-8" ), _cssStr );
+
+  }
+
+  public void testCachedResourceNotModified()
+    throws IOException, ServletException
+  {
+    testEmptyCacheValidResource();
+
+    when( _request.getPathInfo() ).thenReturn( _path );
+    when( _request.getMethod() ).thenReturn( "GET" );
+    when( _request.getDateHeader( LessCssServlet.IF_MOD_SINCE ) ).thenReturn( _systemMillis + 1000 );
+    when( _request.getHeader( LessCssServlet.IF_NONE_MATCH ) ).thenReturn( null );
+    when( _request.getParameter( LessCssServlet.CLEAR_CACHE ) ).thenReturn( null );
+
+    _response.setStatus( HttpServletResponse.SC_NOT_MODIFIED );
+
+    doReplay();
+
+    _servlet.init( _servletConfig );
+    _servlet.service( _request, _response );
+
+  }
+
+  public void testCachedResourceHeadRequest()
+    throws IOException, ServletException
+  {
+    testEmptyCacheValidResource();
+
+    when( _request.getPathInfo() ).thenReturn( _path );
+    when( _request.getMethod() ).thenReturn( "HEAD" );
+    when( _request.getParameter( LessCssServlet.CLEAR_CACHE ) ).thenReturn( null );
+
+
+    _response.addDateHeader( LessCssServlet.LAST_MODIFIED, _systemMillis );
+    _response.addDateHeader( LessCssServlet.EXPIRES, _systemMillis + 900000 );
+    _response.addHeader( LessCssServlet.CACHE_CONTROL, "max-age=900" );
+    _response.setContentType( "text/css; charset=UTF-8" );
+    _response.setContentLength( _cssBytes.length );
+
+    doReplay();
+
+    _servlet.init( _servletConfig );
+    _servlet.service( _request, _response );
+
+  }
+
+  public void testNullPath()
+    throws IOException, ServletException
+  {
+    when( _request.getPathInfo() ).thenReturn( null );
+    when( _request.getParameter( LessCssServlet.CLEAR_CACHE ) ).thenReturn( null );
+    _response.sendError( HttpServletResponse.SC_NOT_FOUND );
+
+    doReplay();
+
+    _servlet.service( _request, _response );
+
+  }
+
+  public void testEmptyPath()
+    throws IOException, ServletException
+  {
+    when( _request.getPathInfo() ).thenReturn( "  " );
+    when( _request.getParameter( LessCssServlet.CLEAR_CACHE ) ).thenReturn( null );
+    _response.sendError( HttpServletResponse.SC_NOT_FOUND );
+
+    doReplay();
+
+    _servlet.service( _request, _response );
+
+  }
+
+  private static class MockServletConfig
+    implements ServletConfig
+  {
+    private String _servletName;
+    private ServletContext _servletContext;
+    private final Map<String, String> _initParameters = new LinkedHashMap<String, String>();
+
+    public String getServletName()
+    {
+      return _servletName;
     }
 
-    public void testCachedResourceETag() throws IOException, ServletException {
-        testEmptyCacheValidResource();
-
-        when(_request.getPathInfo()).thenReturn(_path);
-        when(_request.getMethod()).thenReturn("GET");
-        when(_request.getHeader(LessCssServlet.IF_NONE_MATCH)).thenReturn(Hex.md5(_cssBytes));
-        when(_request.getParameter(LessCssServlet.CLEAR_CACHE)).thenReturn(null);
-
-        _response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-
-        doReplay();
-
-        _servlet.init(_servletConfig);
-        _servlet.service(_request, _response);
-
+    public ServletContext getServletContext()
+    {
+      return _servletContext;
     }
 
-    public void testCachedResourceETagNeedsRefresh() throws IOException, ServletException {
-        _servlet.setCacheMillis(10);
-
-        testEmptyCacheValidResource();
-
-        _systemMillis = _systemMillis - 20;
-
-        when(_request.getPathInfo()).thenReturn(_path);
-        when(_request.getMethod()).thenReturn("GET");
-        when(_request.getHeader(LessCssServlet.IF_NONE_MATCH)).thenReturn("bogus");
-        when(_request.getParameter(LessCssServlet.CLEAR_CACHE)).thenReturn(null);
-
-        when(_servletContext.getRealPath(_path)).thenReturn(_path);
-        when(_servletContext.getResource(_path)).thenReturn(_url);
-
-        _response.addDateHeader(LessCssServlet.LAST_MODIFIED, _systemMillis);
-        _response.addDateHeader(LessCssServlet.EXPIRES, _systemMillis + 900000);
-        _response.addHeader(LessCssServlet.CACHE_CONTROL, "max-age=900");
-        _response.setContentType("text/css; charset=UTF-8");
-        _response.setContentLength(_cssBytes.length);
-
-        final MockServletOutputStream responseStream = new MockServletOutputStream();
-        when(_response.getOutputStream()).thenReturn(responseStream);
-
-        doReplay();
-
-        _servlet.init(_servletConfig);
-        _servlet.service(_request, _response);
-
-        assertEquals(new String(responseStream.getBytes(), "UTF-8"), _cssStr);
-
+    public void setServletName( final String servletName )
+    {
+      _servletName = servletName;
     }
 
-    public void testCachedResourceNeedsRefresh() throws IOException, ServletException {
-        _servlet.setCacheMillis(10);
-
-        testEmptyCacheValidResource();
-
-        _systemMillis = _systemMillis - 20;
-
-        when(_request.getPathInfo()).thenReturn(_path);
-        when(_request.getMethod()).thenReturn("GET");
-        when(_request.getDateHeader(LessCssServlet.IF_MOD_SINCE)).thenReturn(-1L);
-        when(_request.getHeader(LessCssServlet.IF_NONE_MATCH)).thenReturn(null);
-        when(_request.getParameter(LessCssServlet.CLEAR_CACHE)).thenReturn(null);
-
-        when(_servletContext.getRealPath(_path)).thenReturn(_path);
-        when(_servletContext.getResource(_path)).thenReturn(_url);
-
-        _response.addDateHeader(LessCssServlet.LAST_MODIFIED, _systemMillis);
-        _response.addDateHeader(LessCssServlet.EXPIRES, _systemMillis + 900000);
-        _response.addHeader(LessCssServlet.CACHE_CONTROL, "max-age=900");
-        _response.setContentType("text/css; charset=UTF-8");
-        _response.setContentLength(_cssBytes.length);
-
-        final MockServletOutputStream responseStream = new MockServletOutputStream();
-        when(_response.getOutputStream()).thenReturn(responseStream);
-
-        doReplay();
-
-        _servlet.init(_servletConfig);
-        _servlet.service(_request, _response);
-
-        assertEquals(new String(responseStream.getBytes(), "UTF-8"), _cssStr);
-
+    public void setServletContext( final ServletContext servletContext )
+    {
+      _servletContext = servletContext;
     }
 
-    public void testCachedResourceNotModified() throws IOException, ServletException {
-        testEmptyCacheValidResource();
-
-        when(_request.getPathInfo()).thenReturn(_path);
-        when(_request.getMethod()).thenReturn("GET");
-        when(_request.getDateHeader(LessCssServlet.IF_MOD_SINCE)).thenReturn(_systemMillis + 1000);
-        when(_request.getHeader(LessCssServlet.IF_NONE_MATCH)).thenReturn(null);
-        when(_request.getParameter(LessCssServlet.CLEAR_CACHE)).thenReturn(null);
-
-        _response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-
-        doReplay();
-
-        _servlet.init(_servletConfig);
-        _servlet.service(_request, _response);
-
+    public void setInitParameter( final String name, final String value )
+    {
+      _initParameters.put( name, value );
     }
 
-    public void testCachedResourceHeadRequest() throws IOException, ServletException {
-        testEmptyCacheValidResource();
-
-        when(_request.getPathInfo()).thenReturn(_path);
-        when(_request.getMethod()).thenReturn("HEAD");
-        when(_request.getParameter(LessCssServlet.CLEAR_CACHE)).thenReturn(null);
-
-
-        _response.addDateHeader(LessCssServlet.LAST_MODIFIED, _systemMillis);
-        _response.addDateHeader(LessCssServlet.EXPIRES, _systemMillis + 900000);
-        _response.addHeader(LessCssServlet.CACHE_CONTROL, "max-age=900");
-        _response.setContentType("text/css; charset=UTF-8");
-        _response.setContentLength(_cssBytes.length);
-
-        doReplay();
-
-        _servlet.init(_servletConfig);
-        _servlet.service(_request, _response);
-
+    public String getInitParameter( final String name )
+    {
+      return _initParameters.get( name );
     }
 
-    public void testNullPath() throws IOException, ServletException {
-        when(_request.getPathInfo()).thenReturn(null);
-        when(_request.getParameter(LessCssServlet.CLEAR_CACHE)).thenReturn(null);
-        _response.sendError(HttpServletResponse.SC_NOT_FOUND);
-
-        doReplay();
-
-        _servlet.service(_request, _response);
-
-    }
-
-    public void testEmptyPath() throws IOException, ServletException {
-        when(_request.getPathInfo()).thenReturn("  ");
-        when(_request.getParameter(LessCssServlet.CLEAR_CACHE)).thenReturn(null);
-        _response.sendError(HttpServletResponse.SC_NOT_FOUND);
-
-        doReplay();
-
-        _servlet.service(_request, _response);
-
-    }
-
-    private static class MockServletConfig implements ServletConfig {
-        private String _servletName;
-        private ServletContext _servletContext;
-        private final Map<String, String> _initParameters = new LinkedHashMap<String, String>();
-
-        public String getServletName() {
-            return _servletName;
-        }
-
-        public ServletContext getServletContext() {
-            return _servletContext;
-        }
-
-        public void setServletName( final String servletName) {
-            _servletName = servletName;
-        }
-
-        public void setServletContext( final ServletContext servletContext) {
-            _servletContext = servletContext;
-        }
-
-        public void setInitParameter( final String name, final String value) {
-            _initParameters.put(name, value);
-        }
-
-        public String getInitParameter( final String name) {
-            return _initParameters.get(name);
-        }
-
-        public Enumeration getInitParameterNames() {
-            return new Enumeration() {
-                final Iterator _iter = _initParameters.keySet().iterator();
-
-                public boolean hasMoreElements() {
-                    return _iter.hasNext();
-                }
-
-                public Object nextElement() {
-                    return _iter.next();
-                }
-            };
-        }
-    }
-
-    private static class MockServletOutputStream extends ServletOutputStream {
-        private final ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-        @Override
-        public void write( final int b) throws IOException {
-            output.write(b);
-        }
-
-        public byte[] getBytes() {
-            return output.toByteArray();
-        }
-
-      @Override
-      public boolean isReady()
+    public Enumeration getInitParameterNames()
+    {
+      return new Enumeration()
       {
-        return true;
-      }
+        final Iterator _iter = _initParameters.keySet().iterator();
 
-      @Override
-      public void setWriteListener( final WriteListener writeListener )
-      {
-      }
+        public boolean hasMoreElements()
+        {
+          return _iter.hasNext();
+        }
+
+        public Object nextElement()
+        {
+          return _iter.next();
+        }
+      };
     }
+  }
+
+  private static class MockServletOutputStream
+    extends ServletOutputStream
+  {
+    private final ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+    @Override
+    public void write( final int b )
+      throws IOException
+    {
+      output.write( b );
+    }
+
+    public byte[] getBytes()
+    {
+      return output.toByteArray();
+    }
+
+    @Override
+    public boolean isReady()
+    {
+      return true;
+    }
+
+    @Override
+    public void setWriteListener( final WriteListener writeListener )
+    {
+    }
+  }
 }
 

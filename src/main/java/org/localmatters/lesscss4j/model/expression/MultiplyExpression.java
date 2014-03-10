@@ -13,28 +13,34 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.model.expression;
 
-public class MultiplyExpression extends CompoundExpression {
-    public MultiplyExpression() {
-    }
+public class MultiplyExpression
+  extends CompoundExpression
+{
+  public MultiplyExpression()
+  {
+  }
 
-    public MultiplyExpression( final MultiplyExpression copy) {
-        super(copy);
-    }
+  public MultiplyExpression( final MultiplyExpression copy )
+  {
+    super( copy );
+  }
 
-    public MultiplyExpression( final Expression left, final Expression right) {
-        super(left, right);
-    }
+  public MultiplyExpression( final Expression left, final Expression right )
+  {
+    super( left, right );
+  }
 
-    @Override
-    public ConstantValue evaluate( final ConstantValue left, final ConstantValue right) {
-        return left.multiply(right);
-    }
+  @Override
+  public ConstantValue evaluate( final ConstantValue left, final ConstantValue right )
+  {
+    return left.multiply( right );
+  }
 
-    @Override
-    public MultiplyExpression clone() {
-        return new MultiplyExpression(this);
-    }
+  @Override
+  public MultiplyExpression clone()
+  {
+    return new MultiplyExpression( this );
+  }
 }

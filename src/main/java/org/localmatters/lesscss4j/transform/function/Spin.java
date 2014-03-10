@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.transform.function;
 
 import org.localmatters.lesscss4j.model.expression.ConstantColor;
@@ -23,16 +22,19 @@ import org.localmatters.lesscss4j.model.expression.Expression;
 
 /**
  * Function to change the hue of a color by a given number of degrees on the color wheel.
- *
+ * <p/>
  * Usage: spin(@color, 10)
  */
-public class Spin extends AbstractColorFunction {
-    @Override
-    protected Expression evaluate( final ConstantColor color, final ConstantNumber value) {
-        final float[] hsla = color.toHSL();
+public class Spin
+  extends AbstractColorFunction
+{
+  @Override
+  protected Expression evaluate( final ConstantColor color, final ConstantNumber value )
+  {
+    final float[] hsla = color.toHSL();
 
-        final ConstantColor newColor = new ConstantColor();
-        newColor.setHSL(((hsla[0] + (float)value.getValue()) % 360.0f), hsla[1], hsla[2]);
-        return new ConstantExpression(newColor);
-    }
+    final ConstantColor newColor = new ConstantColor();
+    newColor.setHSL( ( ( hsla[ 0 ] + (float) value.getValue() ) % 360.0f ), hsla[ 1 ], hsla[ 2 ] );
+    return new ConstantExpression( newColor );
+  }
 }

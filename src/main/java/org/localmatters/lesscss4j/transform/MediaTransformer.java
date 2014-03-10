@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.transform;
 
 import java.util.Arrays;
@@ -23,41 +22,52 @@ import org.localmatters.lesscss4j.model.Media;
 import org.localmatters.lesscss4j.model.RuleSet;
 import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 
-public class MediaTransformer extends AbstractTransformer<Media> {
-    public MediaTransformer( final TransformerManager transformerManager) {
-        super(transformerManager);
-    }
+public class MediaTransformer
+  extends AbstractTransformer<Media>
+{
+  public MediaTransformer( final TransformerManager transformerManager )
+  {
+    super( transformerManager );
+  }
 
-    public MediaTransformer() {
-    }
+  public MediaTransformer()
+  {
+  }
 
-    public List<Media> transform( final Media media, final EvaluationContext context) {
-        final Media transformed = new Media(media, false);
-        evaluateVariables(media, transformed, context);
-        transformBodyElements(media, transformed, context);
-        return Arrays.asList(transformed);
-    }
+  public List<Media> transform( final Media media, final EvaluationContext context )
+  {
+    final Media transformed = new Media( media, false );
+    evaluateVariables( media, transformed, context );
+    transformBodyElements( media, transformed, context );
+    return Arrays.asList( transformed );
+  }
 
-    protected void transformBodyElements( final Media media, final Media transformed, final EvaluationContext context) {
-        final EvaluationContext mediaContext = new EvaluationContext();
-        mediaContext.setParentContext(context);
-        mediaContext.setVariableContainer(transformed);
-        mediaContext.setRuleSetContainer(transformed);
+  protected void transformBodyElements( final Media media, final Media transformed, final EvaluationContext context )
+  {
+    final EvaluationContext mediaContext = new EvaluationContext();
+    mediaContext.setParentContext( context );
+    mediaContext.setVariableContainer( transformed );
+    mediaContext.setRuleSetContainer( transformed );
 
-        for ( final BodyElement element : media.getBodyElements()) {
-            if (element instanceof RuleSet) {
-                final RuleSet ruleSet = (RuleSet) element;
-                final List<RuleSet> transformedRuleSets = getTransformer(ruleSet).transform(ruleSet, mediaContext);
-                if (transformedRuleSets != null) {
-                    for ( final RuleSet transformedRuleSet : transformedRuleSets) {
-                        transformed.addBodyElement(transformedRuleSet);
-                    }
-                }
-            }
-            else {
-                throw new IllegalStateException(
-                    "Unexpected body element " + element.getClass().getSimpleName() + " in Media");
-            }
+    for ( final BodyElement element : media.getBodyElements() )
+    {
+      if ( element instanceof RuleSet )
+      {
+        final RuleSet ruleSet = (RuleSet) element;
+        final List<RuleSet> transformedRuleSets = getTransformer( ruleSet ).transform( ruleSet, mediaContext );
+        if ( null != transformedRuleSets )
+        {
+          for ( final RuleSet transformedRuleSet : transformedRuleSets )
+          {
+            transformed.addBodyElement( transformedRuleSet );
+          }
         }
+      }
+      else
+      {
+        throw new IllegalStateException(
+          "Unexpected body element " + element.getClass().getSimpleName() + " in Media" );
+      }
     }
+  }
 }

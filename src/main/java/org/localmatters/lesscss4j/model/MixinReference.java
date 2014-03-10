@@ -13,53 +13,65 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.localmatters.lesscss4j.model.expression.Expression;
 
-public class MixinReference extends AbstractElement implements DeclarationElement {
-    private Selector _selector;
-    private List<Expression> _arguments = new ArrayList<>();
+public class MixinReference
+  extends AbstractElement
+  implements DeclarationElement
+{
+  private Selector _selector;
+  private List<Expression> _arguments = new ArrayList<>();
 
-    public MixinReference() {
-    }
+  public MixinReference()
+  {
+  }
 
-    public MixinReference( final MixinReference copy) {
-        _selector = copy._selector.clone();
-        for ( final Expression argument : copy._arguments) {
-            _arguments.add(argument.clone());
-        }
+  public MixinReference( final MixinReference copy )
+  {
+    _selector = copy._selector.clone();
+    for ( final Expression argument : copy._arguments )
+    {
+      _arguments.add( argument.clone() );
     }
+  }
 
-    public Selector getSelector() {
-        return _selector;
-    }
+  public Selector getSelector()
+  {
+    return _selector;
+  }
 
-    public void setSelector( final Selector selector) {
-        _selector = selector;
-    }
+  public void setSelector( final Selector selector )
+  {
+    _selector = selector;
+  }
 
-    public List<Expression> getArguments() {
-        return _arguments;
-    }
+  public List<Expression> getArguments()
+  {
+    return _arguments;
+  }
 
-    public void addArgument( final Expression expression) {
-        if (_arguments == null) {
-            _arguments = new ArrayList<>();
-        }
-        _arguments.add(expression);
+  public void addArgument( final Expression expression )
+  {
+    if ( null == _arguments )
+    {
+      _arguments = new ArrayList<>();
     }
+    _arguments.add( expression );
+  }
 
-    @Override
-    public String toString() {
-        return getSelector().toString();
-    }
+  @Override
+  public String toString()
+  {
+    return getSelector().toString();
+  }
 
-    @Override
-    public MixinReference clone() {
-        return new MixinReference(this);
-    }
+  @Override
+  public MixinReference clone()
+  {
+    return new MixinReference( this );
+  }
 }

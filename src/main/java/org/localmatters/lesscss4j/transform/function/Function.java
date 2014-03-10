@@ -13,11 +13,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.transform.function;
 
 import org.localmatters.lesscss4j.model.expression.Expression;
 
-public interface Function {
-    Expression evaluate(String name, Expression... args);
+public interface Function
+{
+  Expression evaluate( String name, Expression... args );
 }

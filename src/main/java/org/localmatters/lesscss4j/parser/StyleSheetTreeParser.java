@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.parser;
 
 import java.io.IOException;
@@ -23,6 +22,8 @@ import org.localmatters.lesscss4j.error.ErrorHandler;
 /**
  * Parses the given input into an AST tree.
  */
-public interface StyleSheetTreeParser {
-    Tree parseTree(StyleSheetResource input, ErrorHandler handler) throws IOException;
+public interface StyleSheetTreeParser
+{
+  Tree parseTree( StyleSheetResource input, ErrorHandler handler )
+    throws IOException;
 }

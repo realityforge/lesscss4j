@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.transform.function;
 
 import org.localmatters.lesscss4j.model.expression.ConstantColor;
@@ -22,16 +21,20 @@ import org.localmatters.lesscss4j.model.expression.Expression;
 
 /**
  * Function to convert a color to grayscale (i.e. desaturate 100%)
- *
+ * <p/>
  * Usage: grayscale(@color)
  */
-public class Grayscale extends Desaturate {
-    public Grayscale() {
-        setValueRequired(false);
-    }
+public class Grayscale
+  extends Desaturate
+{
+  public Grayscale()
+  {
+    setValueRequired( false );
+  }
 
-    @Override
-    protected Expression evaluate( final ConstantColor color, final ConstantNumber value) {
-        return super.evaluate(color, new ConstantNumber(100, "%"));
-    }
+  @Override
+  protected Expression evaluate( final ConstantColor color, final ConstantNumber value )
+  {
+    return super.evaluate( color, new ConstantNumber( 100, "%" ) );
+  }
 }

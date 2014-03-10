@@ -13,25 +13,27 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.cli;
 
 import junit.framework.TestCase;
 
-public class CompilerMainTest extends TestCase {
-    CompilerMain _main;
+public class CompilerMainTest
+  extends TestCase
+{
+  CompilerMain _main;
 
-    @Override
-    protected void setUp() throws Exception {
-        _main = new CompilerMain();
-    }
+  @Override
+  protected void setUp()
+    throws Exception
+  {
+    _main = new CompilerMain();
+  }
 
-    public void testGenerateOutputFilename() {
-        assertEquals("test.css", _main.generateOutputFilename("test.less"));
-        assertEquals("test.css", _main.generateOutputFilename("test.txt"));
-        assertEquals("test.css", _main.generateOutputFilename("test."));
-        assertEquals("test.css", _main.generateOutputFilename("test"));
-        assertEquals("test-min.css", _main.generateOutputFilename("test.css"));
-    }
-
-}
+  public void testGenerateOutputFilename()
+  {
+    assertEquals( "test.css", _main.generateOutputFilename( "test.less" ) );
+    assertEquals( "test.css", _main.generateOutputFilename( "test.txt" ) );
+    assertEquals( "test.css", _main.generateOutputFilename( "test." ) );
+    assertEquals( "test.css", _main.generateOutputFilename( "test" ) );
+    assertEquals( "test-min.css", _main.generateOutputFilename( "test.css" ) );
+  }}

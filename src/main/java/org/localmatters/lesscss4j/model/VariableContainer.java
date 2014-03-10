@@ -13,14 +13,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.model;
 
 import java.util.Iterator;
 import org.localmatters.lesscss4j.model.expression.Expression;
 
-public interface VariableContainer {
-    Expression getVariable(String name);
-    void setVariable(String name, Expression value);
-    Iterator<String> getVariableNames();
+public interface VariableContainer
+{
+  Expression getVariable( String name );
+
+  void setVariable( String name, Expression value );
+
+  Iterator<String> getVariableNames();
 }

@@ -13,57 +13,68 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.error;
 
 import org.antlr.runtime.BaseRecognizer;
 import org.antlr.runtime.RecognitionException;
 import org.localmatters.lesscss4j.model.PositionAware;
 
-public abstract class ErrorUtils {
+public abstract class ErrorUtils
+{
+  public static void handleError( final ErrorHandler errorHandler, final LessCssException error )
+  {
+    handleError( errorHandler, null, null, error );
 
-    public static void handleError( final ErrorHandler errorHandler, final LessCssException error) {
-        handleError(errorHandler, null, null, error);
+  }
 
+  public static void handleError( final ErrorHandler errorHandler, final String message, final LessCssException error )
+  {
+    handleError( errorHandler, null, message, error );
+  }
+
+  public static void handleError( final ErrorHandler errorHandler,
+                                  final PositionAware pos,
+                                  final LessCssException error )
+  {
+    handleError( errorHandler, pos, null, error );
+  }
+
+  public static void handleError( final ErrorHandler errorHandler,
+                                  PositionAware pos,
+                                  String message,
+                                  final LessCssException error )
+  {
+    if ( null != errorHandler )
+    {
+      if ( null != error.getPosition() )
+      {
+        pos = error.getPosition();
+      }
+
+      if ( null != pos )
+      {
+        message = formatPosition( pos.getLine(), pos.getChar() ) + " - " + ( null == message ? "" : message );
+      }
+      errorHandler.handleError( message, error );
     }
-
-    public static void handleError( final ErrorHandler errorHandler, final String message, final LessCssException error) {
-        handleError(errorHandler, null, message, error);
+    else
+    {
+      throw error;
     }
+  }
 
-    public static void handleError( final ErrorHandler errorHandler,
-                                   final PositionAware pos,
-                                   final LessCssException error) {
-        handleError(errorHandler, pos, null, error);
-    }
+  public static void handleError( final ErrorHandler errorHandler,
+                                  final RecognitionException error,
+                                  final BaseRecognizer parser )
+  {
+    handleError( errorHandler, null, null,
+                 new ParseError( formatPosition( error.line, error.charPositionInLine ) + " - " +
+                                 parser.getErrorMessage( error, parser.getTokenNames() ), error ) );
+  }
 
-    public static void handleError( final ErrorHandler errorHandler,
-                                   PositionAware pos,
-                                   String message,
-                                   final LessCssException error) {
-        if (errorHandler != null) {
-            if (error.getPosition() != null) {
-                pos = error.getPosition();
-            }
-
-            if (pos != null) {
-                message = formatPosition(pos.getLine(), pos.getChar()) + " - " + (message == null ? "" : message);
-            }
-            errorHandler.handleError(message, error);
-        }
-        else {
-            throw error;
-        }
-    }
-
-    public static void handleError( final ErrorHandler errorHandler, final RecognitionException error, final BaseRecognizer parser) {
-        handleError(errorHandler, null, null,
-                    new ParseError(formatPosition(error.line, error.charPositionInLine) + " - " +
-                                   parser.getErrorMessage(error, parser.getTokenNames()), error));
-    }
-
-    public static String formatPosition( final int lineNum, final int charPos) {
-        return "[" + lineNum + ":" + charPos + "]";
-    }
+  public static String formatPosition( final int lineNum, final int charPos )
+  {
+    return "[" + lineNum + ":" + charPos + "]";
+  }
 }
 

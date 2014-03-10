@@ -13,34 +13,41 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.error;
 
 import org.localmatters.lesscss4j.model.PositionAware;
 
-public class LessCssException extends RuntimeException {
-    private PositionAware _position;
+public class LessCssException
+  extends RuntimeException
+{
+  private PositionAware _position;
 
-    public LessCssException() {
-    }
+  public LessCssException()
+  {
+  }
 
-    public LessCssException( final String message) {
-        super(message);
-    }
+  public LessCssException( final String message )
+  {
+    super( message );
+  }
 
-    public LessCssException( final String message, final Throwable cause) {
-        super(message, cause);
-    }
+  public LessCssException( final String message, final Throwable cause )
+  {
+    super( message, cause );
+  }
 
-    public LessCssException( final Throwable cause) {
-        super(cause);
-    }
+  public LessCssException( final Throwable cause )
+  {
+    super( cause );
+  }
 
-    public void setPosition( final PositionAware position) {
-        _position = position;
-    }
+  public void setPosition( final PositionAware position )
+  {
+    _position = position;
+  }
 
-    public PositionAware getPosition() {
-        return _position;
-    }
+  public PositionAware getPosition()
+  {
+    return _position;
+  }
 }

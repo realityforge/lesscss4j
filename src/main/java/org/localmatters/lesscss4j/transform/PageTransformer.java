@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.transform;
 
 import java.util.Arrays;
@@ -21,17 +20,22 @@ import java.util.List;
 import org.localmatters.lesscss4j.model.Page;
 import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 
-public class PageTransformer extends AbstractDeclarationContainerTransformer<Page> {
-    public PageTransformer() {
-    }
+public class PageTransformer
+  extends AbstractDeclarationContainerTransformer<Page>
+{
+  public PageTransformer()
+  {
+  }
 
-    public PageTransformer( final TransformerManager transformerManager) {
-        super(transformerManager);
-    }
+  public PageTransformer( final TransformerManager transformerManager )
+  {
+    super( transformerManager );
+  }
 
-    public List<Page> transform( final Page page, final EvaluationContext context) {
-        final List<Page> pageList = Arrays.asList(new Page(page, false));
-        doTransform(page, pageList, context);
-        return pageList;
-    }
+  public List<Page> transform( final Page page, final EvaluationContext context )
+  {
+    final List<Page> pageList = Arrays.asList( new Page( page, false ) );
+    doTransform( page, pageList, context );
+    return pageList;
+  }
 }

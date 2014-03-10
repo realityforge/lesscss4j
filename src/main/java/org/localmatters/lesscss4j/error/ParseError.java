@@ -13,13 +13,15 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.error;
 
 import org.antlr.runtime.RecognitionException;
 
-public class ParseError extends LessCssException {
-    public ParseError( final String message, final RecognitionException exception) {
-        super(message, exception);
-    }
+public class ParseError
+  extends LessCssException
+{
+  public ParseError( final String message, final RecognitionException exception )
+  {
+    super( message, exception );
+  }
 }

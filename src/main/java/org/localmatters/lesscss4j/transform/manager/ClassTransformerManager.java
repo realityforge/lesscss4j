@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.transform.manager;
 
 import java.util.Map;
@@ -27,53 +26,63 @@ import org.localmatters.lesscss4j.transform.Transformer;
  * <p/>
  * <ol>
  * <li>If there is a <code>Class</code> in the given Map that matches the given object's <code>Class</code> exactly,
- *     the associated {@link Transformer} is returned.</li>
+ * the associated {@link Transformer} is returned.</li>
  * <li>Iterate over the entries in the given <code>Map</code>.  For the first entry where the <code>Class</code> is a
- *     superclass or interface implemented by the given object, the associated {@link Transformer} is returned.</li>
+ * superclass or interface implemented by the given object, the associated {@link Transformer} is returned.</li>
  * </ol>
  * <p/>
  * As a result, it is highly recommended that the map provided to instances of this class return values from the
  * <code>entrySet</code> method in a consistent way. (i.e. something like <code>LinkedHashMap</code>)
  */
-public class ClassTransformerManager implements TransformerManager {
-    private Map<Class, Transformer> _classTransformerMap;
+public class ClassTransformerManager
+  implements TransformerManager
+{
+  private Map<Class, Transformer> _classTransformerMap;
 
-    /**
-     * Find the transformer for the given object.  The algorithm used is described in the description of this class.
-     *
-     * @return The located transformer.  <code>null</code> if no matching transformer can be found.
-     */
-    public <T> Transformer<T> getTransformer( final T object) {
-        final Class objClass = object.getClass();
+  /**
+   * Find the transformer for the given object.  The algorithm used is described in the description of this class.
+   *
+   * @return The located transformer.  <code>null</code> if no matching transformer can be found.
+   */
+  public <T> Transformer<T> getTransformer( final T object )
+  {
+    final Class objClass = object.getClass();
 
-        Transformer<T> transformer = null;
+    Transformer<T> transformer = null;
 
-        final Map<Class, Transformer> transformerMap = getClassTransformerMap();
-        if (transformerMap != null) {
-            transformer = transformerMap.get(objClass);
-            if (transformer == null) {
-                for ( final Map.Entry<Class, Transformer> entry : transformerMap.entrySet()) {
-                    if (entry.getKey().isAssignableFrom(objClass)) {
-                        transformer = entry.getValue();
-                        break;
-                    }
-                }
-            }
+    final Map<Class, Transformer> transformerMap = getClassTransformerMap();
+    if ( null != transformerMap )
+    {
+      transformer = transformerMap.get( objClass );
+      if ( null == transformer )
+      {
+        for ( final Map.Entry<Class, Transformer> entry : transformerMap.entrySet() )
+        {
+          if ( entry.getKey().isAssignableFrom( objClass ) )
+          {
+            transformer = entry.getValue();
+            break;
+          }
         }
-        return transformer;
+      }
     }
+    return transformer;
+  }
 
-    public Map<Class, Transformer> getClassTransformerMap() {
-        return _classTransformerMap;
+  public Map<Class, Transformer> getClassTransformerMap()
+  {
+    return _classTransformerMap;
+  }
+
+  public void setClassTransformerMap( final Map<Class, Transformer> classTransformerMap )
+  {
+    for ( final Transformer transformer : classTransformerMap.values() )
+    {
+      if ( transformer instanceof TransformerManagerAware )
+      {
+        ( (TransformerManagerAware) transformer ).setTransformerManager( this );
+      }
     }
-
-    public void setClassTransformerMap( final Map<Class, Transformer> classTransformerMap) {
-        for ( final Transformer transformer : classTransformerMap.values()) {
-            if (transformer instanceof TransformerManagerAware) {
-                ((TransformerManagerAware) transformer).setTransformerManager(this);
-            }
-        }
-        _classTransformerMap = classTransformerMap;
-    }
-
+    _classTransformerMap = classTransformerMap;
+  }
 }

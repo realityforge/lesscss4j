@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.factory;
 
 import org.antlr.runtime.tree.Tree;
@@ -25,122 +24,144 @@ import org.localmatters.lesscss4j.model.Selector;
 import org.localmatters.lesscss4j.model.expression.Expression;
 import static org.localmatters.lesscss4j.parser.antlr.LessCssLexer.*;
 
-public class RuleSetFactory extends AbstractObjectFactory<RuleSet> {
-    private ObjectFactory<Declaration> _declarationFactory;
-    private ObjectFactory<Selector> _selectorFactory;
-    private ObjectFactory<Expression> _expressionFactory;
+public class RuleSetFactory
+  extends AbstractObjectFactory<RuleSet>
+{
+  private ObjectFactory<Declaration> _declarationFactory;
+  private ObjectFactory<Selector> _selectorFactory;
+  private ObjectFactory<Expression> _expressionFactory;
 
-    public ObjectFactory<Expression> getExpressionFactory() {
-        return _expressionFactory;
-    }
+  public ObjectFactory<Expression> getExpressionFactory()
+  {
+    return _expressionFactory;
+  }
 
-    public void setExpressionFactory( final ObjectFactory<Expression> expressionFactory) {
-        _expressionFactory = expressionFactory;
-    }
+  public void setExpressionFactory( final ObjectFactory<Expression> expressionFactory )
+  {
+    _expressionFactory = expressionFactory;
+  }
 
-    public ObjectFactory<Declaration> getDeclarationFactory() {
-        return _declarationFactory;
-    }
+  public ObjectFactory<Declaration> getDeclarationFactory()
+  {
+    return _declarationFactory;
+  }
 
-    public void setDeclarationFactory( final ObjectFactory<Declaration> declarationFactory) {
-        _declarationFactory = declarationFactory;
-    }
+  public void setDeclarationFactory( final ObjectFactory<Declaration> declarationFactory )
+  {
+    _declarationFactory = declarationFactory;
+  }
 
-    public ObjectFactory<Selector> getSelectorFactory() {
-        return _selectorFactory;
-    }
+  public ObjectFactory<Selector> getSelectorFactory()
+  {
+    return _selectorFactory;
+  }
 
-    public void setSelectorFactory( final ObjectFactory<Selector> selectorFactory) {
-        _selectorFactory = selectorFactory;
-    }
+  public void setSelectorFactory( final ObjectFactory<Selector> selectorFactory )
+  {
+    _selectorFactory = selectorFactory;
+  }
 
-    public RuleSet create( final Tree ruleSetNode, final ErrorHandler errorHandler) {
-        final RuleSet ruleSet = new RuleSet();
-        ruleSet.setLine(ruleSetNode.getLine());
-        ruleSet.setChar(ruleSetNode.getCharPositionInLine());
+  public RuleSet create( final Tree ruleSetNode, final ErrorHandler errorHandler )
+  {
+    final RuleSet ruleSet = new RuleSet();
+    ruleSet.setLine( ruleSetNode.getLine() );
+    ruleSet.setChar( ruleSetNode.getCharPositionInLine() );
 
-        for (int idx = 0, numChildren = ruleSetNode.getChildCount(); idx < numChildren; idx++) {
-            final Tree child = ruleSetNode.getChild(idx);
-            switch (child.getType()) {
-                case SELECTOR:
-                    final Selector selector = getSelectorFactory().create(child, errorHandler);
-                    if (selector != null) {
-                        ruleSet.addSelector(selector);
-                    }
-                    break;
+    for ( int idx = 0, numChildren = ruleSetNode.getChildCount(); idx < numChildren; idx++ )
+    {
+      final Tree child = ruleSetNode.getChild( idx );
+      switch ( child.getType() )
+      {
+        case SELECTOR:
+          final Selector selector = getSelectorFactory().create( child, errorHandler );
+          if ( null != selector )
+          {
+            ruleSet.addSelector( selector );
+          }
+          break;
 
-                case MIXIN_ARG:
-                case VAR:
-                    final Expression expr = getExpressionFactory().create(child.getChild(1), null);
-                    if (expr != null) {
-                        final String varName = child.getChild(0).getText();
-                        if (ruleSet.getVariable(varName) != null) {
-                            // todo: error -- duplicate error
-                        }
-                        ruleSet.setVariable(varName, expr);
-
-                        if (child.getType() == MIXIN_ARG) {
-                            ruleSet.addArgument(varName, expr);
-                        }
-                    }
-                    break;
-
-                case DECLARATION:
-                    final Declaration declaration = getDeclarationFactory().create(child, errorHandler);
-                    if (declaration != null) {
-                        ruleSet.addDeclaration(declaration);
-                    }
-                    break;
-
-                case MIXIN_REF:
-                    final MixinReference ref = createMixinReferences(child, errorHandler);
-                    if (ref != null) {
-                        ruleSet.addDeclaration(ref);
-                    }
-                    break;
-
-                case RULESET:
-                    final RuleSet childRuleSet = create(child, errorHandler);
-                    if (childRuleSet != null) {
-                        ruleSet.addRuleSet(childRuleSet, -1);
-                    }
-                    break;
-
-                default:
-                    handleUnexpectedChild("Unexpected ruleset child:", child);
-                    break;
+        case MIXIN_ARG:
+        case VAR:
+          final Expression expr = getExpressionFactory().create( child.getChild( 1 ), null );
+          if ( null != expr )
+          {
+            final String varName = child.getChild( 0 ).getText();
+            if ( null != ruleSet.getVariable( varName ) )
+            {
+              // todo: error -- duplicate error
             }
-        }
+            ruleSet.setVariable( varName, expr );
 
-        return ruleSet;
-    }
-
-    protected MixinReference createMixinReferences( final Tree mixinNode, final ErrorHandler errorHandler) {
-        // todo: put this in it's own factory?
-
-        final MixinReference ref = new MixinReference();
-        ref.setLine(mixinNode.getLine());
-        ref.setChar(mixinNode.getCharPositionInLine());
-
-        for (int idx = 0, numChildren = mixinNode.getChildCount(); idx < numChildren; idx++) {
-            final Tree child = mixinNode.getChild(idx);
-            switch (child.getType()) {
-                case SELECTOR:
-                    final Selector selector = getSelectorFactory().create(child, errorHandler);
-                    ref.setSelector(selector);
-                    break;
-
-                case MIXIN_ARG:
-                    final Expression arg = getExpressionFactory().create(child.getChild(0), errorHandler);
-                    if (arg != null) {
-                        ref.addArgument(arg);
-                    }
-                    break;
-
-                default:
-                    handleUnexpectedChild("Unexpected mixin reference child", child);
+            if ( child.getType() == MIXIN_ARG )
+            {
+              ruleSet.addArgument( varName, expr );
             }
-        }
-        return ref;
+          }
+          break;
+
+        case DECLARATION:
+          final Declaration declaration = getDeclarationFactory().create( child, errorHandler );
+          if ( null != declaration )
+          {
+            ruleSet.addDeclaration( declaration );
+          }
+          break;
+
+        case MIXIN_REF:
+          final MixinReference ref = createMixinReferences( child, errorHandler );
+          if ( null != ref )
+          {
+            ruleSet.addDeclaration( ref );
+          }
+          break;
+
+        case RULESET:
+          final RuleSet childRuleSet = create( child, errorHandler );
+          if ( null != childRuleSet )
+          {
+            ruleSet.addRuleSet( childRuleSet, -1 );
+          }
+          break;
+
+        default:
+          handleUnexpectedChild( "Unexpected ruleset child:", child );
+          break;
+      }
     }
+
+    return ruleSet;
+  }
+
+  protected MixinReference createMixinReferences( final Tree mixinNode, final ErrorHandler errorHandler )
+  {
+    // todo: put this in it's own factory?
+
+    final MixinReference ref = new MixinReference();
+    ref.setLine( mixinNode.getLine() );
+    ref.setChar( mixinNode.getCharPositionInLine() );
+
+    for ( int idx = 0, numChildren = mixinNode.getChildCount(); idx < numChildren; idx++ )
+    {
+      final Tree child = mixinNode.getChild( idx );
+      switch ( child.getType() )
+      {
+        case SELECTOR:
+          final Selector selector = getSelectorFactory().create( child, errorHandler );
+          ref.setSelector( selector );
+          break;
+
+        case MIXIN_ARG:
+          final Expression arg = getExpressionFactory().create( child.getChild( 0 ), errorHandler );
+          if ( null != arg )
+          {
+            ref.addArgument( arg );
+          }
+          break;
+
+        default:
+          handleUnexpectedChild( "Unexpected mixin reference child", child );
+      }
+    }
+    return ref;
+  }
 }

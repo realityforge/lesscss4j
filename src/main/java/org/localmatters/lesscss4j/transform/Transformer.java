@@ -13,11 +13,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.transform;
 
 import java.util.List;
 
-public interface Transformer<T> {
-    List<T> transform(T value, EvaluationContext context);
+public interface Transformer<T>
+{
+  List<T> transform( T value, EvaluationContext context );
 }

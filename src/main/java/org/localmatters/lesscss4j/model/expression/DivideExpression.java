@@ -13,28 +13,34 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.model.expression;
 
-public class DivideExpression extends CompoundExpression {
-    public DivideExpression() {
-    }
+public class DivideExpression
+  extends CompoundExpression
+{
+  public DivideExpression()
+  {
+  }
 
-    public DivideExpression( final DivideExpression copy) {
-        super(copy);
-    }
+  public DivideExpression( final DivideExpression copy )
+  {
+    super( copy );
+  }
 
-    public DivideExpression( final Expression left, final Expression right) {
-        super(left, right);
-    }
+  public DivideExpression( final Expression left, final Expression right )
+  {
+    super( left, right );
+  }
 
-    @Override
-    public ConstantValue evaluate( final ConstantValue left, final ConstantValue right) {
-        return left.divide(right);
-    }
+  @Override
+  public ConstantValue evaluate( final ConstantValue left, final ConstantValue right )
+  {
+    return left.divide( right );
+  }
 
-    @Override
-    public DivideExpression clone() {
-        return new DivideExpression(this);
-    }
+  @Override
+  public DivideExpression clone()
+  {
+    return new DivideExpression( this );
+  }
 }

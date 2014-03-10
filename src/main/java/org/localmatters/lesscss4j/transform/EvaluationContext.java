@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-
 package org.localmatters.lesscss4j.transform;
 
 import java.util.List;
@@ -24,85 +23,105 @@ import org.localmatters.lesscss4j.model.Selector;
 import org.localmatters.lesscss4j.model.VariableContainer;
 import org.localmatters.lesscss4j.model.expression.Expression;
 
-public class EvaluationContext {
-    private EvaluationContext _parentContext;
-    private VariableContainer _variableContainer;
-    private RuleSetContainer _ruleSetContainer;
-    private ErrorHandler _errorHandler;
+public class EvaluationContext
+{
+  private EvaluationContext _parentContext;
+  private VariableContainer _variableContainer;
+  private RuleSetContainer _ruleSetContainer;
+  private ErrorHandler _errorHandler;
 
-    public EvaluationContext() {
-        this(null);
+  public EvaluationContext()
+  {
+    this( null );
+  }
+
+  public EvaluationContext( final VariableContainer variableContainer )
+  {
+    this( variableContainer, null );
+  }
+
+  public EvaluationContext( final VariableContainer variableContainer, final EvaluationContext parent )
+  {
+    setParentContext( parent );
+    setVariableContainer( variableContainer );
+  }
+
+  public EvaluationContext getParentContext()
+  {
+    return _parentContext;
+  }
+
+  public void setParentContext( final EvaluationContext parentContext )
+  {
+    _parentContext = parentContext;
+  }
+
+  public VariableContainer getVariableContainer()
+  {
+    return _variableContainer;
+  }
+
+  public void setVariableContainer( final VariableContainer variableContainer )
+  {
+    _variableContainer = variableContainer;
+  }
+
+  public RuleSetContainer getRuleSetContainer()
+  {
+    return _ruleSetContainer;
+  }
+
+  public void setRuleSetContainer( final RuleSetContainer ruleSetContainer )
+  {
+    _ruleSetContainer = ruleSetContainer;
+  }
+
+  public Expression getVariable( final String name )
+  {
+    Expression value = null;
+    if ( null != getVariableContainer() )
+    {
+      value = getVariableContainer().getVariable( name );
     }
-
-    public EvaluationContext( final VariableContainer variableContainer) {
-        this(variableContainer, null);
+    if ( null == value && null != getParentContext() )
+    {
+      value = getParentContext().getVariable( name );
     }
+    return value;
+  }
 
-    public EvaluationContext( final VariableContainer variableContainer, final EvaluationContext parent) {
-        setParentContext(parent);
-        setVariableContainer(variableContainer);
+  public List<RuleSet> getRuleSet( final Selector selector )
+  {
+    List<RuleSet> ruleSet = null;
+    if ( null != getRuleSetContainer() )
+    {
+      ruleSet = getRuleSetContainer().getRuleSet( selector );
     }
-
-    public EvaluationContext getParentContext() {
-        return _parentContext;
+    if ( ( null == ruleSet || 0 == ruleSet.size() ) && null != getParentContext() )
+    {
+      ruleSet = getParentContext().getRuleSet( selector );
     }
+    return ruleSet;
+  }
 
-    public void setParentContext( final EvaluationContext parentContext) {
-        _parentContext = parentContext;
+  public ErrorHandler getErrorHandler()
+  {
+    if ( null != _errorHandler )
+    {
+      return _errorHandler;
     }
-
-    public VariableContainer getVariableContainer() {
-        return _variableContainer;
+    else if ( null != getParentContext() )
+    {
+      return getParentContext().getErrorHandler();
     }
-
-    public void setVariableContainer( final VariableContainer variableContainer) {
-        _variableContainer = variableContainer;
+    else
+    {
+      return null;
     }
+  }
 
-    public RuleSetContainer getRuleSetContainer() {
-        return _ruleSetContainer;
-    }
-
-    public void setRuleSetContainer( final RuleSetContainer ruleSetContainer) {
-        _ruleSetContainer = ruleSetContainer;
-    }
-
-    public Expression getVariable( final String name) {
-        Expression value = null;
-        if (getVariableContainer() != null) {
-            value = getVariableContainer().getVariable(name);
-        }
-        if (value == null && getParentContext() != null) {
-            value = getParentContext().getVariable(name);
-        }
-        return value;
-    }
-
-    public List<RuleSet> getRuleSet( final Selector selector) {
-
-        List<RuleSet> ruleSet = null;
-        if (getRuleSetContainer() != null) {
-            ruleSet = getRuleSetContainer().getRuleSet(selector);
-        }
-        if ((ruleSet == null || ruleSet.size() == 0) && getParentContext() != null) {
-            ruleSet = getParentContext().getRuleSet(selector);
-        }
-        return ruleSet;
-    }
-
-    public ErrorHandler getErrorHandler() {
-        if (_errorHandler != null) {
-            return _errorHandler;
-        }
-        else if (getParentContext() != null) {
-            return getParentContext().getErrorHandler();
-        }
-        else {
-            return null;
-        }
-    }
-
-    public void setErrorHandler( final ErrorHandler errorHandler) {
-        _errorHandler = errorHandler;
-    }
+  public void setErrorHandler( final ErrorHandler errorHandler )
+  {
+    _errorHandler = errorHandler;
+  }
 }
