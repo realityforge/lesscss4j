@@ -16,28 +16,31 @@
 package org.localmatters.lesscss4j.parser;
 
 import java.io.IOException;
-import junit.framework.TestCase;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 public class LessCssStyleSheetParserTest
-  extends TestCase
 {
   LessCssStyleSheetParser _parser;
 
-  @Override
-  protected void setUp()
+  @BeforeMethod
+  public void setUp()
     throws Exception
   {
     _parser = new LessCssStyleSheetParser();
   }
 
-  public void testParseCharset()
+  @Test
+  public void ParseCharset()
     throws IOException
   {
     assertEquals( "UTF-8", _parser.parseCharset( "        @charset    'UTF-8'  ;  " ) );
     assertEquals( "ISO-8859-1", _parser.parseCharset( "@charset \"ISO-8859-1\";  " ) );
   }
 
-  public void testParseCharsetWithComments()
+  @Test
+  public void ParseCharsetWithComments()
     throws IOException
   {
     assertEquals( "UTF-8", _parser.parseCharset( "//@charset 'ISO-8859-1'\n" +
@@ -48,7 +51,8 @@ public class LessCssStyleSheetParserTest
                                                  "    @charset    'UTF-8'  ;  " ) );
   }
 
-  public void testParseCharsetNoCharset()
+  @Test
+  public void ParseCharsetNoCharset()
     throws IOException
   {
     assertEquals( null, _parser.parseCharset( "   @import url(something)" ) );

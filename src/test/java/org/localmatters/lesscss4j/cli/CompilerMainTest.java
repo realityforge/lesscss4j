@@ -15,25 +15,28 @@
 */
 package org.localmatters.lesscss4j.cli;
 
-import junit.framework.TestCase;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 public class CompilerMainTest
-  extends TestCase
 {
   CompilerMain _main;
 
-  @Override
+  @BeforeMethod
   protected void setUp()
     throws Exception
   {
     _main = new CompilerMain();
   }
 
-  public void testGenerateOutputFilename()
+  @Test
+  public void GenerateOutputFilename()
   {
     assertEquals( "test.css", _main.generateOutputFilename( "test.less" ) );
     assertEquals( "test.css", _main.generateOutputFilename( "test.txt" ) );
     assertEquals( "test.css", _main.generateOutputFilename( "test." ) );
     assertEquals( "test.css", _main.generateOutputFilename( "test" ) );
     assertEquals( "test-min.css", _main.generateOutputFilename( "test.css" ) );
-  }}
+  }
+}

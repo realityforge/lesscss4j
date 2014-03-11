@@ -15,19 +15,20 @@
 */
 package org.localmatters.lesscss4j.model.expression;
 
-import junit.framework.TestCase;
 import org.localmatters.lesscss4j.error.UnitMismatchException;
+import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 public class ConstantNumberTest
-  extends TestCase
 {
   protected void validateNumber( final double expectedValue, final String expectedUnit, final ConstantNumber actual )
   {
-    assertEquals( "Unexpected value", expectedValue, actual.getValue() );
-    assertEquals( "Unexpected unit", expectedUnit, actual.getUnit() );
+    assertEquals( expectedValue, actual.getValue(), "Unexpected value" );
+    assertEquals( expectedUnit, actual.getUnit(), "Unexpected unit" );
   }
 
-  public void testParseNoUnits()
+  @Test
+  public void ParseNoUnits()
   {
     validateNumber( 5.0, null, new ConstantNumber( "5" ) );
     validateNumber( 3.0, null, new ConstantNumber( "3.0" ) );
@@ -36,7 +37,8 @@ public class ConstantNumberTest
     validateNumber( 0.5, null, new ConstantNumber( ".5" ) );
   }
 
-  public void testParseWithUnits()
+  @Test
+  public void ParseWithUnits()
   {
     validateNumber( 5.0, "px", new ConstantNumber( "5px" ) );
     validateNumber( 3.0, "%", new ConstantNumber( "3.0%" ) );
@@ -47,7 +49,8 @@ public class ConstantNumberTest
     validateNumber( 0, "ms", new ConstantNumber( "0.0ms" ) );
   }
 
-  public void testToString()
+  @Test
+  public void ToString()
   {
     assertEquals( "3", new ConstantNumber( 3, null ).toString() );
     assertEquals( "3.1em", new ConstantNumber( 3.1, "em" ).toString() );
@@ -62,7 +65,7 @@ public class ConstantNumberTest
   }
 
 /*
-    public void testToStringPerformance() {
+    @Test public void ToStringPerformance() {
         Random random = new Random();
         double[] values = new double[100];
         for (int idx = 0; idx < values.length; idx++) {
@@ -92,7 +95,8 @@ public class ConstantNumberTest
     }
 */
 
-  public void testAdd()
+  @Test
+  public void Add()
   {
     assertEquals( new ConstantNumber( 5, "px" ), new ConstantNumber( 3, null ).add( new ConstantNumber( 2, "px" ) ) );
     assertEquals( new ConstantNumber( 5, "px" ), new ConstantNumber( 3, "px" ).add( new ConstantNumber( 2, "px" ) ) );
@@ -100,7 +104,8 @@ public class ConstantNumberTest
     assertEquals( new ConstantNumber( 5, null ), new ConstantNumber( 3, null ).add( new ConstantNumber( 2, null ) ) );
   }
 
-  public void testAddUnitMismatch()
+  @Test
+  public void AddUnitMismatch()
   {
     try
     {
@@ -113,7 +118,8 @@ public class ConstantNumberTest
     }
   }
 
-  public void testAddColor()
+  @Test
+  public void AddColor()
   {
     try
     {
@@ -126,7 +132,8 @@ public class ConstantNumberTest
     }
   }
 
-  public void testSubtract()
+  @Test
+  public void Subtract()
   {
     assertEquals( new ConstantNumber( 1, "px" ),
                   new ConstantNumber( 3, null ).subtract( new ConstantNumber( 2, "px" ) ) );
@@ -138,7 +145,8 @@ public class ConstantNumberTest
                   new ConstantNumber( 3, null ).subtract( new ConstantNumber( 2, null ) ) );
   }
 
-  public void testSubtractUnitMismatch()
+  @Test
+  public void SubtractUnitMismatch()
   {
     try
     {
@@ -151,7 +159,8 @@ public class ConstantNumberTest
     }
   }
 
-  public void testSubtractColor()
+  @Test
+  public void SubtractColor()
   {
     try
     {
@@ -164,7 +173,8 @@ public class ConstantNumberTest
     }
   }
 
-  public void testDivide()
+  @Test
+  public void Divide()
   {
     assertEquals( new ConstantNumber( 1.5, "px" ),
                   new ConstantNumber( 3, null ).divide( new ConstantNumber( 2, "px" ) ) );
@@ -176,7 +186,8 @@ public class ConstantNumberTest
                   new ConstantNumber( 3, null ).divide( new ConstantNumber( 2, null ) ) );
   }
 
-  public void testDivideUnitMismatch()
+  @Test
+  public void DivideUnitMismatch()
   {
     try
     {
@@ -189,7 +200,8 @@ public class ConstantNumberTest
     }
   }
 
-  public void testDivideColor()
+  @Test
+  public void DivideColor()
   {
     try
     {
@@ -202,7 +214,8 @@ public class ConstantNumberTest
     }
   }
 
-  public void testMultiply()
+  @Test
+  public void Multiply()
   {
     assertEquals( new ConstantNumber( 6, "px" ),
                   new ConstantNumber( 3, null ).multiply( new ConstantNumber( 2, "px" ) ) );
@@ -214,7 +227,8 @@ public class ConstantNumberTest
                   new ConstantNumber( 3, null ).multiply( new ConstantNumber( 2, null ) ) );
   }
 
-  public void testMultiplyUnitMismatch()
+  @Test
+  public void MultiplyUnitMismatch()
   {
     try
     {
@@ -227,7 +241,8 @@ public class ConstantNumberTest
     }
   }
 
-  public void testMultiplyColor()
+  @Test
+  public void MultiplyColor()
   {
     assertEquals( new ConstantColor( 0x333333 ),
                   new ConstantNumber( 3, null ).multiply( new ConstantColor( 0x111111 ) ) );

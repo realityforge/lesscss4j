@@ -19,15 +19,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Comparator;
-import junit.framework.TestCase;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.localmatters.lesscss4j.error.ErrorHandler;
 import org.localmatters.lesscss4j.output.PrettyPrintOptions;
 import org.localmatters.lesscss4j.parser.UrlStyleSheetResource;
+import org.testng.annotations.BeforeMethod;
+import static org.testng.Assert.*;
 
 public abstract class AbstractLessCssCompilerTest
-  extends TestCase
 {
   public static final String ENCODING = "UTF-8";
 
@@ -35,8 +35,8 @@ public abstract class AbstractLessCssCompilerTest
   protected PrettyPrintOptions _printOptions;
   protected ErrorHandler _errorHandler;
 
-  @Override
-  protected void setUp()
+  @BeforeMethod
+  public void setUp()
     throws Exception
   {
     _printOptions = new PrettyPrintOptions();
@@ -59,7 +59,7 @@ public abstract class AbstractLessCssCompilerTest
     try
     {
       input = getClass().getClassLoader().getResourceAsStream( cssFile );
-      assertNotNull( "Unable to open " + cssFile, input );
+      assertNotNull( input, "Unable to open " + cssFile );
       return IOUtils.toString( input, ENCODING );
     }
     finally
@@ -78,7 +78,7 @@ public abstract class AbstractLessCssCompilerTest
     throws IOException
   {
     final URL url = getClass().getClassLoader().getResource( lessFile );
-    assertNotNull( "Unable to open " + lessFile, url );
+    assertNotNull( url, "Unable to open " + lessFile );
 
     final ByteArrayOutputStream output = new ByteArrayOutputStream();
 

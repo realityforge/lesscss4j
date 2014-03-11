@@ -21,14 +21,17 @@ import java.io.StringWriter;
 import java.net.URL;
 import org.apache.commons.io.FilenameUtils;
 import org.localmatters.lesscss4j.error.WriterErrorHandler;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 public class LessCssCompilerErrorTest
   extends AbstractLessCssCompilerTest
 {
   StringWriter _writer;
 
-  @Override
-  protected void setUp()
+  @BeforeMethod
+  public void setUp()
     throws Exception
   {
     super.setUp();
@@ -40,7 +43,8 @@ public class LessCssCompilerErrorTest
     ( (WriterErrorHandler) _errorHandler ).setWriter( new PrintWriter( _writer ) );
   }
 
-  public void testMismatchedUnits()
+  @Test
+  public void MismatchedUnits()
     throws IOException
   {
     compileAndValidate( "less/exceptions/mixed-units-error.less", null );
@@ -51,7 +55,8 @@ public class LessCssCompilerErrorTest
     assertEquals( 3, _errorHandler.getErrorCount() );
   }
 
-  public void testUndefinedVariable()
+  @Test
+  public void UndefinedVariable()
     throws IOException
   {
     compileAndValidate( "less/exceptions/name-error-1.0.less", null );
@@ -61,7 +66,8 @@ public class LessCssCompilerErrorTest
     assertEquals( 2, _errorHandler.getErrorCount() );
   }
 
-  public void testMixinErrors()
+  @Test
+  public void MixinErrors()
     throws IOException
   {
     compileAndValidate( "less/exceptions/mixin-error.less", null );
@@ -72,7 +78,8 @@ public class LessCssCompilerErrorTest
     assertEquals( 3, _errorHandler.getErrorCount() );
   }
 
-  public void testSyntaxErrors()
+  @Test
+  public void SyntaxErrors()
     throws IOException
   {
     compileAndValidate( "less/exceptions/syntax-error-1.0.less", null );
@@ -82,7 +89,8 @@ public class LessCssCompilerErrorTest
     assertEquals( 2, _errorHandler.getErrorCount() );
   }
 
-  public void testImportMissingError()
+  @Test
+  public void ImportMissingError()
     throws IOException
   {
     final String resource = "less/exceptions/import-error.less";
@@ -106,7 +114,8 @@ public class LessCssCompilerErrorTest
     assertEquals( 3, _errorHandler.getErrorCount() );
   }
 
-  public void testDivideByZero()
+  @Test
+  public void DivideByZero()
     throws IOException
   {
     compileAndValidate( "less/exceptions/divide-by-zero.less", null );

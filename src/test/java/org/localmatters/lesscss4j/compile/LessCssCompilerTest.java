@@ -17,150 +17,176 @@ package org.localmatters.lesscss4j.compile;
 
 import java.io.IOException;
 import java.util.Comparator;
+import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 public class LessCssCompilerTest
   extends AbstractLessCssCompilerTest
 {
-  public void testVariables()
+  @Test
+  public void Variables()
     throws IOException
   {
     compileAndValidate( "less/variables.less", "css/variables.css" );
   }
 
-  public void testLazyEvalVariables()
+  @Test
+  public void LazyEvalVariables()
     throws IOException
   {
     compileAndValidate( "less/lazy-eval.less", "css/lazy-eval.css" );
   }
 
-  public void testPlainCss()
+  @Test
+  public void PlainCss()
     throws IOException
   {
     compileAndValidate( "less/css.less", "css/css.css" );
   }
 
-  public void testComments()
+  @Test
+  public void Comments()
     throws IOException
   {
     compileAndValidate( "less/comments.less", "css/comments.css" );
   }
 
-  public void testCss3()
+  @Test
+  public void Css3()
     throws IOException
   {
     compileAndValidate( "less/css-3.less", "css/css-3.css" );
   }
 
-  public void testExpressionParens()
+  @Test
+  public void ExpressionParens()
     throws IOException
   {
     compileAndValidate( "less/parens.less", "css/parens.css" );
   }
 
-  public void testOperations()
+  @Test
+  public void Operations()
     throws IOException
   {
     compileAndValidate( "less/operations.less", "css/operations.css" );
   }
 
-  public void testStrings()
+  @Test
+  public void Strings()
     throws IOException
   {
     compileAndValidate( "less/strings.less", "css/strings.css" );
   }
 
-  public void testMixins()
+  @Test
+  public void Mixins()
     throws IOException
   {
     compileAndValidate( "less/mixins.less", "css/mixins.css" );
   }
 
-  public void testNestedRuleSets()
+  @Test
+  public void NestedRuleSets()
     throws IOException
   {
     compileAndValidate( "less/rulesets.less", "css/rulesets.css" );
   }
 
-  public void testMixinVariableScope()
+  @Test
+  public void MixinVariableScope()
     throws IOException
   {
     compileAndValidate( "less/scope.less", "css/scope.css" );
   }
 
-  public void testMixinArgs()
+  @Test
+  public void MixinArgs()
     throws IOException
   {
     compileAndValidate( "less/mixins-args.less", "css/mixins-args.css" );
   }
 
-  public void testMultipleSelectors()
+  @Test
+  public void MultipleSelectors()
     throws IOException
   {
     compileAndValidate( "less/selectors.less", "css/selectors.css" );
   }
 
-  public void testCss3SingleRun()
+  @Test
+  public void Css3SingleRun()
     throws IOException
   {
     compileAndValidate( "less/singlerun.less", "css/singlerun.css" );
   }
 
-  public void testColorMath()
+  @Test
+  public void ColorMath()
     throws IOException
   {
     compileAndValidate( "less/colors.less", "css/colors.css" );
   }
 
-  public void testImport()
+  @Test
+  public void Import()
     throws IOException
   {
     compileAndValidate( "less/import.less", "css/import.css" );
   }
 
-  public void testDashPrefix()
+  @Test
+  public void DashPrefix()
     throws IOException
   {
     compileAndValidate( "less/dash-prefix.less", "css/dash-prefix.css" );
   }
 
-  public void testInternetExplorer()
+  @Test
+  public void InternetExplorer()
     throws IOException
   {
     compileAndValidate( "less/ie.less", "css/ie.css" );
   }
 
-  public void testBigCssFile()
+  @Test
+  public void BigCssFile()
     throws IOException
   {
     _printOptions.setSingleDeclarationOnOneLine( false );
     compileAndValidate( "less/css-big.less", "css/css-big.css" );
   }
 
-  public void testMediaAndPage()
+  @Test
+  public void MediaAndPage()
     throws IOException
   {
     compileAndValidate( "less/media-page.less", "css/media-page.css" );
   }
 
-  public void testAccessors()
+  @Test
+  public void Accessors()
     throws IOException
   {
     compileAndValidate( "less/accessors.less", "css/accessors.css" );
   }
 
-  public void testFunctions()
+  @Test
+  public void Functions()
     throws IOException
   {
     compileAndValidate( "less/functions.less", "css/functions.css" );
   }
 
-  public void testKeyframes()
+  @Test
+  public void Keyframes()
     throws IOException
   {
     compileAndValidate( "less/keyframes.less", "css/keyframes.css" );
   }
 
-  public void testBigCssFileCompareToSelf()
+  @Test
+  public void BigCssFileCompareToSelf()
     throws IOException
   {
     compileAndValidate( "css/big.css", "css/big.css", new Comparator<String>()

@@ -29,14 +29,15 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import junit.framework.TestCase;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.localmatters.lesscss4j.util.Hex;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import static org.mockito.Mockito.*;
+import static org.testng.Assert.*;
 
 public class LessCssServletTest
-  extends TestCase
 {
   LessCssServlet _servlet;
   HttpServletRequest _request;
@@ -49,7 +50,7 @@ public class LessCssServletTest
   String _cssStr;
   long _systemMillis;
 
-  @Override
+  @BeforeMethod
   protected void setUp()
     throws Exception
   {
@@ -85,14 +86,8 @@ public class LessCssServletTest
     }
   }
 
-  protected void doReplay()
-  {
-    //EasyMock.replay(_request);
-    //EasyMock.replay(_response);
-    //EasyMock.replay(_servletContext);
-  }
-
-  public void testEmptyCacheValidResource()
+  @Test
+  public void emptyCacheValidResource()
     throws IOException, ServletException
   {
     when( _request.getPathInfo() ).thenReturn( _path );
@@ -112,19 +107,17 @@ public class LessCssServletTest
     final MockServletOutputStream responseStream = new MockServletOutputStream();
     when( _response.getOutputStream() ).thenReturn( responseStream );
 
-    doReplay();
-
     _servlet.init( _servletConfig );
     _servlet.service( _request, _response );
 
     assertEquals( new String( responseStream.getBytes(), "UTF-8" ), _cssStr );
-
   }
 
-  public void testCachedResource()
+  @Test
+  public void cachedResource()
     throws IOException, ServletException
   {
-    testEmptyCacheValidResource();
+    emptyCacheValidResource();
 
     when( _request.getPathInfo() ).thenReturn( _path );
     when( _request.getMethod() ).thenReturn( "GET" );
@@ -142,8 +135,6 @@ public class LessCssServletTest
     final MockServletOutputStream responseStream = new MockServletOutputStream();
     when( _response.getOutputStream() ).thenReturn( responseStream );
 
-    doReplay();
-
     _servlet.init( _servletConfig );
     _servlet.service( _request, _response );
 
@@ -151,10 +142,11 @@ public class LessCssServletTest
 
   }
 
-  public void testCachedResourceETag()
+  @Test
+  public void cachedResourceETag()
     throws IOException, ServletException
   {
-    testEmptyCacheValidResource();
+    emptyCacheValidResource();
 
     when( _request.getPathInfo() ).thenReturn( _path );
     when( _request.getMethod() ).thenReturn( "GET" );
@@ -163,19 +155,18 @@ public class LessCssServletTest
 
     _response.setStatus( HttpServletResponse.SC_NOT_MODIFIED );
 
-    doReplay();
-
     _servlet.init( _servletConfig );
     _servlet.service( _request, _response );
 
   }
 
-  public void testCachedResourceETagNeedsRefresh()
+  @Test
+  public void cachedResourceETagNeedsRefresh()
     throws IOException, ServletException
   {
     _servlet.setCacheMillis( 10 );
 
-    testEmptyCacheValidResource();
+    emptyCacheValidResource();
 
     _systemMillis = _systemMillis - 20;
 
@@ -196,8 +187,6 @@ public class LessCssServletTest
     final MockServletOutputStream responseStream = new MockServletOutputStream();
     when( _response.getOutputStream() ).thenReturn( responseStream );
 
-    doReplay();
-
     _servlet.init( _servletConfig );
     _servlet.service( _request, _response );
 
@@ -205,12 +194,13 @@ public class LessCssServletTest
 
   }
 
-  public void testCachedResourceNeedsRefresh()
+  @Test
+  public void cachedResourceNeedsRefresh()
     throws IOException, ServletException
   {
     _servlet.setCacheMillis( 10 );
 
-    testEmptyCacheValidResource();
+    emptyCacheValidResource();
 
     _systemMillis = _systemMillis - 20;
 
@@ -232,8 +222,6 @@ public class LessCssServletTest
     final MockServletOutputStream responseStream = new MockServletOutputStream();
     when( _response.getOutputStream() ).thenReturn( responseStream );
 
-    doReplay();
-
     _servlet.init( _servletConfig );
     _servlet.service( _request, _response );
 
@@ -241,10 +229,11 @@ public class LessCssServletTest
 
   }
 
-  public void testCachedResourceNotModified()
+  @Test
+  public void cachedResourceNotModified()
     throws IOException, ServletException
   {
-    testEmptyCacheValidResource();
+    emptyCacheValidResource();
 
     when( _request.getPathInfo() ).thenReturn( _path );
     when( _request.getMethod() ).thenReturn( "GET" );
@@ -254,17 +243,16 @@ public class LessCssServletTest
 
     _response.setStatus( HttpServletResponse.SC_NOT_MODIFIED );
 
-    doReplay();
-
     _servlet.init( _servletConfig );
     _servlet.service( _request, _response );
 
   }
 
-  public void testCachedResourceHeadRequest()
+  @Test
+  public void cachedResourceHeadRequest()
     throws IOException, ServletException
   {
-    testEmptyCacheValidResource();
+    emptyCacheValidResource();
 
     when( _request.getPathInfo() ).thenReturn( _path );
     when( _request.getMethod() ).thenReturn( "HEAD" );
@@ -277,37 +265,31 @@ public class LessCssServletTest
     _response.setContentType( "text/css; charset=UTF-8" );
     _response.setContentLength( _cssBytes.length );
 
-    doReplay();
-
     _servlet.init( _servletConfig );
     _servlet.service( _request, _response );
 
   }
 
-  public void testNullPath()
+  @Test
+  public void NullPath()
     throws IOException, ServletException
   {
     when( _request.getPathInfo() ).thenReturn( null );
     when( _request.getParameter( LessCssServlet.CLEAR_CACHE ) ).thenReturn( null );
     _response.sendError( HttpServletResponse.SC_NOT_FOUND );
 
-    doReplay();
-
     _servlet.service( _request, _response );
-
   }
 
-  public void testEmptyPath()
+  @Test
+  public void EmptyPath()
     throws IOException, ServletException
   {
     when( _request.getPathInfo() ).thenReturn( "  " );
     when( _request.getParameter( LessCssServlet.CLEAR_CACHE ) ).thenReturn( null );
     _response.sendError( HttpServletResponse.SC_NOT_FOUND );
 
-    doReplay();
-
     _servlet.service( _request, _response );
-
   }
 
   private static class MockServletConfig
@@ -327,19 +309,9 @@ public class LessCssServletTest
       return _servletContext;
     }
 
-    public void setServletName( final String servletName )
-    {
-      _servletName = servletName;
-    }
-
     public void setServletContext( final ServletContext servletContext )
     {
       _servletContext = servletContext;
-    }
-
-    public void setInitParameter( final String name, final String value )
-    {
-      _initParameters.put( name, value );
     }
 
     public String getInitParameter( final String name )

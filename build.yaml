@@ -9,7 +9,6 @@ artifacts:
   javax_servlet: javax.servlet:javax.servlet-api:jar:3.1.0
   commons_io: commons-io:commons-io:jar:1.4
 
-  junit: junit:junit:jar:3.8.1
   mockito: org.mockito:mockito-all:jar:1.9.5
 
   getopt4j: org.realityforge.getopt4j:getopt4j:jar:1.1

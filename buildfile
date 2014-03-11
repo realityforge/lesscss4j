@@ -27,7 +27,8 @@ define 'lesscss4j' do
 
   compile.from compile_antlr(_('src/main/antlr3/org/localmatters/lesscssj4/parser/LessCss.g'), :package => 'org.localmatters.lesscss4j.parser.antlr')
 
-  test.with :junit, :mockito
+  test.with :mockito
+  test.using :testng
 
   package(:bundle).tap do |bnd|
     bnd['Import-Package'] = 'org.antlr*;version="3.2",javax.servlet*; resolution:=optional,*'
