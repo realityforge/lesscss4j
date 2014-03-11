@@ -91,7 +91,7 @@ public class LessCssCompilerImpl
       {
         throw new IllegalStateException( "No transformer found for class: " + styleSheet.getClass().getName() );
       }
-      styleSheet = styleSheetTransformer.transform( styleSheet, context ).get( 0 );
+      styleSheet = styleSheetTransformer.transform( styleSheet, context, _transformerManager ).get( 0 );
     }
 
     if ( null == errorHandler || 0 == errorHandler.getErrorCount() )

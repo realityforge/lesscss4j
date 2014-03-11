@@ -24,15 +24,12 @@ import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 public class PageTransformer
   extends AbstractDeclarationContainerTransformer<Page>
 {
-  public PageTransformer( @Nonnull final TransformerManager transformerManager )
-  {
-    super( transformerManager );
-  }
-
-  public List<Page> transform( final Page page, final EvaluationContext context )
+  public List<Page> transform( @Nonnull final Page page,
+                               @Nonnull final EvaluationContext context,
+                               @Nonnull final TransformerManager transformerManager )
   {
     final List<Page> pageList = Arrays.asList( new Page( page, false ) );
-    doTransform( page, pageList, context );
+    doTransform( page, pageList, context, transformerManager );
     return pageList;
   }
 }

@@ -32,11 +32,6 @@ public class FunctionTransformer
 {
   private Map<String, Function> _functionMap;
 
-  public FunctionTransformer( @Nonnull final TransformerManager transformerManager )
-  {
-    super( transformerManager );
-  }
-
   public void addFunction( final String name, final Function function )
   {
     if ( null == _functionMap )
@@ -56,7 +51,9 @@ public class FunctionTransformer
     _functionMap = functionMap;
   }
 
-  public List<Expression> transform( final Expression expression, final EvaluationContext context )
+  public List<Expression> transform( @Nonnull final Expression expression,
+                                     @Nonnull final EvaluationContext context,
+                                     @Nonnull final TransformerManager transformerManager )
   {
     if ( !( expression instanceof FunctionExpression ) )
     {
@@ -78,10 +75,10 @@ public class FunctionTransformer
         Expression argExpression = function.getArguments().get( idx );
         if ( !( argExpression instanceof LiteralExpression ) || !argExpression.toString().equals( "," ) )
         {
-          final Transformer<Expression> transformer = getTransformer( argExpression, false );
+          final Transformer<Expression> transformer = transformerManager.getTransformer( argExpression );
           if ( null != transformer )
           {
-            argExpression = transformer.transform( argExpression, context ).get( 0 );
+            argExpression = transformer.transform( argExpression, context, transformerManager ).get( 0 );
           }
           argExpression = argExpression.evaluate( context );
           args.add( argExpression );

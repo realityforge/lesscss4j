@@ -17,6 +17,8 @@ package org.localmatters.lesscss4j.transform;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Nonnull;
+import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 
 public class CompositeTransformer<T>
   implements Transformer<T>
@@ -33,27 +35,29 @@ public class CompositeTransformer<T>
     _transformers = transformers;
   }
 
-  public List<T> transform( final T value, final EvaluationContext context )
+  public List<T> transform( @Nonnull final T value,
+                            @Nonnull final EvaluationContext context,
+                            @Nonnull final TransformerManager transformerManager )
   {
     final List<T> transformed = new ArrayList<>();
     transformed.add( value );
 
     for ( final Transformer<T> transformer : getTransformers() )
     {
-      for ( int idx = 0; idx < transformed.size(); idx++ )
+      for ( int i = 0; i < transformed.size(); i++ )
       {
-        final T val = transformed.get( idx );
-        final List<T> result = transformer.transform( val, context );
+        final T val = transformed.get( i );
+        final List<T> result = transformer.transform( val, context, transformerManager );
         if ( null != result && result.size() > 0 )
         {
-          transformed.set( idx, result.get( 0 ) );
+          transformed.set( i, result.get( 0 ) );
           if ( result.size() > 1 )
           {
-            for ( int tdx = 1; tdx < result.size(); tdx++ )
+            for ( int j = 1; j < result.size(); j++ )
             {
-              transformed.add( idx + tdx, result.get( tdx ) );
+              transformed.add( i + j, result.get( j ) );
             }
-            idx += result.size() - 1;
+            i += result.size() - 1;
           }
         }
       }

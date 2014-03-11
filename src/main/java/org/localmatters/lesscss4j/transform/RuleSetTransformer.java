@@ -25,12 +25,9 @@ import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 public class RuleSetTransformer
   extends AbstractDeclarationContainerTransformer<RuleSet>
 {
-  public RuleSetTransformer( @Nonnull final TransformerManager transformerManager )
-  {
-    super( transformerManager );
-  }
-
-  public List<RuleSet> transform( final RuleSet ruleSet, final EvaluationContext context )
+  public List<RuleSet> transform( @Nonnull final RuleSet ruleSet,
+                                  @Nonnull final EvaluationContext context,
+                                  @Nonnull final TransformerManager transformerManager )
   {
     final RuleSet transformed;
 
@@ -48,7 +45,7 @@ public class RuleSetTransformer
 
       ruleSetList = new ArrayList<>();
       ruleSetList.add( transformed );
-      doTransform( ruleSet, ruleSetList, context );
+      doTransform( ruleSet, ruleSetList, context, transformerManager );
     }
     return ruleSetList;
   }

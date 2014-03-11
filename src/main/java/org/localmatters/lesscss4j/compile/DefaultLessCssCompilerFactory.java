@@ -246,9 +246,7 @@ public class DefaultLessCssCompilerFactory
    */
   protected TransformerManager createDefaultTransformManager()
   {
-    final ClassTransformerManager transformerManager = new ClassTransformerManager();
-    transformerManager.setClassTransformerMap( createDefaultClassTransformerMap( transformerManager ) );
-    return transformerManager;
+    return new ClassTransformerManager( createDefaultClassTransformerMap() );
   }
 
   /**
@@ -257,16 +255,16 @@ public class DefaultLessCssCompilerFactory
    * {@link #setTransformers} which will override any defaults registered in this method.  This method is only
    * called when using the default {@link TransformerManager}.
    */
-  protected Map<Class, Transformer> createDefaultClassTransformerMap( final TransformerManager transformerManager )
+  protected Map<Class, Transformer> createDefaultClassTransformerMap()
   {
     final Map<Class, Transformer> transformerMap = new LinkedHashMap<>();
-    transformerMap.put( Declaration.class, new DeclarationTransformer( transformerManager ) );
-    transformerMap.put( RuleSet.class, new RuleSetTransformer( transformerManager ) );
-    transformerMap.put( Page.class, new PageTransformer( transformerManager ) );
-    transformerMap.put( Media.class, new MediaTransformer( transformerManager ) );
-    transformerMap.put( Keyframes.class, new KeyframesTransformer( transformerManager ) );
-    transformerMap.put( StyleSheet.class, new StyleSheetTransformer( transformerManager ) );
-    transformerMap.put( FunctionExpression.class, createFunctionTransformer( transformerManager ) );
+    transformerMap.put( Declaration.class, new DeclarationTransformer() );
+    transformerMap.put( RuleSet.class, new RuleSetTransformer() );
+    transformerMap.put( Page.class, new PageTransformer() );
+    transformerMap.put( Media.class, new MediaTransformer() );
+    transformerMap.put( Keyframes.class, new KeyframesTransformer() );
+    transformerMap.put( StyleSheet.class, new StyleSheetTransformer() );
+    transformerMap.put( FunctionExpression.class, createFunctionTransformer() );
 
     // Apply any additional transformers or overrides for default transformers.
     if ( null != _transformers )
@@ -282,7 +280,7 @@ public class DefaultLessCssCompilerFactory
    * a default set of functions and then applies any additional functions that have been set on this factory,
    * potentially overriding default functions.
    */
-  protected Transformer createFunctionTransformer( final TransformerManager transformerManager )
+  protected Transformer createFunctionTransformer()
   {
     final Map<String, Function> functions = new HashMap<>();
     functions.put( "%", new Format() );
@@ -304,7 +302,7 @@ public class DefaultLessCssCompilerFactory
       functions.putAll( _functions );
     }
 
-    final FunctionTransformer transformer = new FunctionTransformer( transformerManager );
+    final FunctionTransformer transformer = new FunctionTransformer();
     transformer.setFunctionMap( functions );
     return transformer;
   }

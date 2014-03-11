@@ -16,8 +16,12 @@
 package org.localmatters.lesscss4j.transform;
 
 import java.util.List;
+import javax.annotation.Nonnull;
+import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 
 public interface Transformer<T>
 {
-  List<T> transform( T value, EvaluationContext context );
+  List<T> transform( @Nonnull T value,
+                     @Nonnull EvaluationContext context,
+                     @Nonnull TransformerManager transformerManager );
 }

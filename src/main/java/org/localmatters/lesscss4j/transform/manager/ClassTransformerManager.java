@@ -15,7 +15,10 @@
 */
 package org.localmatters.lesscss4j.transform.manager;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Nonnull;
 import org.localmatters.lesscss4j.transform.Transformer;
 
 /**
@@ -37,45 +40,38 @@ import org.localmatters.lesscss4j.transform.Transformer;
 public class ClassTransformerManager
   implements TransformerManager
 {
-  private Map<Class, Transformer> _classTransformerMap;
+  @Nonnull
+  private final Map<Class, Transformer> _classTransformerMap;
+
+  public ClassTransformerManager( @Nonnull final Map<Class, Transformer> classTransformerMap )
+  {
+    _classTransformerMap = Collections.unmodifiableMap( new HashMap<>( classTransformerMap ) );
+  }
 
   /**
    * Find the transformer for the given object.  The algorithm used is described in the description of this class.
    *
    * @return The located transformer.  <code>null</code> if no matching transformer can be found.
    */
-  public <T> Transformer<T> getTransformer( final T object )
+  public <T> Transformer<T> getTransformer( @Nonnull final T object )
   {
     final Class objClass = object.getClass();
 
-    Transformer<T> transformer = null;
-
-    final Map<Class, Transformer> transformerMap = getClassTransformerMap();
-    if ( null != transformerMap )
+    final Transformer<T> transformer = _classTransformerMap.get( objClass );
+    if( null != transformer )
     {
-      transformer = transformerMap.get( objClass );
-      if ( null == transformer )
+      return transformer;
+    }
+    else
+    {
+      for ( final Map.Entry<Class, Transformer> entry : _classTransformerMap.entrySet() )
       {
-        for ( final Map.Entry<Class, Transformer> entry : transformerMap.entrySet() )
+        if ( entry.getKey().isAssignableFrom( objClass ) )
         {
-          if ( entry.getKey().isAssignableFrom( objClass ) )
-          {
-            transformer = entry.getValue();
-            break;
-          }
+          return entry.getValue();
         }
       }
     }
-    return transformer;
-  }
-
-  public Map<Class, Transformer> getClassTransformerMap()
-  {
-    return _classTransformerMap;
-  }
-
-  public void setClassTransformerMap( final Map<Class, Transformer> classTransformerMap )
-  {
-    _classTransformerMap = classTransformerMap;
+    return null;
   }
 }

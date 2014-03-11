@@ -26,20 +26,20 @@ import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 public class MediaTransformer
   extends AbstractTransformer<Media>
 {
-  public MediaTransformer( @Nonnull final TransformerManager transformerManager )
-  {
-    super( transformerManager );
-  }
-
-  public List<Media> transform( final Media media, final EvaluationContext context )
+  public List<Media> transform( @Nonnull final Media media,
+                                @Nonnull final EvaluationContext context,
+                                @Nonnull final TransformerManager transformerManager )
   {
     final Media transformed = new Media( media, false );
     evaluateVariables( media, transformed, context );
-    transformBodyElements( media, transformed, context );
+    transformBodyElements( media, transformed, context, transformerManager );
     return Arrays.asList( transformed );
   }
 
-  protected void transformBodyElements( final Media media, final Media transformed, final EvaluationContext context )
+  protected void transformBodyElements( @Nonnull final Media media,
+                                        @Nonnull final Media transformed,
+                                        @Nonnull final EvaluationContext context,
+                                        @Nonnull final TransformerManager transformerManager )
   {
     final EvaluationContext mediaContext = new EvaluationContext();
     mediaContext.setParentContext( context );
@@ -51,7 +51,7 @@ public class MediaTransformer
       if ( element instanceof RuleSet )
       {
         final RuleSet ruleSet = (RuleSet) element;
-        final List<RuleSet> transformedRuleSets = getTransformer( ruleSet ).transform( ruleSet, mediaContext );
+        final List<RuleSet> transformedRuleSets = performTransform( ruleSet, mediaContext, transformerManager );
         if ( null != transformedRuleSets )
         {
           for ( final RuleSet transformedRuleSet : transformedRuleSets )

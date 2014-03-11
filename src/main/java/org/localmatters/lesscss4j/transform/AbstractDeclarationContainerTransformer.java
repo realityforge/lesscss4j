@@ -37,12 +37,10 @@ import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 public abstract class AbstractDeclarationContainerTransformer<T extends DeclarationContainer>
   extends AbstractTransformer<T>
 {
-  protected AbstractDeclarationContainerTransformer( @Nonnull final TransformerManager transformerManager )
-  {
-    super( transformerManager );
-  }
-
-  protected void transformDeclarations( final T container, final T transformed, final EvaluationContext context )
+  protected void transformDeclarations( @Nonnull final T container,
+                                        @Nonnull final T transformed,
+                                        @Nonnull final EvaluationContext context,
+                                        @Nonnull final TransformerManager transformerManager )
   {
     if ( !container.isMixinReferenceUsed() )
     {
@@ -55,7 +53,7 @@ public abstract class AbstractDeclarationContainerTransformer<T extends Declarat
       {
         if ( declaration instanceof Declaration )
         {
-          transformed.addDeclarations( getTransformer( declaration ).transform( declaration, declContext ) );
+          transformed.addDeclarations( performTransform( declaration, declContext, transformerManager ) );
         }
         else
         {
@@ -65,13 +63,14 @@ public abstract class AbstractDeclarationContainerTransformer<T extends Declarat
     }
     else
     {
-      transformDeclarationsWithMixins( container, transformed, context );
+      transformDeclarationsWithMixins( container, transformed, context, transformerManager );
     }
   }
 
-  private void transformDeclarationsWithMixins( final DeclarationContainer container,
-                                                final DeclarationContainer transformed,
-                                                final EvaluationContext context )
+  private void transformDeclarationsWithMixins( @Nonnull final DeclarationContainer container,
+                                                @Nonnull final DeclarationContainer transformed,
+                                                @Nonnull final EvaluationContext context,
+                                                @Nonnull final TransformerManager transformerManager )
   {
     final EvaluationContext declContext = new EvaluationContext();
     declContext.setParentContext( context );
@@ -103,7 +102,7 @@ public abstract class AbstractDeclarationContainerTransformer<T extends Declarat
 
               updateMixinArguments( ruleSet, mixin );
 
-              final List<RuleSet> mixinRuleSets = getTransformer( ruleSet ).transform( ruleSet, declContext );
+              final List<RuleSet> mixinRuleSets = performTransform( ruleSet, declContext, transformerManager );
 
               ruleSet = mixinRuleSets.get( 0 );
 
@@ -145,7 +144,7 @@ public abstract class AbstractDeclarationContainerTransformer<T extends Declarat
 
     for ( final Declaration declaration : declarationList )
     {
-      transformed.addDeclarations( getTransformer( declaration ).transform( declaration, declContext ) );
+      transformed.addDeclarations( performTransform( declaration, declContext, transformerManager ) );
     }
   }
 
@@ -185,7 +184,9 @@ public abstract class AbstractDeclarationContainerTransformer<T extends Declarat
     }
   }
 
-  protected void transformRuleSets( final List<T> transformed, final EvaluationContext context )
+  protected void transformRuleSets( @Nonnull final List<T> transformed,
+                                    @Nonnull final EvaluationContext context,
+                                    @Nonnull final TransformerManager transformerManager )
   {
     final T container = transformed.get( 0 );
     if ( container.getRuleSetCount() == 0 )
@@ -205,7 +206,7 @@ public abstract class AbstractDeclarationContainerTransformer<T extends Declarat
       if ( element instanceof RuleSet )
       {
         final RuleSet childRuleSet = (RuleSet) element;
-        final List<RuleSet> transformedList = getTransformer( childRuleSet ).transform( childRuleSet, ruleSetContext );
+        final List<RuleSet> transformedList = performTransform( childRuleSet, ruleSetContext, transformerManager );
         for ( final RuleSet transformedChild : transformedList )
         {
           if ( container instanceof RuleSet )
@@ -232,10 +233,13 @@ public abstract class AbstractDeclarationContainerTransformer<T extends Declarat
     child.setSelectors( selectorList );
   }
 
-  public void doTransform( final T container, final List<T> transformed, final EvaluationContext context )
+  public void doTransform( @Nonnull final T container,
+                           @Nonnull final List<T> transformed,
+                           @Nonnull final EvaluationContext context,
+                           @Nonnull final TransformerManager transformerManager )
   {
     evaluateVariables( container, transformed.get( 0 ), context );
-    transformDeclarations( container, transformed.get( 0 ), context );
-    transformRuleSets( transformed, context );
+    transformDeclarations( container, transformed.get( 0 ), context, transformerManager );
+    transformRuleSets( transformed, context, transformerManager );
   }
 }

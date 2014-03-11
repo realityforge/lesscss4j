@@ -26,22 +26,20 @@ import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 public class KeyframesTransformer
   extends AbstractTransformer<Keyframes>
 {
-  public KeyframesTransformer( @Nonnull final TransformerManager transformerManager )
-  {
-    super( transformerManager );
-  }
-
-  public List<Keyframes> transform( final Keyframes keyframes, final EvaluationContext context )
+  public List<Keyframes> transform( @Nonnull final Keyframes keyframes,
+                                    @Nonnull final EvaluationContext context,
+                                    @Nonnull final TransformerManager transformerManager )
   {
     final Keyframes transformed = new Keyframes( keyframes, false );
     evaluateVariables( keyframes, transformed, context );
-    transformBodyElements( keyframes, transformed, context );
+    transformBodyElements( keyframes, transformed, context, transformerManager );
     return Arrays.asList( transformed );
   }
 
-  protected void transformBodyElements( final Keyframes keyframes,
-                                        final Keyframes transformed,
-                                        final EvaluationContext context )
+  protected void transformBodyElements( @Nonnull final Keyframes keyframes,
+                                        @Nonnull final Keyframes transformed,
+                                        @Nonnull final EvaluationContext context,
+                                        @Nonnull final TransformerManager transformerManager )
   {
     final EvaluationContext mediaContext = new EvaluationContext();
     mediaContext.setParentContext( context );
@@ -53,7 +51,7 @@ public class KeyframesTransformer
       if ( element instanceof RuleSet )
       {
         final RuleSet ruleSet = (RuleSet) element;
-        final List<RuleSet> transformedRuleSets = getTransformer( ruleSet ).transform( ruleSet, mediaContext );
+        final List<RuleSet> transformedRuleSets = performTransform( ruleSet, mediaContext, transformerManager );
         if ( null != transformedRuleSets )
         {
           for ( final RuleSet transformedRuleSet : transformedRuleSets )
@@ -64,8 +62,8 @@ public class KeyframesTransformer
       }
       else
       {
-        throw new IllegalStateException(
-          "Unexpected body element " + element.getClass().getSimpleName() + " in Media" );
+        final String message = "Unexpected body element " + element.getClass().getSimpleName() + " in Media";
+        throw new IllegalStateException( message );
       }
     }
   }

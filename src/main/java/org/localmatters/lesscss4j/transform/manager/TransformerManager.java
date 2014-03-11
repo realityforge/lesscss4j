@@ -15,6 +15,8 @@
 */
 package org.localmatters.lesscss4j.transform.manager;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.localmatters.lesscss4j.transform.Transformer;
 
 /**
@@ -28,5 +30,6 @@ public interface TransformerManager
    * @param object The object to transform
    * @return The transformer for the given object.
    */
-  <T> Transformer<T> getTransformer( T object );
+  @Nullable
+  <T> Transformer<T> getTransformer( @Nonnull T object );
 }

@@ -16,6 +16,7 @@
 package org.localmatters.lesscss4j.transform;
 
 import java.util.Iterator;
+import java.util.List;
 import javax.annotation.Nonnull;
 import org.localmatters.lesscss4j.error.ErrorUtils;
 import org.localmatters.lesscss4j.error.LessCssException;
@@ -26,28 +27,19 @@ import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 public abstract class AbstractTransformer<T>
   implements Transformer<T>
 {
-  private final TransformerManager _transformerManager;
-
-  protected AbstractTransformer( @Nonnull final TransformerManager transformerManager )
+  protected final <N> List<N> performTransform( @Nonnull final N value,
+                                                @Nonnull final EvaluationContext context,
+                                                @Nonnull final TransformerManager transformerManager )
   {
-    _transformerManager = transformerManager;
+    return getTransformer( transformerManager, value ).transform( value, context, transformerManager );
   }
 
   @Nonnull
-  public TransformerManager getTransformerManager()
+  protected <T> Transformer<T> getTransformer( @Nonnull final TransformerManager transformerManager,
+                                               @Nonnull final T obj )
   {
-    return _transformerManager;
-  }
-
-  protected <T> Transformer<T> getTransformer( final T obj )
-  {
-    return getTransformer( obj, true );
-  }
-
-  protected final <T> Transformer<T> getTransformer( final T obj, final boolean required )
-  {
-    final Transformer<T> transformer = getTransformerManager().getTransformer( obj );
-    if ( required && null == transformer )
+    final Transformer<T> transformer = transformerManager.getTransformer( obj );
+    if ( null == transformer )
     {
       throw new IllegalStateException( "Unable to find transformer for object of type " + obj.getClass().getName() );
     }

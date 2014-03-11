@@ -25,19 +25,16 @@ import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 public class StyleSheetTransformer
   extends AbstractTransformer<StyleSheet>
 {
-  public StyleSheetTransformer( @Nonnull final TransformerManager transformerManager )
-  {
-    super( transformerManager );
-  }
-
-  public List<StyleSheet> transform( final StyleSheet styleSheet, final EvaluationContext context )
+  public List<StyleSheet> transform( @Nonnull final StyleSheet styleSheet,
+                                     @Nonnull final EvaluationContext context,
+                                     @Nonnull final TransformerManager transformerManager )
   {
     final StyleSheet transformed = new StyleSheet();
 
     processImports( styleSheet, transformed, context );
     evaluateVariables( styleSheet, transformed, context );
 
-    transformBodyElements( styleSheet, transformed, context );
+    transformBodyElements( styleSheet, transformed, context, transformerManager );
 
     return Arrays.asList( transformed );
   }
@@ -52,7 +49,8 @@ public class StyleSheetTransformer
 
   protected void transformBodyElements( final StyleSheet styleSheet,
                                         final StyleSheet transformed,
-                                        final EvaluationContext context )
+                                        final EvaluationContext context,
+                                        final TransformerManager transformerManager )
   {
     final EvaluationContext styleContext = new EvaluationContext();
     styleContext.setParentContext( context );
@@ -62,7 +60,8 @@ public class StyleSheetTransformer
     final List<BodyElement> elements = styleSheet.getBodyElements();
     for ( final BodyElement element : elements )
     {
-      final List<? extends BodyElement> transformedElementList = transformBodyElement( element, styleContext );
+      final List<? extends BodyElement> transformedElementList =
+        transformBodyElement( element, styleContext, transformerManager );
       if ( null != transformedElementList )
       {
         for ( final BodyElement transformedElement : transformedElementList )
@@ -74,8 +73,9 @@ public class StyleSheetTransformer
   }
 
   private List<? extends BodyElement> transformBodyElement( final BodyElement element,
-                                                            final EvaluationContext styleContext )
+                                                            final EvaluationContext styleContext,
+                                                            final TransformerManager transformerManager )
   {
-    return getTransformer( element ).transform( element, styleContext );
+    return performTransform( element, styleContext, transformerManager );
   }
 }
