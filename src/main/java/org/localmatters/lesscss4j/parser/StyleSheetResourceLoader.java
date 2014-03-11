@@ -16,8 +16,10 @@
 package org.localmatters.lesscss4j.parser;
 
 import java.net.URL;
+import javax.annotation.Nonnull;
 
 public interface StyleSheetResourceLoader
 {
-  StyleSheetResource getResource( URL url );
+  @Nonnull
+  StyleSheetResource getResource( @Nonnull URL url );
 }

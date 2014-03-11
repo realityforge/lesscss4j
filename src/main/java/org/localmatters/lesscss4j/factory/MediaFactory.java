@@ -15,6 +15,8 @@
 */
 package org.localmatters.lesscss4j.factory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.antlr.runtime.tree.Tree;
 import org.localmatters.lesscss4j.error.ErrorHandler;
 import org.localmatters.lesscss4j.model.Media;
@@ -48,7 +50,8 @@ public class MediaFactory
     _ruleSetFactory = ruleSetFactory;
   }
 
-  public Media create( final Tree mediaNode, final ErrorHandler errorHandler )
+  @Nullable
+  public Media create( @Nonnull final Tree mediaNode, @Nullable final ErrorHandler errorHandler )
   {
     final Media media = new Media();
     media.setLine( mediaNode.getLine() );

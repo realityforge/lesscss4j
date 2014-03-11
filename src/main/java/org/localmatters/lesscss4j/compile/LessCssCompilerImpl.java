@@ -86,6 +86,8 @@ public class LessCssCompilerImpl
       context.setResource( input );
       context.setErrorHandler( errorHandler );
 
+      assert null != styleSheet;
+
       final Transformer<StyleSheet> styleSheetTransformer = getTransformerManager().getTransformer( styleSheet );
       if ( null == styleSheetTransformer )
       {

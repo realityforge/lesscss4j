@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.antlr.runtime.tree.Tree;
 import org.apache.commons.io.FilenameUtils;
 import org.localmatters.lesscss4j.error.ErrorHandler;
@@ -123,20 +125,13 @@ public class StyleSheetFactory
     _pageFactory = pageFactory;
   }
 
-  public StyleSheet create( final Tree styleSheetNode, final ErrorHandler errorHandler )
+  @Nullable
+  public StyleSheet create( @Nonnull final Tree styleSheetNode, @Nullable final ErrorHandler errorHandler )
   {
+    final StyleSheetResource resource =
+      styleSheetNode instanceof StyleSheetTree ? ( (StyleSheetTree) styleSheetNode ).getResource() : null;
+
     final StyleSheet stylesheet = new StyleSheet();
-    if ( null == styleSheetNode )
-    {
-      return stylesheet;
-    }
-
-    StyleSheetResource resource = null;
-    if ( styleSheetNode instanceof StyleSheetTree )
-    {
-      resource = ( (StyleSheetTree) styleSheetNode ).getResource();
-    }
-
     stylesheet.setLine( styleSheetNode.getLine() );
     stylesheet.setChar( styleSheetNode.getCharPositionInLine() );
 

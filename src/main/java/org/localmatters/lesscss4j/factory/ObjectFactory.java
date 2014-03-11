@@ -15,10 +15,13 @@
 */
 package org.localmatters.lesscss4j.factory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.antlr.runtime.tree.Tree;
 import org.localmatters.lesscss4j.error.ErrorHandler;
 
 public interface ObjectFactory<T>
 {
-  T create( Tree tree, ErrorHandler errorHandler );
+  @Nullable
+  T create( @Nonnull Tree tree, @Nullable ErrorHandler errorHandler );
 }

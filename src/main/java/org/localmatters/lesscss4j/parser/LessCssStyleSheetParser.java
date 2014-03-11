@@ -18,6 +18,8 @@ package org.localmatters.lesscss4j.parser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PushbackInputStream;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
@@ -94,19 +96,22 @@ public class LessCssStyleSheetParser
     return styleSheetObjectFactory;
   }
 
-  public StyleSheet parse( final StyleSheetResource input, final ErrorHandler errorHandler )
+  @Nullable
+  public StyleSheet parse( @Nonnull final StyleSheetResource input, @Nullable final ErrorHandler errorHandler )
     throws IOException
   {
     final Tree parseTree = parseTree( input, errorHandler );
-    StyleSheet styleSheet = null;
     if ( null != parseTree )
     {
-      styleSheet = getStyleSheetFactory().create( new StyleSheetTree( parseTree, input ), errorHandler );
+      return getStyleSheetFactory().create( new StyleSheetTree( parseTree, input ), errorHandler );
     }
-    return styleSheet;
+    else
+    {
+      return null;
+    }
   }
 
-  public Tree parseTree( final StyleSheetResource input, final ErrorHandler errorHandler )
+  public Tree parseTree( @Nonnull final StyleSheetResource input, @Nullable final ErrorHandler errorHandler )
     throws IOException
   {
     final LessCssLexer lexer = new LessCssLexer( createANTLRInputStream( input.getInputStream() ) );

@@ -15,6 +15,8 @@
 */
 package org.localmatters.lesscss4j.factory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.antlr.runtime.tree.Tree;
 import org.localmatters.lesscss4j.error.ErrorHandler;
 import org.localmatters.lesscss4j.model.AbstractElement;
@@ -33,7 +35,8 @@ import static org.localmatters.lesscss4j.parser.antlr.LessCssLexer.*;
 public class ExpressionFactory
   extends AbstractObjectFactory<Expression>
 {
-  public Expression create( final Tree expression, final ErrorHandler errorHandler )
+  @Nullable
+  public Expression create( @Nonnull final Tree expression, @Nullable final ErrorHandler errorHandler )
   {
     switch ( expression.getType() )
     {

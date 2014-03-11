@@ -15,6 +15,8 @@
 */
 package org.localmatters.lesscss4j.factory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.antlr.runtime.tree.Tree;
 import org.localmatters.lesscss4j.error.ErrorHandler;
 import org.localmatters.lesscss4j.model.Keyframes;
@@ -48,7 +50,8 @@ public class KeyframesFactory
     _ruleSetFactory = ruleSetFactory;
   }
 
-  public Keyframes create( final Tree mediaNode, final ErrorHandler errorHandler )
+  @Nullable
+  public Keyframes create( @Nonnull final Tree mediaNode, @Nullable final ErrorHandler errorHandler )
   {
     final Keyframes keyframes = new Keyframes();
     keyframes.setLine( mediaNode.getLine() );

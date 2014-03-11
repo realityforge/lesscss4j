@@ -19,34 +19,39 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import javax.annotation.Nonnull;
 import org.apache.commons.io.FileUtils;
 
 public class FileStyleSheetResource
   implements StyleSheetResource
 {
+  @Nonnull
   private final File _file;
 
-  public FileStyleSheetResource( final String filename )
+  public FileStyleSheetResource( @Nonnull final String filename )
   {
     this( new File( filename ) );
   }
 
-  public FileStyleSheetResource( final File file )
+  public FileStyleSheetResource( @Nonnull final File file )
   {
     _file = file;
   }
 
+  @Nonnull
   public File getFile()
   {
     return _file;
   }
 
+  @Nonnull
   public InputStream getInputStream()
     throws IOException
   {
     return FileUtils.openInputStream( getFile() );
   }
 
+  @Nonnull
   public URL getUrl()
     throws IOException
   {

@@ -16,6 +16,8 @@
 package org.localmatters.lesscss4j.parser;
 
 import java.io.IOException;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.localmatters.lesscss4j.error.ErrorHandler;
 import org.localmatters.lesscss4j.model.StyleSheet;
 
@@ -24,6 +26,7 @@ import org.localmatters.lesscss4j.model.StyleSheet;
  */
 public interface StyleSheetParser
 {
-  StyleSheet parse( StyleSheetResource input, ErrorHandler errorHandler )
+  @Nullable
+  StyleSheet parse( @Nonnull StyleSheetResource input, @Nullable ErrorHandler errorHandler )
     throws IOException;
 }

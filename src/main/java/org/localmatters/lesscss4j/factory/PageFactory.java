@@ -15,6 +15,8 @@
 */
 package org.localmatters.lesscss4j.factory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.antlr.runtime.tree.Tree;
 import org.localmatters.lesscss4j.error.ErrorHandler;
 import org.localmatters.lesscss4j.model.Declaration;
@@ -48,7 +50,8 @@ public class PageFactory
     _declarationFactory = declarationFactory;
   }
 
-  public Page create( final Tree pageNode, final ErrorHandler errorHandler )
+  @Nullable
+  public Page create( @Nonnull final Tree pageNode, @Nullable final ErrorHandler errorHandler )
   {
     final Page page = new Page();
     page.setLine( pageNode.getLine() );

@@ -19,17 +19,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import javax.annotation.Nonnull;
 
 public class UrlStyleSheetResource
   implements StyleSheetResource
 {
+  @Nonnull
   private final URL _url;
 
-  public UrlStyleSheetResource( final URL url )
+  public UrlStyleSheetResource( @Nonnull final URL url )
   {
     _url = url;
   }
 
+  @Nonnull
   public InputStream getInputStream()
     throws IOException
   {
@@ -38,6 +41,7 @@ public class UrlStyleSheetResource
     return con.getInputStream();
   }
 
+  @Nonnull
   public URL getUrl()
   {
     return _url;

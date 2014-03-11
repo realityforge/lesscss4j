@@ -15,6 +15,8 @@
 */
 package org.localmatters.lesscss4j.factory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.antlr.runtime.tree.Tree;
 import org.localmatters.lesscss4j.error.ErrorHandler;
 import org.localmatters.lesscss4j.model.Selector;
@@ -22,18 +24,21 @@ import org.localmatters.lesscss4j.model.Selector;
 public class SelectorFactory
   extends AbstractObjectFactory<Selector>
 {
-  public Selector create( final Tree selectorNode, final ErrorHandler errorHandler )
+  @Nullable
+  public Selector create( @Nonnull final Tree selectorNode, @Nullable final ErrorHandler errorHandler )
   {
-    Selector selector = null;
-
     final String selectorText = concatChildNodeText( selectorNode );
     if ( selectorText.length() > 0 )
     {
-      selector = new Selector( selectorText );
+      final Selector selector = new Selector( selectorText );
       selector.setLine( selectorNode.getLine() );
       selector.setChar( selectorNode.getCharPositionInLine() );
+      return selector;
     }
-    return selector;
+    else
+    {
+      return null;
+    }
   }
 }
 

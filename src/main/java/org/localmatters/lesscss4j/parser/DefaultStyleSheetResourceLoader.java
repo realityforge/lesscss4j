@@ -16,11 +16,13 @@
 package org.localmatters.lesscss4j.parser;
 
 import java.net.URL;
+import javax.annotation.Nonnull;
 
 public class DefaultStyleSheetResourceLoader
   implements StyleSheetResourceLoader
 {
-  public StyleSheetResource getResource( final URL url )
+  @Nonnull
+  public StyleSheetResource getResource( @Nonnull final URL url )
   {
     if ( "file".equals( url.getProtocol() ) )
     {
@@ -30,6 +32,5 @@ public class DefaultStyleSheetResourceLoader
     {
       return new UrlStyleSheetResource( url );
     }
-
   }
 }

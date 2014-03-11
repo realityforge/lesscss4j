@@ -18,12 +18,16 @@ package org.localmatters.lesscss4j.parser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public interface StyleSheetResource
 {
+  @Nonnull
   InputStream getInputStream()
     throws IOException;
 
+  @Nullable
   URL getUrl()
     throws IOException;
 }

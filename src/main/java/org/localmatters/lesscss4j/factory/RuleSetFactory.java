@@ -15,6 +15,8 @@
 */
 package org.localmatters.lesscss4j.factory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.antlr.runtime.tree.Tree;
 import org.localmatters.lesscss4j.error.ErrorHandler;
 import org.localmatters.lesscss4j.model.Declaration;
@@ -61,7 +63,8 @@ public class RuleSetFactory
     _selectorFactory = selectorFactory;
   }
 
-  public RuleSet create( final Tree ruleSetNode, final ErrorHandler errorHandler )
+  @Nullable
+  public RuleSet create( @Nonnull final Tree ruleSetNode, @Nullable final ErrorHandler errorHandler )
   {
     final RuleSet ruleSet = new RuleSet();
     ruleSet.setLine( ruleSetNode.getLine() );

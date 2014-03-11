@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
@@ -60,7 +62,8 @@ public class DeclarationFactory
     _expressionFactory = expressionFactory;
   }
 
-  public Declaration create( final Tree declarationNode, final ErrorHandler errorHandler )
+  @Nullable
+  public Declaration create( @Nonnull final Tree declarationNode, @Nullable final ErrorHandler errorHandler )
   {
     final Declaration declaration = new Declaration();
     declaration.setLine( declarationNode.getLine() );

@@ -18,6 +18,8 @@ package org.localmatters.lesscss4j.parser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class InputStreamStyleSheetResource
   implements StyleSheetResource
@@ -25,23 +27,25 @@ public class InputStreamStyleSheetResource
   private final InputStream _inputStream;
   private final URL _url;
 
-  public InputStreamStyleSheetResource( final InputStream inputStream )
+  public InputStreamStyleSheetResource( @Nonnull final InputStream inputStream )
   {
     this( inputStream, null );
   }
 
-  public InputStreamStyleSheetResource( final InputStream inputStream, final URL url )
+  public InputStreamStyleSheetResource( @Nonnull final InputStream inputStream, @Nullable final URL url )
   {
     _inputStream = inputStream;
     _url = url;
   }
 
+  @Nonnull
   public InputStream getInputStream()
     throws IOException
   {
     return _inputStream;
   }
 
+  @Nullable
   public URL getUrl()
   {
     return _url;
