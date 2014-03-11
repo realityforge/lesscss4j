@@ -71,7 +71,7 @@ public abstract class AbstractColorFunction
   public Expression evaluate( final String name, final Expression... args )
   {
     final int numArgs = args.length;
-    if ( isValueRequired() && numArgs != 2 || !isValueRequired() && numArgs != 1 )
+    if ( isValueRequired() && 2 != numArgs || !isValueRequired() && 1 != numArgs )
     {
       throw new FunctionException( "Invalid number of arguments for function '%s'", name );
     }
