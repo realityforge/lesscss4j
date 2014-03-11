@@ -89,6 +89,7 @@ public class LessCssCompilerErrorTest
     compileAndValidate( resource, null );
 
     final URL url = getClass().getClassLoader().getResource( resource );
+    assertNotNull( url );
     final String baseDir = FilenameUtils.getFullPath( url.getPath() );
 
     assertEquals(
