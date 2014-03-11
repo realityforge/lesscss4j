@@ -70,19 +70,6 @@ public class ConstantColorTest
     assertEquals( "rgba(255,255,255,0.4)", new ConstantColor( "RGBA(255, 255, 255, 0.4)" ).toString() );
   }
 
-/*
-    public void testToStringPerf() {
-        StopWatch timer = new StopWatch("testToStringPerf");
-        timer.start();
-        for (int idx = 0; idx < 100000; idx++) {
-            assertEquals("#001234", new ConstantColor(0x001234).toString());
-            assertEquals("#ab1", new ConstantColor(0xaabb11).toString());
-        }
-        timer.stop();
-        System.out.println(timer.prettyPrint());
-    }
-*/
-
   public void testAdd()
   {
     assertEquals( new ConstantColor( 0x00ff00 ), new ConstantColor( 0x00ee00 ).add( new ConstantColor( 0x009900 ) ) );
