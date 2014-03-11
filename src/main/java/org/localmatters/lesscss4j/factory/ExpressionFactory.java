@@ -38,20 +38,20 @@ public class ExpressionFactory
     switch ( expression.getType() )
     {
       case FUNCTION:
-        return createFunction( expression, errorHandler );
+        return createFunction( expression );
 
       case EXPR:
         if ( expression.getChildCount() > 1 )
         {
-          return createListExpression( expression, errorHandler );
+          return createListExpression( expression );
         }
         else
         {
-          return createExpression( expression.getChild( 0 ), errorHandler );
+          return createExpression( expression.getChild( 0 ) );
         }
 
       case LITERAL:
-        return createLiteral( expression, errorHandler );
+        return createLiteral( expression );
 
       default:
         handleUnexpectedChild( "Unexpected expression type", expression );
@@ -59,12 +59,12 @@ public class ExpressionFactory
     }
   }
 
-  protected LiteralExpression createLiteral( final Tree expression, final ErrorHandler errorHandler )
+  protected LiteralExpression createLiteral( final Tree expression )
   {
-    return createLiteral( concatChildNodeText( expression ), expression, errorHandler );
+    return createLiteral( concatChildNodeText( expression ), expression );
   }
 
-  protected LiteralExpression createLiteral( final String text, final Tree expression, final ErrorHandler errorHandler )
+  protected LiteralExpression createLiteral( final String text, final Tree expression )
   {
     final LiteralExpression literal = new LiteralExpression( text );
     literal.setType( expression.getType() );
@@ -73,7 +73,7 @@ public class ExpressionFactory
     return literal;
   }
 
-  protected Expression createListExpression( final Tree expression, final ErrorHandler errorHandler )
+  protected Expression createListExpression( final Tree expression )
   {
     final ListExpression listExpr = new ListExpression();
     for ( int idx = 0, numChildren = expression.getChildCount(); idx < numChildren; idx++ )
@@ -83,11 +83,11 @@ public class ExpressionFactory
       {
         case COMMA:
         case WS:
-          listExpr.addExpression( createLiteral( child.getText(), child, errorHandler ) );
+          listExpr.addExpression( createLiteral( child.getText(), child ) );
           break;
 
         default:
-          listExpr.addExpression( createExpression( child, errorHandler ) );
+          listExpr.addExpression( createExpression( child ) );
           break;
       }
     }
@@ -95,7 +95,7 @@ public class ExpressionFactory
     return listExpr;
   }
 
-  protected Expression createExpression( final Tree expression, final ErrorHandler errorHandler )
+  protected Expression createExpression( final Tree expression )
   {
     final Expression result;
     switch ( expression.getType() )
@@ -105,27 +105,27 @@ public class ExpressionFactory
         break;
 
       case LITERAL:
-        result = createLiteral( expression, errorHandler );
+        result = createLiteral( expression );
         break;
 
       case STAR:
-        result = new MultiplyExpression( createExpression( expression.getChild( 0 ), errorHandler ),
-                                         createExpression( expression.getChild( 1 ), errorHandler ) );
+        result = new MultiplyExpression( createExpression( expression.getChild( 0 ) ),
+                                         createExpression( expression.getChild( 1 ) ) );
         break;
 
       case SOLIDUS:
-        result = new DivideExpression( createExpression( expression.getChild( 0 ), errorHandler ),
-                                       createExpression( expression.getChild( 1 ), errorHandler ) );
+        result = new DivideExpression( createExpression( expression.getChild( 0 ) ),
+                                       createExpression( expression.getChild( 1 ) ) );
         break;
 
       case PLUS:
-        result = new AddExpression( createExpression( expression.getChild( 0 ), errorHandler ),
-                                    createExpression( expression.getChild( 1 ), errorHandler ) );
+        result = new AddExpression( createExpression( expression.getChild( 0 ) ),
+                                    createExpression( expression.getChild( 1 ) ) );
         break;
 
       case MINUS:
-        result = new SubtractExpression( createExpression( expression.getChild( 0 ), errorHandler ),
-                                         createExpression( expression.getChild( 1 ), errorHandler ) );
+        result = new SubtractExpression( createExpression( expression.getChild( 0 ) ),
+                                         createExpression( expression.getChild( 1 ) ) );
         break;
 
       case VAR:
@@ -133,7 +133,7 @@ public class ExpressionFactory
         break;
 
       case EXPR:
-        result = createExpression( expression.getChild( 0 ), errorHandler );
+        result = createExpression( expression.getChild( 0 ) );
         break;
 
       default:
@@ -150,7 +150,7 @@ public class ExpressionFactory
     return result;
   }
 
-  protected Expression createFunction( final Tree function, final ErrorHandler errorHandler )
+  protected Expression createFunction( final Tree function )
   {
     final Tree nameNode = function.getChild( 0 );
     final FunctionExpression func = new FunctionExpression( concatChildNodeText( nameNode ) );
@@ -163,31 +163,31 @@ public class ExpressionFactory
         case COLON:
           if ( child.getChildCount() == 0 )
           {
-            func.addArgument( createLiteral( child.getText(), child, errorHandler ) );
+            func.addArgument( createLiteral( child.getText(), child ) );
           }
           else
           {
             final Tree propNode = child.getChild( 0 );
             final String prop = propNode.getText();
             final Expression expr = create( child.getChild( 1 ), null );
-            func.addArgument( createLiteral( prop, propNode, errorHandler ) );
-            func.addArgument( createLiteral( child.getText(), child, errorHandler ) );
+            func.addArgument( createLiteral( prop, propNode ) );
+            func.addArgument( createLiteral( child.getText(), child ) );
             func.addArgument( expr );
           }
           break;
 
         case FUNCTION:
-          func.addArgument( createFunction( child, errorHandler ) );
+          func.addArgument( createFunction( child ) );
           break;
 
         case VAR:
         case LITERAL:
         case EXPR:
-          func.addArgument( createExpression( child, errorHandler ) );
+          func.addArgument( createExpression( child ) );
           break;
 
         default:
-          func.addArgument( createLiteral( child.getText(), child, errorHandler ) );
+          func.addArgument( createLiteral( child.getText(), child ) );
           break;
 
       }
