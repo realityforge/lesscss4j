@@ -24,172 +24,172 @@ public class LessCssCompilerTest
   extends AbstractLessCssCompilerTest
 {
   @Test
-  public void Variables()
+  public void variables()
     throws IOException
   {
-    compileAndValidate( "less/variables.less", "css/variables.css" );
+    assertCompilesTo( "variables" );
   }
 
   @Test
-  public void LazyEvalVariables()
+  public void lazyEvalVariables()
     throws IOException
   {
-    compileAndValidate( "less/lazy-eval.less", "css/lazy-eval.css" );
+    assertCompilesTo( "lazy-eval" );
   }
 
   @Test
-  public void PlainCss()
+  public void plainCss()
     throws IOException
   {
-    compileAndValidate( "less/css.less", "css/css.css" );
+    assertCompilesTo( "css" );
   }
 
   @Test
-  public void Comments()
+  public void comments()
     throws IOException
   {
-    compileAndValidate( "less/comments.less", "css/comments.css" );
+    assertCompilesTo( "comments" );
   }
 
   @Test
-  public void Css3()
+  public void css3()
     throws IOException
   {
-    compileAndValidate( "less/css-3.less", "css/css-3.css" );
+    assertCompilesTo( "css-3" );
   }
 
   @Test
-  public void ExpressionParens()
+  public void expressionParens()
     throws IOException
   {
-    compileAndValidate( "less/parens.less", "css/parens.css" );
+    assertCompilesTo( "parens" );
   }
 
   @Test
-  public void Operations()
+  public void operations()
     throws IOException
   {
-    compileAndValidate( "less/operations.less", "css/operations.css" );
+    assertCompilesTo( "operations" );
   }
 
   @Test
-  public void Strings()
+  public void strings()
     throws IOException
   {
-    compileAndValidate( "less/strings.less", "css/strings.css" );
+    assertCompilesTo( "strings" );
   }
 
   @Test
-  public void Mixins()
+  public void mixins()
     throws IOException
   {
-    compileAndValidate( "less/mixins.less", "css/mixins.css" );
+    assertCompilesTo( "mixins" );
   }
 
   @Test
-  public void NestedRuleSets()
+  public void nestedRuleSets()
     throws IOException
   {
-    compileAndValidate( "less/rulesets.less", "css/rulesets.css" );
+    assertCompilesTo( "rulesets" );
   }
 
   @Test
-  public void MixinVariableScope()
+  public void mixinVariableScope()
     throws IOException
   {
-    compileAndValidate( "less/scope.less", "css/scope.css" );
+    assertCompilesTo( "scope" );
   }
 
   @Test
-  public void MixinArgs()
+  public void mixinArgs()
     throws IOException
   {
-    compileAndValidate( "less/mixins-args.less", "css/mixins-args.css" );
+    assertCompilesTo( "mixins-args" );
   }
 
   @Test
-  public void MultipleSelectors()
+  public void multipleSelectors()
     throws IOException
   {
-    compileAndValidate( "less/selectors.less", "css/selectors.css" );
+    assertCompilesTo( "selectors" );
   }
 
   @Test
-  public void Css3SingleRun()
+  public void css3SingleRun()
     throws IOException
   {
-    compileAndValidate( "less/singlerun.less", "css/singlerun.css" );
+    assertCompilesTo( "singlerun" );
   }
 
   @Test
-  public void ColorMath()
+  public void colorMath()
     throws IOException
   {
-    compileAndValidate( "less/colors.less", "css/colors.css" );
+    assertCompilesTo( "colors" );
   }
 
   @Test
   public void Import()
     throws IOException
   {
-    compileAndValidate( "less/import.less", "css/import.css" );
+    assertCompilesTo( "import" );
   }
 
   @Test
-  public void DashPrefix()
+  public void dashPrefix()
     throws IOException
   {
-    compileAndValidate( "less/dash-prefix.less", "css/dash-prefix.css" );
+    assertCompilesTo( "dash-prefix" );
   }
 
   @Test
-  public void InternetExplorer()
+  public void internetExplorer()
     throws IOException
   {
-    compileAndValidate( "less/ie.less", "css/ie.css" );
+    assertCompilesTo( "ie" );
   }
 
   @Test
-  public void BigCssFile()
+  public void bigCssFile()
     throws IOException
   {
     _printOptions.setSingleDeclarationOnOneLine( false );
-    compileAndValidate( "less/css-big.less", "css/css-big.css" );
+    assertCompilesTo( "css-big" );
   }
 
   @Test
-  public void MediaAndPage()
+  public void mediaAndPage()
     throws IOException
   {
-    compileAndValidate( "less/media-page.less", "css/media-page.css" );
+    assertCompilesTo( "media-page" );
   }
 
   @Test
-  public void Accessors()
+  public void accessors()
     throws IOException
   {
-    compileAndValidate( "less/accessors.less", "css/accessors.css" );
+    assertCompilesTo( "accessors" );
   }
 
   @Test
-  public void Functions()
+  public void functions()
     throws IOException
   {
-    compileAndValidate( "less/functions.less", "css/functions.css" );
+    assertCompilesTo( "functions" );
   }
 
   @Test
-  public void Keyframes()
+  public void keyframes()
     throws IOException
   {
-    compileAndValidate( "less/keyframes.less", "css/keyframes.css" );
+    assertCompilesTo( "keyframes" );
   }
 
   @Test
-  public void BigCssFileCompareToSelf()
+  public void bigCssFileCompareToSelf()
     throws IOException
   {
-    compileAndValidate( "css/big.css", "css/big.css", new Comparator<String>()
+    compileAndCompare( "css/big.css", "css/big.css", new Comparator<String>()
     {
       public int compare( final String expected, final String actual )
       {
@@ -197,6 +197,22 @@ public class LessCssCompilerTest
         return 0;
       }
     } );
+  }
+
+  private void assertCompilesTo( final String key )
+    throws IOException
+  {
+    compileAndCompare( toLessResourceName( key ), toCssResourceName( key ), null );
+  }
+
+  private String toCssResourceName( final String key )
+  {
+    return "css/" + key + ".css";
+  }
+
+  private String toLessResourceName( final String key )
+  {
+    return "less/" + key + ".less";
   }
 }
 

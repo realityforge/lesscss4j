@@ -68,22 +68,14 @@ public abstract class AbstractLessCssCompilerTest
     }
   }
 
-  protected void compileAndValidate( final String lessFile, final String cssFile )
-    throws IOException
-  {
-    compileAndValidate( lessFile, cssFile, null );
-  }
-
-  protected void compileAndValidate( final String lessFile, final String cssFile, final Comparator<String> comparator )
+  protected final void compileAndCompare( final String lessFile, final String cssFile, final Comparator<String> comparator )
     throws IOException
   {
     final URL url = getClass().getClassLoader().getResource( lessFile );
     assertNotNull( url, "Unable to open " + lessFile );
 
     final ByteArrayOutputStream output = new ByteArrayOutputStream();
-
     _compiler.compile( new UrlStyleSheetResource( url ), output, _errorHandler );
-
     output.close();
 
     if ( null == _errorHandler || 0 == _errorHandler.getErrorCount() )
@@ -99,5 +91,15 @@ public abstract class AbstractLessCssCompilerTest
         comparator.compare( expected, actual );
       }
     }
+  }
+
+  private String toCssResourceName( final String key )
+  {
+    return "css/" + key + ".css";
+  }
+
+  private String toLessResourceName( final String key )
+  {
+    return "less/" + key + ".less";
   }
 }
