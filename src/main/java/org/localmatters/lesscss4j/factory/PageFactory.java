@@ -80,7 +80,6 @@ public class PageFactory
           }
           break;
 
-
         default:
           handleUnexpectedChild( "Unexpected page child:", child );
           break;

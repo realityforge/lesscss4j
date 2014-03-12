@@ -139,8 +139,7 @@ public class LessCssServletTest
     _servlet.service( _request, _response );
 
     assertEquals( new String( responseStream.getBytes(), "UTF-8" ), _cssStr );
-
-  }
+}
 
   @Test
   public void cachedResourceETag()
@@ -157,8 +156,7 @@ public class LessCssServletTest
 
     _servlet.init( _servletConfig );
     _servlet.service( _request, _response );
-
-  }
+}
 
   @Test
   public void cachedResourceETagNeedsRefresh()
@@ -191,8 +189,7 @@ public class LessCssServletTest
     _servlet.service( _request, _response );
 
     assertEquals( new String( responseStream.getBytes(), "UTF-8" ), _cssStr );
-
-  }
+}
 
   @Test
   public void cachedResourceNeedsRefresh()
@@ -226,8 +223,7 @@ public class LessCssServletTest
     _servlet.service( _request, _response );
 
     assertEquals( new String( responseStream.getBytes(), "UTF-8" ), _cssStr );
-
-  }
+}
 
   @Test
   public void cachedResourceNotModified()
@@ -245,8 +241,7 @@ public class LessCssServletTest
 
     _servlet.init( _servletConfig );
     _servlet.service( _request, _response );
-
-  }
+}
 
   @Test
   public void cachedResourceHeadRequest()
@@ -267,8 +262,7 @@ public class LessCssServletTest
 
     _servlet.init( _servletConfig );
     _servlet.service( _request, _response );
-
-  }
+}
 
   @Test
   public void NullPath()

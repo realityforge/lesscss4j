@@ -159,7 +159,6 @@ public class DeclarationFactory
         default:
           handleUnexpectedChild( "Unexpected declaration value child:", child );
           break;
-
       }
     }
     return values.size() > 0 ? values : null;

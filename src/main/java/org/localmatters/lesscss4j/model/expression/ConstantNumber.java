@@ -29,7 +29,6 @@ public class ConstantNumber
     this( 0, null );
   }
 
-
   public ConstantNumber( final ConstantNumber copy )
   {
     _value = copy._value;
@@ -268,7 +267,6 @@ public class ConstantNumber
       return false;
     }
     return !( null != _unit ? !_unit.equals( that._unit ) : null != that._unit );
-
   }
 
   @Override

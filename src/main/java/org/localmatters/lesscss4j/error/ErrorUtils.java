@@ -24,7 +24,6 @@ public abstract class ErrorUtils
   public static void handleError( final ErrorHandler errorHandler, final LessCssException error )
   {
     handleError( errorHandler, null, null, error );
-
   }
 
   public static void handleError( final ErrorHandler errorHandler, final String message, final LessCssException error )

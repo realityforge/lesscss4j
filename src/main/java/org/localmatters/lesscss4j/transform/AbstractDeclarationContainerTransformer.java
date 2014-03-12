@@ -77,7 +77,6 @@ public abstract class AbstractDeclarationContainerTransformer<T extends Declarat
     declContext.setVariableContainer( transformed );
     declContext.setRuleSetContainer( transformed );
 
-
     // Mixins might define additional variables referenced by declaration values.
     // So we need to process all of the mixins before we transform the declarations.
     final List<Declaration> declarationList = new ArrayList<>( container.getDeclarations().size() );
@@ -106,13 +105,11 @@ public abstract class AbstractDeclarationContainerTransformer<T extends Declarat
 
               ruleSet = mixinRuleSets.get( 0 );
 
-
               for ( final Iterator<String> iter = ruleSet.getVariableNames(); iter.hasNext(); )
               {
                 final String varName = iter.next();
                 final Expression expression = ruleSet.getVariable( varName );
                 transformed.setVariable( varName, expression );
-
               }
 
               for ( final DeclarationElement element : ruleSet.getDeclarations() )

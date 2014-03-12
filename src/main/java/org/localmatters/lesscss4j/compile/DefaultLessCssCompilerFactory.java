@@ -238,7 +238,6 @@ public class DefaultLessCssCompilerFactory
     compiler.setTransformerManager( transformerManager );
   }
 
-
   /**
    * Creates the default {@link TransformerManager} if a custom one has not been provided.
    *

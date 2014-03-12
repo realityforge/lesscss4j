@@ -192,7 +192,6 @@ public class ExpressionFactory
         default:
           func.addArgument( createLiteral( child.getText(), child ) );
           break;
-
       }
     }
 

@@ -60,7 +60,6 @@ public class ConstantColor
     COLOR_KEYWORDS.put( "gray", 0x808080 );
   }
 
-
   public ConstantColor()
   {
     this( 0 );
@@ -338,7 +337,6 @@ public class ConstantColor
     }
   }
 
-
   public ConstantValue subtract( final ConstantValue right )
   {
     checkUnits( right );
@@ -440,7 +438,6 @@ public class ConstantColor
            this.getBlue() == that.getBlue() &&
            ( null == this.getAlpha() && null == that.getAlpha() ||
              this.getAlpha().equals( that.getAlpha() ) );
-
   }
 
   @Override

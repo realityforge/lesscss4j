@@ -28,7 +28,6 @@ public class Media
   {
   }
 
-
   public Media( final Media copy )
   {
     this( copy, true );

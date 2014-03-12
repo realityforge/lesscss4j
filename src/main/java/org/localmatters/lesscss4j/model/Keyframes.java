@@ -25,7 +25,6 @@ public class Keyframes
   {
   }
 
-
   public Keyframes( final Keyframes copy )
   {
     this( copy, true );

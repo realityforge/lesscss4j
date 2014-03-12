@@ -58,7 +58,7 @@ public class ClassTransformerManager
     final Class objClass = object.getClass();
 
     final Transformer<T> transformer = _classTransformerMap.get( objClass );
-    if( null != transformer )
+    if ( null != transformer )
     {
       return transformer;
     }

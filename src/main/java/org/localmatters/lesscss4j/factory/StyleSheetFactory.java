@@ -152,7 +152,6 @@ public class StyleSheetFactory
     }
   }
 
-
   protected void processStyleSheetNode( final StyleSheet stylesheet,
                                         final Tree child,
                                         final StyleSheetResource resource,

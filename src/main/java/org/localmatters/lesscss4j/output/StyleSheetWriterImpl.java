@@ -279,14 +279,12 @@ public class StyleSheetWriterImpl
       writeIndent( writer, indent );
     }
     writeClosingBrace( writer, indent );
-
   }
 
   protected void writeMedia( final Writer writer, final Media media, final int indent )
     throws IOException
   {
     writer.write( "@media " );
-
 
     boolean first = true;
     for ( final String medium : media.getMediums() )
@@ -310,7 +308,6 @@ public class StyleSheetWriterImpl
     throws IOException
   {
     writer.write( media.getName() );
-
 
     writeOpeningBrace( writer, indent, null );
     writeBreak( writer, indent );
@@ -345,7 +342,6 @@ public class StyleSheetWriterImpl
       writer.write( selector.getText() );
     }
 
-
     writeOpeningBrace( writer, indent, declarations );
     writeDeclarationBraceSpace( writer, declarations );
 
@@ -358,7 +354,6 @@ public class StyleSheetWriterImpl
       writeIndent( writer, indent );
     }
     writeClosingBrace( writer, 0 );
-
   }
 
   private void writeDeclarations( final Writer writer,
