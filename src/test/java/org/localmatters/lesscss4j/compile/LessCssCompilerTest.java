@@ -24,7 +24,6 @@ import java.util.Comparator;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.localmatters.lesscss4j.error.ErrorHandler;
 import org.localmatters.lesscss4j.error.WriterErrorHandler;
 import org.localmatters.lesscss4j.output.PrettyPrintOptions;
 import org.localmatters.lesscss4j.parser.UrlStyleSheetResource;
@@ -36,10 +35,7 @@ public class LessCssCompilerTest
 {
   private static final String ENCODING = "UTF-8";
 
-  private LessCssCompiler _compiler;
   private PrettyPrintOptions _printOptions;
-  private ErrorHandler _errorHandler;
-  private StringWriter _writer;
 
   @BeforeMethod
   public void setUp()
@@ -50,12 +46,6 @@ public class LessCssCompilerTest
     _printOptions.setLineBetweenRuleSets( false );
     _printOptions.setOpeningBraceOnNewLine( false );
     _printOptions.setIndentSize( 2 );
-
-    final DefaultLessCssCompilerFactory factoryBean = new DefaultLessCssCompilerFactory();
-    factoryBean.setDefaultEncoding( ENCODING );
-    factoryBean.setPrettyPrintEnabled( true );
-    factoryBean.setPrettyPrintOptions( _printOptions );
-    _compiler = factoryBean.create();
   }
 
   @Test
@@ -224,7 +214,7 @@ public class LessCssCompilerTest
   public void bigCssFileCompareToSelf()
     throws IOException
   {
-    compileAndCompare( "css/big.css", "css/big.css", new Comparator<String>()
+    compileAndCompare( "css/big.css", "css/big.css", null, new Comparator<String>()
     {
       public int compare( final String expected, final String actual )
       {
@@ -238,53 +228,49 @@ public class LessCssCompilerTest
   public void mismatchedUnits()
     throws IOException
   {
-    assertCompileError( "mixed-units-error" );
+    final String error = ensureCompileError( "mixed-units-error", 3 );
     assertEquals( "mixed-units-error.less [1:4] - Unit mismatch: 1px 1%\n" +
                   "mixed-units-error.less [5:4] - Unit mismatch: #000 1em\n" +
                   "mixed-units-error.less [3:9] - Unit mismatch: 1px #fff\n",
-                  _writer.toString() );
-    assertEquals( 3, _errorHandler.getErrorCount() );
+                  error );
   }
 
   @Test
   public void undefinedVariable()
     throws IOException
   {
-    assertCompileError( "name-error-1.0" );
+    final String error = ensureCompileError( "name-error-1.0", 2 );
     assertEquals( "name-error-1.0.less [1:5] - Undefined variable: @var\n" +
                   "name-error-1.0.less [3:10] - Undefined variable: @var2\n",
-                  _writer.toString() );
-    assertEquals( 2, _errorHandler.getErrorCount() );
+                  error );
   }
 
   @Test
   public void mixinErrors()
     throws IOException
   {
-    assertCompileError( "mixin-error" );
+    final String error = ensureCompileError( "mixin-error", 3 );
     assertEquals( "mixin-error.less [2:2] - Undefined mixin: .mixin\n" +
                   "mixin-error.less [2:10] - Undefined mixin: .mixout\n" +
                   "mixin-error.less [11:2] - Mixin argument mismatch. Expected maximum of 2 but got 3.\n",
-                  _writer.toString() );
-    assertEquals( 3, _errorHandler.getErrorCount() );
+                  error );
   }
 
   @Test
   public void syntaxErrors()
     throws IOException
   {
-    assertCompileError( "syntax-error-1.0" );
+    final String error = ensureCompileError( "syntax-error-1.0", 2 );
     assertEquals( "syntax-error-1.0.less [2:14] - no viable alternative at input ';'\n" +
                   "syntax-error-1.0.less [3:0] - missing EOF at '}'\n",
-                  _writer.toString() );
-    assertEquals( 2, _errorHandler.getErrorCount() );
+                  error );
   }
 
   @Test
   public void importMissingError()
     throws IOException
   {
-    assertCompileError( "import-error" );
+    final String error = ensureCompileError( "import-error", 3 );
 
     final URL url = getClass().getClassLoader().getResource( "less/exceptions/import-error.less" );
     assertNotNull( url );
@@ -300,37 +286,39 @@ public class LessCssCompilerTest
       "import-error.less [4:8] - Import error: 'missing.less': File '" +
       baseDir +
       "missing.less' does not exist\n",
-      _writer.toString() );
-    assertEquals( 3, _errorHandler.getErrorCount() );
+      error );
   }
 
   @Test
   public void divideByZero()
     throws IOException
   {
-    assertCompileError( "divide-by-zero" );
+    final String error = ensureCompileError( "divide-by-zero", 2 );
     assertEquals( "divide-by-zero.less [1:4] - Division by zero.\n" +
                   "divide-by-zero.less [2:4] - Division by zero.\n",
-                  _writer.toString() );
-    assertEquals( 2, _errorHandler.getErrorCount() );
+                  error );
   }
 
-  private void assertCompileError( final String lessFile )
+  private String ensureCompileError( final String lessFile, final int errorCount )
     throws IOException
   {
-    _writer = new StringWriter();
+    try ( final StringWriter writer = new StringWriter() )
+    {
+      final WriterErrorHandler errorHandler = new WriterErrorHandler();
+      errorHandler.setLogStackTrace( false );
+      errorHandler.setWriter( new PrintWriter( writer ) );
 
-    _errorHandler = new WriterErrorHandler();
-    ( (WriterErrorHandler) _errorHandler ).setLogStackTrace( false );
-    ( (WriterErrorHandler) _errorHandler ).setWriter( new PrintWriter( _writer ) );
+      compileAndCompare( "less/exceptions/" + lessFile + ".less", null, errorHandler, null );
+      assertEquals( errorCount, errorHandler.getErrorCount() );
 
-    compileAndCompare( "less/exceptions/" + lessFile + ".less", null, null );
+      return writer.toString();
+    }
   }
 
   private void assertCompilesTo( final String key )
     throws IOException
   {
-    compileAndCompare( toLessResourceName( key ), toCssResourceName( key ), null );
+    compileAndCompare( toLessResourceName( key ), toCssResourceName( key ), null, null );
   }
 
   private String readCss( final String cssFile )
@@ -351,16 +339,23 @@ public class LessCssCompilerTest
 
   private void compileAndCompare( final String lessFile,
                                   final String cssFile,
+                                  final WriterErrorHandler errorHandler,
                                   final Comparator<String> comparator )
     throws IOException
   {
     final URL url = toUrl( lessFile );
 
+    final DefaultLessCssCompilerFactory factoryBean = new DefaultLessCssCompilerFactory();
+    factoryBean.setDefaultEncoding( ENCODING );
+    factoryBean.setPrettyPrintEnabled( true );
+    factoryBean.setPrettyPrintOptions( _printOptions );
+    final LessCssCompiler compiler = factoryBean.create();
+
     final ByteArrayOutputStream output = new ByteArrayOutputStream();
-    _compiler.compile( new UrlStyleSheetResource( url ), output, _errorHandler );
+    compiler.compile( new UrlStyleSheetResource( url ), output, errorHandler );
     output.close();
 
-    if ( null == _errorHandler || 0 == _errorHandler.getErrorCount() )
+    if ( null == errorHandler || 0 == errorHandler.getErrorCount() )
     {
       final String expected = readCss( cssFile );
       final String actual = output.toString( ENCODING );
