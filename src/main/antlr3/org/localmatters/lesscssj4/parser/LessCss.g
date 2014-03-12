@@ -801,5 +801,5 @@ fragment URL_NO_WS  : ~('\n'|'\r'|'\f'|'\''|'"'|RPAREN|' '|'\t')  ;
 WS : ( ' ' | '\t' | '\r' | '\n' | '\f' )+ ;
 
 // -------------
-//  Illegal.    Any other character shoudl not be allowed.
+//  Illegal.    Any other character should not be allowed.
 //
