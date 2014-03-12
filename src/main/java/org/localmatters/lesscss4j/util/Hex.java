@@ -42,17 +42,13 @@ public final class Hex
    */
   public static char[] encodeHex( final byte[] data )
   {
-    final int l = data.length;
-
-    final char[] out = new char[ l << 1 ];
-
-    // two characters form the hex value.
-    for ( int i = 0, j = 0; i < l; i++ )
+    final char[] out = new char[ data.length << 1 ];
+    for ( int i = 0, j = 0; i < data.length; i++ )
     {
+      // two characters form the hex value.
       out[ j++ ] = DIGITS[ ( 0xF0 & data[ i ] ) >>> 4 ];
       out[ j++ ] = DIGITS[ 0x0F & data[ i ] ];
     }
-
     return out;
   }
 
@@ -66,6 +62,5 @@ public final class Hex
     {
       throw new RuntimeException( "Unable to find MD5 MessageDigest instance", ex );
     }
-
   }
 }
