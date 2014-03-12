@@ -15,28 +15,19 @@
 */
 package org.localmatters.lesscss4j.cli;
 
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 public class CompilerMainTest
 {
-  CompilerMain _main;
-
-  @BeforeMethod
-  protected void setUp()
-    throws Exception
-  {
-    _main = new CompilerMain();
-  }
-
   @Test
-  public void GenerateOutputFilename()
+  public void generateOutputFilename()
   {
-    assertEquals( "test.css", _main.generateOutputFilename( "test.less" ) );
-    assertEquals( "test.css", _main.generateOutputFilename( "test.txt" ) );
-    assertEquals( "test.css", _main.generateOutputFilename( "test." ) );
-    assertEquals( "test.css", _main.generateOutputFilename( "test" ) );
-    assertEquals( "test-min.css", _main.generateOutputFilename( "test.css" ) );
+    final CompilerMain main = new CompilerMain();
+    assertEquals( "test.css", main.generateOutputFilename( "test.less" ) );
+    assertEquals( "test.css", main.generateOutputFilename( "test.txt" ) );
+    assertEquals( "test.css", main.generateOutputFilename( "test." ) );
+    assertEquals( "test.css", main.generateOutputFilename( "test" ) );
+    assertEquals( "test-min.css", main.generateOutputFilename( "test.css" ) );
   }
 }
