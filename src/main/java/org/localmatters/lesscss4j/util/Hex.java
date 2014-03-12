@@ -60,7 +60,7 @@ public final class Hex
   {
     try
     {
-      return new String( Hex.encodeHex( MessageDigest.getInstance( "MD5" ).digest( value ) ) );
+      return new String( encodeHex( MessageDigest.getInstance( "MD5" ).digest( value ) ) );
     }
     catch ( final NoSuchAlgorithmException ex )
     {
