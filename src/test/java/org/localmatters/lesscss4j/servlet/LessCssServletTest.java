@@ -17,11 +17,13 @@ package org.localmatters.lesscss4j.servlet;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.annotation.Nonnull;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -58,8 +60,7 @@ public class LessCssServletTest
     _response = mock( HttpServletResponse.class );
     _servletContext = mock( ServletContext.class );
 
-    _servletConfig = new MockServletConfig();
-    _servletConfig.setServletContext( _servletContext );
+    _servletConfig = new MockServletConfig(_servletContext);
 
     _systemMillis = System.currentTimeMillis();
 
@@ -110,7 +111,7 @@ public class LessCssServletTest
     _servlet.init( _servletConfig );
     _servlet.service( _request, _response );
 
-    assertEquals( new String( responseStream.getBytes(), "UTF-8" ), _cssStr );
+    assertEquals( responseStream.asString(), _cssStr );
   }
 
   @Test
@@ -138,7 +139,7 @@ public class LessCssServletTest
     _servlet.init( _servletConfig );
     _servlet.service( _request, _response );
 
-    assertEquals( new String( responseStream.getBytes(), "UTF-8" ), _cssStr );
+    assertEquals( responseStream.asString(), _cssStr );
 }
 
   @Test
@@ -188,7 +189,7 @@ public class LessCssServletTest
     _servlet.init( _servletConfig );
     _servlet.service( _request, _response );
 
-    assertEquals( new String( responseStream.getBytes(), "UTF-8" ), _cssStr );
+    assertEquals( responseStream.asString(), _cssStr );
 }
 
   @Test
@@ -222,7 +223,7 @@ public class LessCssServletTest
     _servlet.init( _servletConfig );
     _servlet.service( _request, _response );
 
-    assertEquals( new String( responseStream.getBytes(), "UTF-8" ), _cssStr );
+    assertEquals( responseStream.asString(), _cssStr );
 }
 
   @Test
@@ -289,13 +290,17 @@ public class LessCssServletTest
   private static class MockServletConfig
     implements ServletConfig
   {
-    private String _servletName;
-    private ServletContext _servletContext;
+    private final ServletContext _servletContext;
     private final Map<String, String> _initParameters = new LinkedHashMap<String, String>();
+
+    private MockServletConfig( @Nonnull final ServletContext servletContext )
+    {
+      _servletContext = servletContext;
+    }
 
     public String getServletName()
     {
-      return _servletName;
+      return "";
     }
 
     public ServletContext getServletContext()
@@ -303,28 +308,23 @@ public class LessCssServletTest
       return _servletContext;
     }
 
-    public void setServletContext( final ServletContext servletContext )
-    {
-      _servletContext = servletContext;
-    }
-
     public String getInitParameter( final String name )
     {
       return _initParameters.get( name );
     }
 
-    public Enumeration getInitParameterNames()
+    public Enumeration<String> getInitParameterNames()
     {
-      return new Enumeration()
+      return new Enumeration<String>()
       {
-        final Iterator _iter = _initParameters.keySet().iterator();
+        final Iterator<String> _iter = _initParameters.keySet().iterator();
 
         public boolean hasMoreElements()
         {
           return _iter.hasNext();
         }
 
-        public Object nextElement()
+        public String nextElement()
         {
           return _iter.next();
         }
@@ -335,18 +335,25 @@ public class LessCssServletTest
   private static class MockServletOutputStream
     extends ServletOutputStream
   {
-    private final ByteArrayOutputStream output = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream _output = new ByteArrayOutputStream();
 
     @Override
     public void write( final int b )
       throws IOException
     {
-      output.write( b );
+      _output.write( b );
     }
 
-    public byte[] getBytes()
+    public String asString()
+      throws UnsupportedEncodingException
     {
-      return output.toByteArray();
+      return asString( "UTF-8" );
+    }
+
+    public String asString( final String charsetName )
+      throws UnsupportedEncodingException
+    {
+      return new String( _output.toByteArray(), charsetName );
     }
 
     @Override
