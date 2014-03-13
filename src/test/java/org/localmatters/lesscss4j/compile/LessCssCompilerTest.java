@@ -326,18 +326,15 @@ public class LessCssCompilerTest
   {
     final CompileResults compileResults = compile( lessFile, printOptions );
     assertEquals( compileResults.getErrorCount(), 0 );
-    if ( 0 == compileResults.getErrorCount() )
+    final String expected = readCss( cssFile );
+    final String actual = compileResults.getOutput();
+    if ( null == comparator )
     {
-      final String expected = readCss( cssFile );
-      final String actual = compileResults.getOutput();
-      if ( null == comparator )
-      {
-        assertEquals( expected, actual );
-      }
-      else
-      {
-        comparator.compare( expected, actual );
-      }
+      assertEquals( expected, actual );
+    }
+    else
+    {
+      comparator.compare( expected, actual );
     }
   }
 
