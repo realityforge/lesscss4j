@@ -314,16 +314,10 @@ public class LessCssCompilerTest
   private String readCss( final String cssFile )
     throws IOException
   {
-    InputStream input = null;
-    try
+    try ( final InputStream input = getClass().getClassLoader().getResourceAsStream( cssFile ) )
     {
-      input = getClass().getClassLoader().getResourceAsStream( cssFile );
       assertNotNull( input, "Unable to open " + cssFile );
       return IOUtils.toString( input, ENCODING );
-    }
-    finally
-    {
-      IOUtils.closeQuietly( input );
     }
   }
 
