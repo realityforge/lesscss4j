@@ -325,7 +325,9 @@ public class LessCssCompilerTest
     throws IOException
   {
     final CompileResults compileResults = compile( lessFile, printOptions );
-    assertEquals( compileResults.getErrorCount(), 0 );
+    assertEquals( compileResults.getErrorCount(),
+                  0,
+                  "Unexpected errors compiling " + lessFile + ".\n Errors: " + compileResults.getErrorOutput() );
     final String expected = readCss( cssFile );
     final String actual = compileResults.getOutput();
     if ( null == comparator )
