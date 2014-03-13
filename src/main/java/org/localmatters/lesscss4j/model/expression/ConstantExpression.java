@@ -22,8 +22,6 @@ public class ConstantExpression
   extends AbstractElement
   implements Expression
 {
-  public static final String UNIT_COLOR = "color";
-
   private ConstantValue _value;
 
   public ConstantExpression()
