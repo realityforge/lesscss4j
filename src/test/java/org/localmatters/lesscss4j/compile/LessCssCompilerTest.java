@@ -169,7 +169,7 @@ public class LessCssCompilerTest
     final PrettyPrintOptions prettyPrintOptions = createPrettyPrintOptions();
     prettyPrintOptions.setSingleDeclarationOnOneLine( false );
     final String key = "css-big";
-    compileAndCompare( toLessResourceName( key ), toCssResourceName( key ), prettyPrintOptions, null, null );
+    compileAndCompare( toLessResourceName( key ), toCssResourceName( key ), prettyPrintOptions, null );
   }
 
   @Test
@@ -204,7 +204,7 @@ public class LessCssCompilerTest
   public void bigCssFileCompareToSelf()
     throws IOException
   {
-    compileAndCompare( "css/big.css", "css/big.css", null, new Comparator<String>()
+    compileAndCompare( "css/big.css", "css/big.css", createPrettyPrintOptions(), new Comparator<String>()
     {
       public int compare( final String expected, final String actual )
       {
@@ -267,15 +267,10 @@ public class LessCssCompilerTest
     final String baseDir = FilenameUtils.getFullPath( url.getPath() );
 
     assertEquals(
-      "import-error.less [2:8] - Import error: \"bogus.less\": File '" +
-      baseDir +
-      "bogus.less' does not exist\n" +
+      "import-error.less [2:8] - Import error: \"bogus.less\": File '" + baseDir + "bogus.less' does not exist\n" +
       "imported-with-error.less [1:8] - Import error: url(nope.less): File '" +
-      baseDir +
-      "nope.less' does not exist\n" +
-      "import-error.less [4:8] - Import error: 'missing.less': File '" +
-      baseDir +
-      "missing.less' does not exist\n",
+      baseDir + "nope.less' does not exist\n" +
+      "import-error.less [4:8] - Import error: 'missing.less': File '" + baseDir + "missing.less' does not exist\n",
       error );
   }
 
@@ -292,23 +287,15 @@ public class LessCssCompilerTest
   private String ensureCompileError( final String lessFile, final int errorCount )
     throws IOException
   {
-    try ( final StringWriter writer = new StringWriter() )
-    {
-      final WriterErrorHandler errorHandler = new WriterErrorHandler();
-      errorHandler.setLogStackTrace( false );
-      errorHandler.setWriter( new PrintWriter( writer ) );
-
-      compileAndCompare( "less/exceptions/" + lessFile + ".less", null, errorHandler, null );
-      assertEquals( errorCount, errorHandler.getErrorCount() );
-
-      return writer.toString();
-    }
+    final CompileResults compileResults = compile( "less/exceptions/" + lessFile + ".less" );
+    assertEquals( errorCount, compileResults.getErrorCount() );
+    return compileResults.getErrorOutput();
   }
 
   private void assertCompilesTo( final String key )
     throws IOException
   {
-    compileAndCompare( toLessResourceName( key ), toCssResourceName( key ), null, null );
+    compileAndCompare( toLessResourceName( key ), toCssResourceName( key ), createPrettyPrintOptions(), null );
   }
 
   private String readCss( final String cssFile )
@@ -333,36 +320,16 @@ public class LessCssCompilerTest
 
   private void compileAndCompare( @Nonnull final String lessFile,
                                   @Nullable final String cssFile,
-                                  @Nullable final WriterErrorHandler errorHandler,
-                                  @Nullable final Comparator<String> comparator )
-    throws IOException
-  {
-    compileAndCompare( lessFile, cssFile, createPrettyPrintOptions(), errorHandler, comparator );
-  }
-
-  private void compileAndCompare( @Nonnull final String lessFile,
-                                  @Nullable final String cssFile,
                                   @Nonnull final PrettyPrintOptions printOptions,
-                                  @Nullable final WriterErrorHandler errorHandler,
                                   @Nullable final Comparator<String> comparator )
     throws IOException
   {
-    final URL url = toUrl( lessFile );
-
-    final DefaultLessCssCompilerFactory factoryBean = new DefaultLessCssCompilerFactory();
-    factoryBean.setDefaultEncoding( ENCODING );
-    factoryBean.setPrettyPrintEnabled( true );
-    factoryBean.setPrettyPrintOptions( printOptions );
-    final LessCssCompiler compiler = factoryBean.create();
-
-    final ByteArrayOutputStream output = new ByteArrayOutputStream();
-    compiler.compile( new UrlStyleSheetResource( url ), output, errorHandler );
-    output.close();
-
-    if ( null == errorHandler || 0 == errorHandler.getErrorCount() )
+    final CompileResults compileResults = compile( lessFile, printOptions );
+    assertEquals( compileResults.getErrorCount(), 0 );
+    if ( 0 == compileResults.getErrorCount() )
     {
       final String expected = readCss( cssFile );
-      final String actual = output.toString( ENCODING );
+      final String actual = compileResults.getOutput();
       if ( null == comparator )
       {
         assertEquals( expected, actual );
@@ -371,6 +338,33 @@ public class LessCssCompilerTest
       {
         comparator.compare( expected, actual );
       }
+    }
+  }
+
+  private CompileResults compile( final String lessFile )
+    throws IOException
+  {
+    return compile( lessFile, createPrettyPrintOptions() );
+  }
+
+  private CompileResults compile( final String lessFile, final PrettyPrintOptions printOptions )
+    throws IOException
+  {
+    final DefaultLessCssCompilerFactory factoryBean = new DefaultLessCssCompilerFactory();
+    factoryBean.setDefaultEncoding( ENCODING );
+    factoryBean.setPrettyPrintEnabled( true );
+    factoryBean.setPrettyPrintOptions( printOptions );
+    final LessCssCompiler compiler = factoryBean.create();
+
+    try ( final StringWriter writer = new StringWriter(); final ByteArrayOutputStream output = new ByteArrayOutputStream() )
+    {
+      final WriterErrorHandler errorHandler = new WriterErrorHandler();
+      errorHandler.setLogStackTrace( false );
+      errorHandler.setWriter( new PrintWriter( writer ) );
+
+      compiler.compile( new UrlStyleSheetResource( toUrl( lessFile ) ), output, errorHandler );
+      output.close();
+      return new CompileResults( output.toString( ENCODING ), writer.toString(), errorHandler.getErrorCount() );
     }
   }
 
