@@ -153,14 +153,14 @@ public enum ColorKeyword
   yellow( 0xffff00 ),
   yellowgreen( 0x9acd32 );
 
-  private final long _hexValue;
+  private final int _hexValue;
 
-  ColorKeyword( final long hexValue )
+  ColorKeyword( final int hexValue )
   {
     _hexValue = hexValue;
   }
 
-  public long getHexValue()
+  public int getHexValue()
   {
     return _hexValue;
   }
