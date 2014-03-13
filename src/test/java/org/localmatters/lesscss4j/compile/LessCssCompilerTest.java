@@ -21,32 +21,20 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.Comparator;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.localmatters.lesscss4j.error.WriterErrorHandler;
 import org.localmatters.lesscss4j.output.PrettyPrintOptions;
 import org.localmatters.lesscss4j.parser.UrlStyleSheetResource;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 public class LessCssCompilerTest
 {
   private static final String ENCODING = "UTF-8";
-
-  private PrettyPrintOptions _printOptions;
-
-  @BeforeMethod
-  public void setUp()
-    throws Exception
-  {
-    _printOptions = new PrettyPrintOptions();
-    _printOptions.setSingleDeclarationOnOneLine( true );
-    _printOptions.setLineBetweenRuleSets( false );
-    _printOptions.setOpeningBraceOnNewLine( false );
-    _printOptions.setIndentSize( 2 );
-  }
 
   @Test
   public void variables()
@@ -178,8 +166,10 @@ public class LessCssCompilerTest
   public void bigCssFile()
     throws IOException
   {
-    _printOptions.setSingleDeclarationOnOneLine( false );
-    assertCompilesTo( "css-big" );
+    final PrettyPrintOptions prettyPrintOptions = createPrettyPrintOptions();
+    prettyPrintOptions.setSingleDeclarationOnOneLine( false );
+    final String key = "css-big";
+    compileAndCompare( toLessResourceName( key ), toCssResourceName( key ), prettyPrintOptions, null, null );
   }
 
   @Test
@@ -337,10 +327,30 @@ public class LessCssCompilerTest
     }
   }
 
-  private void compileAndCompare( final String lessFile,
-                                  final String cssFile,
-                                  final WriterErrorHandler errorHandler,
-                                  final Comparator<String> comparator )
+  private PrettyPrintOptions createPrettyPrintOptions()
+  {
+    final PrettyPrintOptions prettyPrintOptions = new PrettyPrintOptions();
+    prettyPrintOptions.setSingleDeclarationOnOneLine( true );
+    prettyPrintOptions.setLineBetweenRuleSets( false );
+    prettyPrintOptions.setOpeningBraceOnNewLine( false );
+    prettyPrintOptions.setIndentSize( 2 );
+    return prettyPrintOptions;
+  }
+
+  private void compileAndCompare( @Nonnull final String lessFile,
+                                  @Nullable final String cssFile,
+                                  @Nullable final WriterErrorHandler errorHandler,
+                                  @Nullable final Comparator<String> comparator )
+    throws IOException
+  {
+    compileAndCompare( lessFile, cssFile, createPrettyPrintOptions(), errorHandler, comparator );
+  }
+
+  private void compileAndCompare( @Nonnull final String lessFile,
+                                  @Nullable final String cssFile,
+                                  @Nonnull final PrettyPrintOptions printOptions,
+                                  @Nullable final WriterErrorHandler errorHandler,
+                                  @Nullable final Comparator<String> comparator )
     throws IOException
   {
     final URL url = toUrl( lessFile );
@@ -348,7 +358,7 @@ public class LessCssCompilerTest
     final DefaultLessCssCompilerFactory factoryBean = new DefaultLessCssCompilerFactory();
     factoryBean.setDefaultEncoding( ENCODING );
     factoryBean.setPrettyPrintEnabled( true );
-    factoryBean.setPrettyPrintOptions( _printOptions );
+    factoryBean.setPrettyPrintOptions( printOptions );
     final LessCssCompiler compiler = factoryBean.create();
 
     final ByteArrayOutputStream output = new ByteArrayOutputStream();
