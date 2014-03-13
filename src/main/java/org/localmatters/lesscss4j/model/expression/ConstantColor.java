@@ -37,28 +37,6 @@ public class ConstantColor
   public static final Pattern RGB_HSL_PATTERN = Pattern.compile(
     "(?i)(?:rgb|hsl)a?\\s*\\(\\s*(-?\\d+%?)\\s*,\\s*(-?\\d+%?)\\s*,\\s*(-?\\d+%?)(?:\\s*,\\s*(-?(?:\\d+(?:\\.\\d*)*|\\.\\d+%?)))?\\s*\\)" );
 
-  private static final Map<String, Integer> COLOR_KEYWORDS = new HashMap<>();
-
-  static
-  {
-    COLOR_KEYWORDS.put( "maroon", 0x800000 );
-    COLOR_KEYWORDS.put( "red", 0xff0000 );
-    COLOR_KEYWORDS.put( "orange", 0xffA500 );
-    COLOR_KEYWORDS.put( "yellow", 0xffff00 );
-    COLOR_KEYWORDS.put( "olive", 0x808000 );
-    COLOR_KEYWORDS.put( "purple", 0x800080 );
-    COLOR_KEYWORDS.put( "fuchsia", 0xff00ff );
-    COLOR_KEYWORDS.put( "white", 0xffffff );
-    COLOR_KEYWORDS.put( "lime", 0x00ff00 );
-    COLOR_KEYWORDS.put( "green", 0x008000 );
-    COLOR_KEYWORDS.put( "navy", 0x000080 );
-    COLOR_KEYWORDS.put( "blue", 0x0000ff );
-    COLOR_KEYWORDS.put( "aqua", 0x00ffff );
-    COLOR_KEYWORDS.put( "teal", 0x008080 );
-    COLOR_KEYWORDS.put( "black", 0x000000 );
-    COLOR_KEYWORDS.put( "silver", 0xc0c0c0 );
-    COLOR_KEYWORDS.put( "gray", 0x808080 );
-  }
 
   public ConstantColor()
   {
@@ -150,10 +128,10 @@ public class ConstantColor
     }
     else
     {
-      final Integer keywordValue = COLOR_KEYWORDS.get( value.toLowerCase() );
+      final ColorKeyword keywordValue = ColorKeyword.valueOf( value.toLowerCase() );
       if ( null != keywordValue )
       {
-        setValue( keywordValue );
+        setValue( keywordValue.getHexValue() );
       }
     }
   }
