@@ -332,7 +332,7 @@ public class LessCssCompilerTest
     final String actual = compileResults.getOutput();
     if ( null == comparator )
     {
-      assertEquals( expected, actual );
+      assertEquals( actual.replaceAll("[ \n\t]+", " "), expected.replaceAll("[ \n\t]+", " ") );
     }
     else
     {
