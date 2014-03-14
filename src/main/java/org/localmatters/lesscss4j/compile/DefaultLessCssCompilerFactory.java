@@ -40,6 +40,7 @@ import org.localmatters.lesscss4j.transform.PageTransformer;
 import org.localmatters.lesscss4j.transform.RuleSetTransformer;
 import org.localmatters.lesscss4j.transform.StyleSheetTransformer;
 import org.localmatters.lesscss4j.transform.Transformer;
+import org.localmatters.lesscss4j.transform.function.Argb;
 import org.localmatters.lesscss4j.transform.function.Darken;
 import org.localmatters.lesscss4j.transform.function.Desaturate;
 import org.localmatters.lesscss4j.transform.function.Escape;
@@ -284,6 +285,7 @@ public class DefaultLessCssCompilerFactory
     final Map<String, Function> functions = new HashMap<>();
     functions.put( "%", new Format() );
     functions.put( "e", new Escape() );
+    functions.put( "argb", new Argb() );
     functions.put( "lighten", new Lighten() );
     functions.put( "darken", new Darken() );
     functions.put( "saturate", new Saturate() );
