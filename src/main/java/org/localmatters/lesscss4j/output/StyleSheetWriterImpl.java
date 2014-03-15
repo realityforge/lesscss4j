@@ -88,15 +88,23 @@ public class StyleSheetWriterImpl
   public void write( final OutputStream output, final StyleSheet styleSheet, final ErrorHandler errorHandler )
     throws IOException
   {
-    String encoding = styleSheet.getCharset();
-    if ( null == encoding || 0 == encoding.length() )
-    {
-      encoding = getDefaultEncoding();
-    }
-
+    final String encoding = getEncoding( styleSheet );
     try ( final Writer writer = new BufferedWriter( new OutputStreamWriter( output, encoding ) ) )
     {
       write( writer, styleSheet );
+    }
+  }
+
+  private String getEncoding( final StyleSheet styleSheet )
+  {
+    final String encoding = styleSheet.getCharset();
+    if ( null == encoding || 0 == encoding.length() )
+    {
+      return getDefaultEncoding();
+    }
+    else
+    {
+      return encoding;
     }
   }
 
