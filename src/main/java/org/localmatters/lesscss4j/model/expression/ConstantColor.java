@@ -466,8 +466,7 @@ public class ConstantColor
     return this.getRed() == that.getRed() &&
            this.getGreen() == that.getGreen() &&
            this.getBlue() == that.getBlue() &&
-           ( null == this.getAlpha() && null == that.getAlpha() ||
-             this.getAlpha().equals( that.getAlpha() ) );
+           ( this.getAlpha().equals( that.getAlpha() ) );
   }
 
   @Override
