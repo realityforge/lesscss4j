@@ -15,6 +15,7 @@
 */
 package org.localmatters.lesscss4j.model.expression;
 
+import java.math.BigDecimal;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
@@ -22,15 +23,29 @@ public class ConstantColorTest
 {
   protected void validateColor( final int expectedValue, final ConstantColor actual )
   {
-    validateColor( expectedValue, null, actual );
+    validateColor( expectedValue, (Float) null, actual );
   }
 
   protected void validateColor( final int expectedValue, final Float expectedAlpha, final ConstantColor actual )
   {
+    assertEquals( actual.getAlpha(), new BigDecimal(  expectedAlpha ), "Unexpected alpha value" );
     assertEquals( Integer.toHexString( expectedValue ),
                   Integer.toHexString( (int) actual.getValue() ),
                   "Unexpected color value" );
-    assertEquals( expectedAlpha, actual.getAlpha(), "Unexpected alpha value" );
+  }
+
+  protected void validateColor( final int expectedValue, final String expectedAlpha, final ConstantColor actual )
+  {
+    assertEquals( actual.getAlpha(), new BigDecimal(  expectedAlpha ), "Unexpected alpha value" );
+    assertEquals( Integer.toHexString( expectedValue ),
+                  Integer.toHexString( (int) actual.getValue() ),
+                  "Unexpected color value" );
+  }
+
+  @Test
+  public void parseRgbaWithNegative()
+  {
+    validateColor( 0x001FFF, "0.42", new ConstantColor( "rgba(-99.9, 31.4159, 321, 0.42)" ) );
   }
 
   @Test

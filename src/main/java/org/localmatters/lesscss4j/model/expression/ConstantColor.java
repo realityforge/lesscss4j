@@ -15,28 +15,46 @@
 */
 package org.localmatters.lesscss4j.model.expression;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.localmatters.lesscss4j.error.DivideByZeroException;
 import org.localmatters.lesscss4j.error.UnitMismatchException;
 
 public class ConstantColor
   implements ConstantValue
 {
+  private static final BigDecimal ZERO = new BigDecimal( 0 );
+  private static final BigDecimal MIN_PERCENTAGE = ZERO;
+  private static final BigDecimal MAX_PERCENTAGE = new BigDecimal( 100 );
+  private static final BigDecimal MAX_COLOR_COMPONENT_VALUE = new BigDecimal( 255 );
+  private static final BigDecimal MAX_ALPHA_VALUE = new BigDecimal( 1 );
+  private static final BigDecimal MIN_ALPHA_VALUE = ZERO;
+
   private int _red;
   private int _green;
   private int _blue;
-  private Float _alpha;
+  private BigDecimal _alpha = MAX_ALPHA_VALUE;
+  private boolean _compressed;
 
+  private static final String COLOR_COMPONENT_CONSTANT = "(-?\\d+(\\.\\d+)?||\\d+%?)";
   /**
    * Regular expression that is used to extract the rgb or hsl and alpha values from the color function value
    */
-  public static final Pattern RGB_HSL_PATTERN = Pattern.compile(
-    "(?i)(?:rgb|hsl)a?\\s*\\(\\s*(-?\\d+%?)\\s*,\\s*(-?\\d+%?)\\s*,\\s*(-?\\d+%?)(?:\\s*,\\s*(-?(?:\\d+(?:\\.\\d*)*|\\.\\d+%?)))?\\s*\\)" );
-
+  private static final Pattern RGB_HSL_PATTERN = Pattern.compile(
+    "(?i)(?:rgb|hsl)a?\\s*\\(\\s*" +
+    COLOR_COMPONENT_CONSTANT +
+    "\\s*,\\s*" +
+    COLOR_COMPONENT_CONSTANT +
+    "\\s*,\\s*" +
+    COLOR_COMPONENT_CONSTANT +
+    "(?:\\s*,\\s*" +
+    COLOR_COMPONENT_CONSTANT +
+    ")?\\s*\\)" );
 
   public ConstantColor()
   {
@@ -49,6 +67,7 @@ public class ConstantColor
     _green = copy._green;
     _blue = copy._blue;
     _alpha = copy._alpha;
+    _compressed = copy._compressed;
   }
 
   public ConstantColor( final int value )
@@ -77,6 +96,7 @@ public class ConstantColor
                                         value.charAt( 2 ),
                                         value.charAt( 2 )
         } );
+        _compressed = true;
       }
       setValue( Integer.parseInt( value, 16 ) );
     }
@@ -86,8 +106,8 @@ public class ConstantColor
       if ( matcher.matches() )
       {
         final String red = matcher.group( 1 );
-        final String green = matcher.group( 2 );
-        final String blue = matcher.group( 3 );
+        final String green = matcher.group( 3 );
+        final String blue = matcher.group( 5 );
 
         setRed( parseRGBValue( red ) );
         setGreen( parseRGBValue( green ) );
@@ -95,8 +115,8 @@ public class ConstantColor
 
         if ( value.charAt( 3 ) == 'a' || value.charAt( 3 ) == 'A' )
         {
-          final String alpha = matcher.group( 4 );
-          setAlpha( Float.parseFloat( alpha ) );
+          final String alpha = matcher.group( 7 );
+          setAlpha( parseAlphaValue( alpha ) );
         }
       }
       else
@@ -111,15 +131,15 @@ public class ConstantColor
       {
         if ( value.charAt( 3 ) == 'a' || value.charAt( 3 ) == 'A' )
         {
-          final String alpha = matcher.group( 4 );
-          setAlpha( Float.parseFloat( alpha ) );
+          final String alpha = matcher.group( 7 );
+          setAlpha( new BigDecimal( alpha ) );
         }
 
         final float hue = Integer.parseInt( matcher.group( 1 ) );
-        final float saturation = parsePercentage( matcher.group( 2 ) );
-        final float lightness = parsePercentage( matcher.group( 3 ) );
+        final BigDecimal saturation = parsePercentage( matcher.group( 3 ) );
+        final BigDecimal lightness = parsePercentage( matcher.group( 5 ) );
 
-        setHSL( hue, saturation, lightness );
+        setHSL( hue, saturation.floatValue(), lightness.floatValue() );
       }
       else
       {
@@ -135,6 +155,7 @@ public class ConstantColor
       }
     }
   }
+
 
   public void setHSL( float hue, float saturation, float lightness )
   {
@@ -212,14 +233,17 @@ public class ConstantColor
     return p;
   }
 
-  protected float parsePercentage( String value )
+  protected BigDecimal parsePercentage( String value )
   {
     if ( value.endsWith( "%" ) )
     {
       // Strip off the optional percent sign
       value = value.substring( 0, value.length() - 1 );
     }
-    return Math.max( 0, Math.min( 100, Integer.parseInt( value ) ) ) / 100.0f;
+    return new BigDecimal( value ).
+      max( MIN_PERCENTAGE ).
+      min( MAX_PERCENTAGE ).
+      divide( MAX_PERCENTAGE );
   }
 
   protected int parseRGBValue( final String value )
@@ -227,11 +251,28 @@ public class ConstantColor
     if ( value.charAt( value.length() - 1 ) == '%' )
     {
       // colors are in terms of percentage
-      return (int) ( parsePercentage( value ) * 255 );
+      return round( parsePercentage( value ).multiply( MAX_COLOR_COMPONENT_VALUE ) );
     }
     else
     {
-      return Integer.parseInt( value );
+      return round( new BigDecimal( value ) );
+    }
+  }
+
+  private int round( final BigDecimal value )
+  {
+    return value.round( MathContext.DECIMAL32 ).intValue();
+  }
+
+  protected BigDecimal parseAlphaValue( final String value )
+  {
+    if ( value.charAt( value.length() - 1 ) == '%' )
+    {
+      return parsePercentage( value );
+    }
+    else
+    {
+      return new BigDecimal( value );
     }
   }
 
@@ -286,7 +327,7 @@ public class ConstantColor
       h /= 6;
     }
 
-    return new float[]{ h * 360, s, l, null == _alpha ? 1.0f : _alpha };
+    return new float[]{ h * 360, s, l, null == _alpha ? 1.0f : _alpha.floatValue() };
   }
 
   protected void checkUnits( final ConstantValue that )
@@ -356,10 +397,20 @@ public class ConstantColor
   @Override
   public String toString()
   {
-    if ( null != getAlpha() )
+    return toCss( _compressed );
+  }
+
+  public String toCss( final boolean compress )
+  {
+    final String spacer = compress ? "" : " ";
+    if ( !getAlpha().equals( MAX_ALPHA_VALUE ) )
     {
       final DecimalFormat alphaFormat = new DecimalFormat( "0.###" );
-      return "rgba(" + getRed() + ',' + getGreen() + ',' + getBlue() + ',' + alphaFormat.format( getAlpha() ) + ')';
+      return "rgba(" +
+             getRed() + ',' + spacer +
+             getGreen() + ',' + spacer +
+             getBlue() + ',' + spacer +
+             alphaFormat.format( getAlpha() ) + ')';
     }
 
     // Shorten colors of the form #aabbcc to #abc
@@ -371,7 +422,8 @@ public class ConstantColor
     final int g = getGreen();
     final int b = getBlue();
 
-    if ( ( ( r & 0xf0 ) >> 4 ) == ( r & 0xf ) &&
+    if ( compress &&
+         ( ( r & 0xf0 ) >> 4 ) == ( r & 0xf ) &&
          ( ( g & 0xf0 ) >> 4 ) == ( g & 0xf ) &&
          ( ( b & 0xf0 ) >> 4 ) == ( b & 0xf ) )
     {
@@ -459,20 +511,21 @@ public class ConstantColor
     _blue = pinColor( blue );
   }
 
-  public Float getAlpha()
+  @Nonnull
+  public BigDecimal getAlpha()
   {
     return _alpha;
   }
 
-  public void setAlpha( final Float alpha )
+  public void setAlpha( @Nullable final BigDecimal alpha )
   {
     if ( null != alpha )
     {
-      _alpha = Math.min( 1.0f, Math.max( 0.0f, alpha ) );
+      _alpha = alpha.min( MAX_ALPHA_VALUE ).max( MIN_ALPHA_VALUE );
     }
     else
     {
-      _alpha = alpha;
+      _alpha = MAX_ALPHA_VALUE;
     }
   }
 
@@ -497,6 +550,15 @@ public class ConstantColor
            ( value.charAt( 2 ) == 'l' || value.charAt( 2 ) == 'L' );
   }
 
+  public ConstantColor toARGB()
+  {
+    final ConstantColor constantColor =
+      new ConstantColor( round( getAlpha().multiply( MAX_COLOR_COMPONENT_VALUE ) ), getRed(), getGreen() );
+    constantColor.setAlpha( new BigDecimal( getBlue() ).divide( MAX_COLOR_COMPONENT_VALUE ) );
+    return constantColor;
+  }
+
+  @Override
   public ConstantColor clone()
   {
     return new ConstantColor( this );
