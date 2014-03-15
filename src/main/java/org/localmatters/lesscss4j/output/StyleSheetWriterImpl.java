@@ -21,7 +21,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.List;
-import org.apache.commons.io.IOUtils;
 import org.localmatters.lesscss4j.error.ErrorHandler;
 import org.localmatters.lesscss4j.model.BodyElement;
 import org.localmatters.lesscss4j.model.Declaration;
@@ -95,15 +94,9 @@ public class StyleSheetWriterImpl
       encoding = getDefaultEncoding();
     }
 
-    Writer writer = null;
-    try
+    try ( final Writer writer = new BufferedWriter( new OutputStreamWriter( output, encoding ) ) )
     {
-      writer = new BufferedWriter( new OutputStreamWriter( output, encoding ) );
       write( writer, styleSheet );
-    }
-    finally
-    {
-      IOUtils.closeQuietly( writer );
     }
   }
 
