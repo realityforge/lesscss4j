@@ -39,7 +39,6 @@ public class ConstantColor
   private int _green;
   private int _blue;
   private BigDecimal _alpha = MAX_ALPHA_VALUE;
-  private boolean _compressed;
 
   private static final String COLOR_COMPONENT_CONSTANT = "(-?\\d+(\\.\\d+)?||\\d+%?)";
   /**
@@ -67,7 +66,6 @@ public class ConstantColor
     _green = copy._green;
     _blue = copy._blue;
     _alpha = copy._alpha;
-    _compressed = copy._compressed;
   }
 
   public ConstantColor( final int value )
@@ -96,7 +94,6 @@ public class ConstantColor
                                         value.charAt( 2 ),
                                         value.charAt( 2 )
         } );
-        _compressed = true;
       }
       setValue( Integer.parseInt( value, 16 ) );
     }
@@ -327,7 +324,7 @@ public class ConstantColor
       h /= 6;
     }
 
-    return new float[]{ h * 360, s, l, null == _alpha ? 1.0f : _alpha.floatValue() };
+    return new float[]{ h * 360, s, l, _alpha.floatValue() };
   }
 
   protected void checkUnits( final ConstantValue that )
@@ -397,7 +394,7 @@ public class ConstantColor
   @Override
   public String toString()
   {
-    return toCss( _compressed );
+    return toCss( true );
   }
 
   public String toCss( final boolean compress )
