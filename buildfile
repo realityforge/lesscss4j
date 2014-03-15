@@ -42,4 +42,6 @@ define 'lesscss4j' do
   end
   package(:sources)
   package(:javadoc)
+
+  ipr.extra_modules << '../less.js/less.js.iml'
 end
