@@ -108,7 +108,7 @@ public class StyleSheetWriterImpl
     }
   }
 
-  protected void writeBreak( final Writer writer, final int indent )
+  private void writeBreak( final Writer writer, final int indent )
     throws IOException
   {
     if ( isPrettyPrintEnabled() )
@@ -121,13 +121,13 @@ public class StyleSheetWriterImpl
     }
   }
 
-  protected void writeBreak( final Writer writer )
+  private void writeBreak( final Writer writer )
     throws IOException
   {
     writeBreak( writer, 0 );
   }
 
-  protected void writeSpace( final Writer writer )
+  private void writeSpace( final Writer writer )
     throws IOException
   {
     if ( isPrettyPrintEnabled() )
@@ -136,7 +136,7 @@ public class StyleSheetWriterImpl
     }
   }
 
-  protected void writeSemi( final Writer writer, final boolean withBreak )
+  private void writeSemi( final Writer writer, final boolean withBreak )
     throws IOException
   {
     writer.write( ";" );
@@ -146,7 +146,7 @@ public class StyleSheetWriterImpl
     }
   }
 
-  protected void writeSemi( final Writer writer )
+  private void writeSemi( final Writer writer )
     throws IOException
   {
     writeSemi( writer, true );
@@ -159,7 +159,7 @@ public class StyleSheetWriterImpl
     writeSpace( writer );
   }
 
-  protected void writeIndent( final Writer writer, final int level )
+  private void writeIndent( final Writer writer, final int level )
     throws IOException
   {
     if ( isPrettyPrintEnabled() )
@@ -174,7 +174,7 @@ public class StyleSheetWriterImpl
     }
   }
 
-  protected void write( final Writer writer, final StyleSheet styleSheet )
+  private void write( final Writer writer, final StyleSheet styleSheet )
     throws IOException
   {
     writeCharset( writer, styleSheet );
@@ -214,9 +214,9 @@ public class StyleSheetWriterImpl
     }
   }
 
-  protected void writeBodyElements( final Writer writer,
-                                    final List<BodyElement> bodyElements,
-                                    final int indent )
+  private void writeBodyElements( final Writer writer,
+                                  final List<BodyElement> bodyElements,
+                                  final int indent )
     throws IOException
   {
     if ( null == bodyElements )
@@ -251,7 +251,7 @@ public class StyleSheetWriterImpl
     }
   }
 
-  protected void writePage( final Writer writer, final Page page, final int indent )
+  private void writePage( final Writer writer, final Page page, final int indent )
     throws IOException
   {
     final List<DeclarationElement> declarations = page.getDeclarations();
@@ -282,7 +282,7 @@ public class StyleSheetWriterImpl
     writeClosingBrace( writer, indent );
   }
 
-  protected void writeMedia( final Writer writer, final Media media, final int indent )
+  private void writeMedia( final Writer writer, final Media media, final int indent )
     throws IOException
   {
     writer.write( "@media " );
@@ -305,7 +305,7 @@ public class StyleSheetWriterImpl
     writeClosingBrace( writer, indent );
   }
 
-  protected void writeKeyframes( final Writer writer, final Keyframes media, final int indent )
+  private void writeKeyframes( final Writer writer, final Keyframes media, final int indent )
     throws IOException
   {
     writer.write( media.getName() );
@@ -318,7 +318,7 @@ public class StyleSheetWriterImpl
     writeClosingBrace( writer, indent );
   }
 
-  protected void writeRuleSet( final Writer writer, final RuleSet ruleSet, final int indent )
+  private void writeRuleSet( final Writer writer, final RuleSet ruleSet, final int indent )
     throws IOException
   {
     // Don't write rule sets with empty bodies
@@ -386,7 +386,7 @@ public class StyleSheetWriterImpl
     }
   }
 
-  protected void writeOpeningBrace( final Writer writer, final int indent, final List<DeclarationElement> declarations )
+  private void writeOpeningBrace( final Writer writer, final int indent, final List<DeclarationElement> declarations )
     throws IOException
   {
     if ( isPrettyPrintEnabled() &&
@@ -402,14 +402,14 @@ public class StyleSheetWriterImpl
     writer.write( '{' );
   }
 
-  protected void writeClosingBrace( final Writer writer, final int indent )
+  private void writeClosingBrace( final Writer writer, final int indent )
     throws IOException
   {
     writer.write( "}" );
     writeBreak( writer, indent );
   }
 
-  protected void writeDeclaration( final Writer writer, final Declaration declaration, final int indent )
+  private void writeDeclaration( final Writer writer, final Declaration declaration, final int indent )
     throws IOException
   {
     writeIndent( writer, indent );
@@ -428,7 +428,7 @@ public class StyleSheetWriterImpl
     writeSemi( writer, false );
   }
 
-  protected void writeDeclarationBraceSpace( final Writer writer, final List<DeclarationElement> declarations )
+  private void writeDeclarationBraceSpace( final Writer writer, final List<DeclarationElement> declarations )
     throws IOException
   {
     if ( isOneLineDeclarationList( declarations ) )
