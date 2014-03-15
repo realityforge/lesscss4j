@@ -16,6 +16,7 @@
 package org.localmatters.lesscss4j.model.expression;
 
 import java.math.BigDecimal;
+import javax.annotation.Nonnull;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
@@ -23,20 +24,14 @@ public class ConstantColorTest
 {
   protected void validateColor( final int expectedValue, final ConstantColor actual )
   {
-    validateColor( expectedValue, (Float) null, actual );
+    validateColor( expectedValue, "1", actual );
   }
 
-  protected void validateColor( final int expectedValue, final Float expectedAlpha, final ConstantColor actual )
+  protected void validateColor( final int expectedValue,
+                                @Nonnull final String expectedAlpha,
+                                @Nonnull final ConstantColor actual )
   {
-    assertEquals( actual.getAlpha(), new BigDecimal(  expectedAlpha ), "Unexpected alpha value" );
-    assertEquals( Integer.toHexString( expectedValue ),
-                  Integer.toHexString( (int) actual.getValue() ),
-                  "Unexpected color value" );
-  }
-
-  protected void validateColor( final int expectedValue, final String expectedAlpha, final ConstantColor actual )
-  {
-    assertEquals( actual.getAlpha(), new BigDecimal(  expectedAlpha ), "Unexpected alpha value" );
+    assertEquals( actual.getAlpha(), new BigDecimal( expectedAlpha ), "Unexpected alpha value" );
     assertEquals( Integer.toHexString( expectedValue ),
                   Integer.toHexString( (int) actual.getValue() ),
                   "Unexpected color value" );
@@ -54,8 +49,8 @@ public class ConstantColorTest
     validateColor( 0xfed412, new ConstantColor( "#fed412" ) );
     validateColor( 0xffeedd, new ConstantColor( "#fed" ) );
     validateColor( 0xffeedd, new ConstantColor( "rgb( 255, 238, 221 )" ) );
-    validateColor( 0xffffff, 0.4f, new ConstantColor( "rGBa(255, 255, 255, 0.4)" ) );
-    validateColor( 0xff7f00, 0.4f, new ConstantColor( "Rgba(100%, 50%, 0%, 0.4)" ) );
+    validateColor( 0xffffff, "0.4", new ConstantColor( "rGBa(255, 255, 255, 0.4)" ) );
+    validateColor( 0xff7f00, "0.4", new ConstantColor( "Rgba(100%, 50%, 0%, 0.4)" ) );
   }
 
   @Test
@@ -63,8 +58,8 @@ public class ConstantColorTest
   {
     validateColor( 0xff0000, new ConstantColor( "hsl(0, 100%, 50%)" ) );
     validateColor( 0x00ff00, new ConstantColor( "hSl(120, 100%, 50%)" ) );
-    validateColor( 0xef8f8f, 1.0f, new ConstantColor( "hsLa(0, 75%, 75%, 1.0)" ) );
-    validateColor( 0x80609f, 0.5f, new ConstantColor( "HSLa(270, 25%, 50%, 0.5)" ) );
+    validateColor( 0xef8f8f, "1.0", new ConstantColor( "hsLa(0, 75%, 75%, 1.0)" ) );
+    validateColor( 0x80609f, "0.5", new ConstantColor( "HSLa(270, 25%, 50%, 0.5)" ) );
     validateColor( 0xbfbf40, new ConstantColor( "hsl(60, 50, 50)" ) );
     validateColor( 0x808080, new ConstantColor( "hsl(60, 0%, 50%)" ) );
     validateColor( 0x206020, new ConstantColor( "hsl(120, 50%, 25%)" ) );
