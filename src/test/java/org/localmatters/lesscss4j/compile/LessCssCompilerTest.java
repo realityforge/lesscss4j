@@ -16,25 +16,17 @@
 package org.localmatters.lesscss4j.compile;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.URL;
 import java.util.Comparator;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.localmatters.lesscss4j.error.WriterErrorHandler;
 import org.localmatters.lesscss4j.output.PrettyPrintOptions;
-import org.localmatters.lesscss4j.parser.UrlStyleSheetResource;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 public class LessCssCompilerTest
 {
-  private static final String ENCODING = "UTF-8";
 
   @Test
   public void variables()
@@ -298,16 +290,6 @@ public class LessCssCompilerTest
     compileAndCompare( toLessResourceName( key ), toCssResourceName( key ), createPrettyPrintOptions(), null );
   }
 
-  private String readCss( final String cssFile )
-    throws IOException
-  {
-    try ( final InputStream input = getClass().getClassLoader().getResourceAsStream( cssFile ) )
-    {
-      assertNotNull( input, "Unable to open " + cssFile );
-      return IOUtils.toString( input, ENCODING );
-    }
-  }
-
   private PrettyPrintOptions createPrettyPrintOptions()
   {
     final PrettyPrintOptions prettyPrintOptions = new PrettyPrintOptions();
@@ -324,11 +306,11 @@ public class LessCssCompilerTest
                                   @Nullable final Comparator<String> comparator )
     throws IOException
   {
-    final CompileResults compileResults = compile( lessFile, printOptions );
+    final CompileResults compileResults = CompileTestUtil.compile( lessFile, printOptions );
     assertEquals( compileResults.getErrorCount(),
                   0,
                   "Unexpected errors compiling " + lessFile + ".\n Errors: " + compileResults.getErrorOutput() );
-    final String expected = readCss( cssFile );
+    final String expected = CompileTestUtil.readResourceFully( cssFile );
     final String actual = compileResults.getOutput();
     if ( null == comparator )
     {
@@ -343,35 +325,7 @@ public class LessCssCompilerTest
   private CompileResults compile( final String lessFile )
     throws IOException
   {
-    return compile( lessFile, createPrettyPrintOptions() );
-  }
-
-  private CompileResults compile( final String lessFile, final PrettyPrintOptions printOptions )
-    throws IOException
-  {
-    final DefaultLessCssCompilerFactory factoryBean = new DefaultLessCssCompilerFactory();
-    factoryBean.setDefaultEncoding( ENCODING );
-    factoryBean.setPrettyPrintEnabled( true );
-    factoryBean.setPrettyPrintOptions( printOptions );
-    final LessCssCompiler compiler = factoryBean.create();
-
-    try ( final StringWriter writer = new StringWriter(); final ByteArrayOutputStream output = new ByteArrayOutputStream() )
-    {
-      final WriterErrorHandler errorHandler = new WriterErrorHandler();
-      errorHandler.setLogStackTrace( false );
-      errorHandler.setWriter( new PrintWriter( writer ) );
-
-      compiler.compile( new UrlStyleSheetResource( toUrl( lessFile ) ), output, errorHandler );
-      output.close();
-      return new CompileResults( output.toString( ENCODING ), writer.toString(), errorHandler.getErrorCount() );
-    }
-  }
-
-  private URL toUrl( final String resourceName )
-  {
-    final URL url = getClass().getClassLoader().getResource( resourceName );
-    assertNotNull( url, "Unable to open " + resourceName );
-    return url;
+    return CompileTestUtil.compile( lessFile, createPrettyPrintOptions() );
   }
 
   private String toCssResourceName( final String key )
