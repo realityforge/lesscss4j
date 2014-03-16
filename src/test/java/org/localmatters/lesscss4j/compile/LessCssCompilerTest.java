@@ -301,7 +301,7 @@ public class LessCssCompilerTest
   }
 
   private void compileAndCompare( @Nonnull final String lessFile,
-                                  @Nullable final String cssFile,
+                                  @Nonnull final String cssFile,
                                   @Nonnull final PrettyPrintOptions printOptions,
                                   @Nullable final Comparator<String> comparator )
     throws IOException
