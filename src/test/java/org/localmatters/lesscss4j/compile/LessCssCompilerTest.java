@@ -312,6 +312,7 @@ public class LessCssCompilerTest
                   "Unexpected errors compiling " + lessFile + ".\n Errors: " + compileResults.getErrorOutput() );
     final String expected = CompileTestUtil.readResourceFully( cssFile );
     final String actual = compileResults.getOutput();
+    assertNotNull( actual );
     if ( null == comparator )
     {
       assertEquals( actual.replaceAll("[ \n\t]+", " "), expected.replaceAll("[ \n\t]+", " ") );
