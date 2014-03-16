@@ -6,6 +6,7 @@ require 'buildr/jacoco'
 
 PROVIDED_DEPS = [:javax_javaee, :javax_servlet, :javax_jsr305]
 COMPILE_DEPS = [Buildr::Antlr.runtime_dependencies, :commons_io, :getopt4j]
+TEST_DEPS = [:mockito]
 
 desc 'Less CSS for Java'
 define 'lesscss4j' do
@@ -27,7 +28,7 @@ define 'lesscss4j' do
 
   compile.from compile_antlr(_('src/main/antlr3/org/localmatters/lesscssj4/parser/LessCss.g'), :package => 'org.localmatters.lesscss4j.parser.antlr')
 
-  test.with :mockito
+  test.with TEST_DEPS
   test.using :testng
 
   package(:bundle).tap do |bnd|
