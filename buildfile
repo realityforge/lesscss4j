@@ -1,7 +1,6 @@
 require 'buildr/git_auto_version'
 require 'buildr/top_level_generate_dir'
 require 'buildr/antlr'
-require 'buildr/bnd'
 require 'buildr/jacoco'
 
 PROVIDED_DEPS = [:javax_javaee, :javax_servlet, :javax_jsr305]
@@ -31,16 +30,7 @@ define 'lesscss4j' do
   test.with TEST_DEPS
   test.using :testng
 
-  package(:bundle).tap do |bnd|
-    bnd['Import-Package'] = 'org.antlr*;version="3.2",javax.servlet*; resolution:=optional,*'
-    bnd['Export-Package'] = "org.localmatters.lesscss4j.*;version=#{version}"
-  end
-  package(:bundle, :classifier => 'all').tap do |bnd|
-    bnd['Main-Class'] = 'org.localmatters.lesscss4j.cli.CompilerMain'
-    bnd['Bundle-SymbolicName'] = "#{project.group}.#{project.id}-all"
-    bnd['Private-Package'] = 'org.antlr*,org.apache.commons.io.*'
-    bnd['Export-Package'] = "org.localmatters.lesscss4j.*;version=#{version}"
-  end
+  package(:jar)
   package(:sources)
   package(:javadoc)
 
