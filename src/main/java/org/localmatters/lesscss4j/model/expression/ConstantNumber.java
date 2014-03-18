@@ -41,9 +41,9 @@ public class ConstantNumber
     setUnit( unit );
   }
 
-  public ConstantNumber( String value )
+  public ConstantNumber( final String input )
   {
-    value = ( null != value ) ? value.trim() : value;
+    final String value = ( null != input ) ? input.trim() : null;
     if ( null == value || 0 == value.length() )
     {
       setValue( 0 );
