@@ -15,32 +15,17 @@
 */
 package org.localmatters.lesscss4j.transform.function;
 
-import org.localmatters.lesscss4j.error.FunctionException;
 import org.localmatters.lesscss4j.model.expression.ConstantColor;
-import org.localmatters.lesscss4j.model.expression.ConstantExpression;
 import org.localmatters.lesscss4j.model.expression.ConstantNumber;
 import org.localmatters.lesscss4j.model.expression.Expression;
+import org.localmatters.lesscss4j.transform.function2.ColorFunctions;
 
-/**
- * Function that reduces the saturation of a color by a percentage.
- * <p/>
- * Usage: desaturate(@color, 10%)
- */
 public class Desaturate
   extends AbstractColorFunction
 {
   @Override
   protected Expression evaluate( final ConstantColor color, final ConstantNumber value )
   {
-    if ( null != value.getUnit() && !"%".equals( value.getUnit() ) )
-    {
-      throw new FunctionException( "Argument 2 for function '%s' must be a percentage: %s", value.toString() );
-    }
-
-    final float[] hsla = color.toHSL();
-
-    final ConstantColor newColor = new ConstantColor();
-    newColor.setHSL( hsla[ 0 ], hsla[ 1 ] - ( (float) value.getValue() / 100.0f ), hsla[ 2 ] );
-    return new ConstantExpression( newColor );
+    return new ColorFunctions().desaturate( color, value );
   }
 }

@@ -18,12 +18,8 @@ package org.localmatters.lesscss4j.transform.function;
 import org.localmatters.lesscss4j.model.expression.ConstantColor;
 import org.localmatters.lesscss4j.model.expression.ConstantNumber;
 import org.localmatters.lesscss4j.model.expression.Expression;
+import org.localmatters.lesscss4j.transform.function2.ColorFunctions;
 
-/**
- * Function to convert a color to grayscale (i.e. desaturate 100%)
- * <p/>
- * Usage: grayscale(@color)
- */
 public class Grayscale
   extends Desaturate
 {
@@ -35,6 +31,6 @@ public class Grayscale
   @Override
   protected Expression evaluate( final ConstantColor color, final ConstantNumber value )
   {
-    return super.evaluate( color, new ConstantNumber( 100, "%" ) );
+    return new ColorFunctions().grayscale( color );
   }
 }

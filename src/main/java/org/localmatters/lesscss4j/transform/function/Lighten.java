@@ -15,32 +15,17 @@
 */
 package org.localmatters.lesscss4j.transform.function;
 
-import org.localmatters.lesscss4j.error.FunctionException;
 import org.localmatters.lesscss4j.model.expression.ConstantColor;
-import org.localmatters.lesscss4j.model.expression.ConstantExpression;
 import org.localmatters.lesscss4j.model.expression.ConstantNumber;
 import org.localmatters.lesscss4j.model.expression.Expression;
+import org.localmatters.lesscss4j.transform.function2.ColorFunctions;
 
-/**
- * Function to lighten a color
- * <p/>
- * Usage: lighten(@color, 50%)
- */
 public class Lighten
   extends AbstractColorFunction
 {
   @Override
   protected Expression evaluate( final ConstantColor color, final ConstantNumber value )
   {
-    if ( null != value.getUnit() && !"%".equals( value.getUnit() ) )
-    {
-      throw new FunctionException( "Argument 2 for function '%s' must be a percentage: %s", value.toString() );
-    }
-
-    final float[] hsla = color.toHSL();
-
-    final ConstantColor newColor = new ConstantColor();
-    newColor.setHSL( hsla[ 0 ], hsla[ 1 ], hsla[ 2 ] + ( (float) value.getValue() / 100.0f ) );
-    return new ConstantExpression( newColor );
+    return new ColorFunctions().lighten( color, value );
   }
 }
