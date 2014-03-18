@@ -7,3 +7,8 @@
 - Macro/Function/Syntax to Base64 encode image data
 - It seems like handling of @media, @keyframes, @-webkit-keyframes, and maybe
   @page could all be handled the same way. Look at refactoring.
+
+Petes:
+- Introduce the model objects from LizardCSS. ie Percentage, Dimension etc
+- Add apt extension to generate function adapter objects statically (See Dagger for example)
+- Consider using Dagger to construct system?
