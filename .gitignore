@@ -1,6 +1,7 @@
 /generated
 /target
 /reports
+/tmp
 /*.iml
 /*.ipr
 /*.iws
