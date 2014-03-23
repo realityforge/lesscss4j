@@ -26,7 +26,6 @@ define 'lesscss4j' do
 
   define 'model' do
     package(:jar)
-    package(:sources)
   end
 
   define 'compiler' do
