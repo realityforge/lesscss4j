@@ -18,10 +18,6 @@ package org.localmatters.lesscss4j.model.expression;
 public class DivideExpression
   extends CompoundExpression
 {
-  public DivideExpression()
-  {
-  }
-
   public DivideExpression( final DivideExpression copy )
   {
     super( copy );

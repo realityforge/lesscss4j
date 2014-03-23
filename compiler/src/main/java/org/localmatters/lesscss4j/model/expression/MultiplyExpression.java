@@ -18,10 +18,6 @@ package org.localmatters.lesscss4j.model.expression;
 public class MultiplyExpression
   extends CompoundExpression
 {
-  public MultiplyExpression()
-  {
-  }
-
   public MultiplyExpression( final MultiplyExpression copy )
   {
     super( copy );

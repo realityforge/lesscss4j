@@ -24,11 +24,6 @@ public class ConstantExpression
 {
   private ConstantValue _value;
 
-  public ConstantExpression()
-  {
-    this( (ConstantValue) null );
-  }
-
   public ConstantExpression( final ConstantExpression copy )
   {
     super( copy );

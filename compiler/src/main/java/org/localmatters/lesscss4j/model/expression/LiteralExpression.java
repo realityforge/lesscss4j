@@ -32,10 +32,6 @@ public class LiteralExpression
    */
   private int _type;
 
-  public LiteralExpression()
-  {
-  }
-
   public LiteralExpression( final LiteralExpression copy )
   {
     super( copy );

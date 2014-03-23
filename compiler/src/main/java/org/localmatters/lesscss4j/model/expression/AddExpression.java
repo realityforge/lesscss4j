@@ -18,10 +18,6 @@ package org.localmatters.lesscss4j.model.expression;
 public class AddExpression
   extends CompoundExpression
 {
-  public AddExpression()
-  {
-  }
-
   public AddExpression( final Expression left, final Expression right )
   {
     super( left, right );

@@ -18,10 +18,6 @@ package org.localmatters.lesscss4j.model.expression;
 public class SubtractExpression
   extends CompoundExpression
 {
-  public SubtractExpression()
-  {
-  }
-
   public SubtractExpression( final SubtractExpression copy )
   {
     super( copy );

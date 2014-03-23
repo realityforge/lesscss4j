@@ -25,11 +25,6 @@ public class VariableReferenceExpression
 {
   private String _variableName;
 
-  public VariableReferenceExpression()
-  {
-    this( (String) null );
-  }
-
   public VariableReferenceExpression( final VariableReferenceExpression copy )
   {
     super( copy );
