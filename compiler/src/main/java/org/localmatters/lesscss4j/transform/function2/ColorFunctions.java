@@ -5,6 +5,7 @@ import org.localmatters.lesscss4j.model.expression.ConstantColor;
 import org.localmatters.lesscss4j.model.expression.ConstantExpression;
 import org.localmatters.lesscss4j.model.expression.ConstantNumber;
 import org.localmatters.lesscss4j.model.expression.Expression;
+import org.realityforge.css.lizard.CssFunction;
 
 /**
  * Class defining Color-oriented css functions.
