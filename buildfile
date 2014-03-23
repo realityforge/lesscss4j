@@ -25,6 +25,8 @@ define 'lesscss4j' do
   pom.description = 'Java-based "compiler" for the Less CSS language. Compiles LESS files into standard CSS and provides utility classes for integration with existing web application.'
 
   define 'model' do
+    package(:jar)
+    package(:sources)
   end
 
   define 'compiler' do
