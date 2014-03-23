@@ -53,6 +53,7 @@ public class ClassTransformerManager
    *
    * @return The located transformer.  <code>null</code> if no matching transformer can be found.
    */
+  @SuppressWarnings( "unchecked" )
   public <T> Transformer<T> getTransformer( @Nonnull final T object )
   {
     final Class objClass = object.getClass();

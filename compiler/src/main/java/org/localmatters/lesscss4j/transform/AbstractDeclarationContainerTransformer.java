@@ -181,6 +181,7 @@ public abstract class AbstractDeclarationContainerTransformer<T extends Declarat
     }
   }
 
+  @SuppressWarnings( "unchecked" )
   protected void transformRuleSets( @Nonnull final List<T> transformed,
                                     @Nonnull final EvaluationContext context,
                                     @Nonnull final TransformerManager transformerManager )
