@@ -86,7 +86,7 @@ styleSheet
       EOF
       -> ^(STYLESHEET charSet* importFile* bodyset*)
     ;
-    
+
 // -----------------
 // Character set.   Picks up the user specified character set, should it be present.
 //
@@ -102,8 +102,8 @@ importFile
     : '@' IMPORT_SYM WS+ importLocation  (WS+ medium (WS* COMMA WS* medium)*)? WS* SEMI
     -> ^(IMPORT importLocation medium*)
     ;
-    
-importLocation 
+
+importLocation
     : STRING
     | URI ;
 
@@ -119,39 +119,39 @@ media
     -> ^(MEDIA_SYM ^(MEDIA_EXPR medium)+ ruleList*)
     ;
 
-// ---------    
+// ---------
 // Medium.  The name of a medim that are particulare set of rules applies to.
 //
 medium
     : ((ONLY | NOT) WS+)? mediaType (WS+ AND WS+ mediaExpression)*
     | mediaExpression (WS+ AND WS+ mediaExpression)*
     ;
-    
+
 mediaType
-    : ident 
+    : ident
     ;
-    
+
 mediaExpression
     : LPAREN WS* mediaFeature (WS* COLON WS* (ident | numberOrColor))? WS* RPAREN
     ;
-    
+
 mediaFeature
     : ident
     ;
-    
+
 bodyset
     : ruleList
     | media
     | page
-    ;   
-    
+    ;
+
 ruleList
     : variableDef
     | mixinMacro
     | keyframesRule
     | ruleSet
     ;
-    
+
 page
     : '@' PAGE_SYM (WS+ COLON pseudoPage)? WS* LBRACE WS* (pageElement WS*)* RBRACE
     -> ^(PAGE_SYM pseudoPage? pageElement*)
@@ -160,7 +160,7 @@ page
 pseudoPage
     : ident
     ;
-    
+
 pageElement
     : mixinSelectorList WS!* SEMI!
     | declaration
@@ -171,27 +171,27 @@ combinator
     : WS* combinatorNonWs WS*
     | WS+
     ;
-    
+
 combinatorNonWs
     : PLUS
     | GREATER
     ;
-    
+
 mixinMacro
     : mixinMacroSelector WS* LPAREN WS* mixinMacroArg (WS* COMMA WS* mixinMacroArg)* WS* RPAREN WS* LBRACE (WS* ruleSetElement)+ WS* RBRACE
     -> ^(MIXIN_MACRO ^(SELECTOR mixinMacroSelector) mixinMacroArg+ ruleSetElement+)
     ;
-    
+
 mixinMacroArg
     : variable WS* COLON WS* mixinMacroArgDefault
     -> ^(MIXIN_ARG variable ^(EXPR mixinMacroArgDefault))
     ;
-    
+
 mixinMacroArgDefault
     : numberOrColor -> ^(CONSTANT numberOrColor)
     | literal       -> ^(LITERAL literal)
     ;
-    
+
 mixinMacroSelector
     : cssClass
     | HASH
@@ -201,11 +201,11 @@ keyframesRule
     : keyframesSelector WS* LBRACE WS* keyframesBody (WS* keyframesBody)* WS* RBRACE
     -> ^(KEYFRAMES ^(SELECTOR keyframesSelector) keyframesBody+)
     ;
-    
+
 keyframesSelector
     : '@' KEYFRAMES WS+ ident
     ;
-            
+
 keyframesBody
     : variableDef
     | keyframe WS* LBRACE (WS* ruleSetElement)* WS* RBRACE -> ^(RULESET ^(SELECTOR keyframe) ruleSetElement*)
@@ -215,71 +215,71 @@ keyframe
     : NUMBER
     | ident
     ;
-                
+
 ruleSet
     : ruleSetSelector WS* LBRACE (WS* ruleSetElement)* WS* RBRACE
     -> ^(RULESET ruleSetSelector ruleSetElement*)
     ;
-    
+
 ruleSetElement
     : (innerSelectorList WS* LBRACE)=>innerSelectorList WS* LBRACE (WS* ruleSetElement)* WS* RBRACE    -> ^(RULESET innerSelectorList ruleSetElement*)
     | (mixinSelectorList WS* SEMI)=>mixinSelectorList WS!* SEMI!
     | declaration
     | variableDef
     ;
-    
+
 mixinSelectorList
     : mixinSelector (WS!* COMMA! WS!* mixinSelector)*
     ;
-    
+
 mixinSelector
     : mixinMacroSelector WS* LPAREN (WS* mixinMacroCallArgList)? WS* RPAREN
       -> ^(MIXIN_REF ^(SELECTOR mixinMacroSelector) mixinMacroCallArgList*)
     | mixinNoArgSelector
       -> ^(MIXIN_REF ^(SELECTOR mixinNoArgSelector))
     ;
-    
+
 mixinNoArgSelector
-    : mixinSimpleSelector (combinator mixinSimpleSelector)* 
+    : mixinSimpleSelector (combinator mixinSimpleSelector)*
     ;
 
 mixinSimpleSelector
     : elementName (mixinSubsequent)*
     | mixinSubsequent+
     ;
-    
+
 mixinMacroCallArgList
     : mixinMacroCallArg (WS!* COMMA! WS!* mixinMacroCallArg)*
     ;
-    
+
 mixinMacroCallArg
     : literal             -> ^(MIXIN_ARG ^(LITERAL literal))
     | additiveExpression  -> ^(MIXIN_ARG ^(EXPR additiveExpression))
     ;
-    
+
 mixinSubsequent
     : HASH
     | cssClass
     ;
-    
+
 innerSelectorList
      : innerSelector (WS* COMMA WS* innerSelector)* -> ^(SELECTOR innerSelector)+
      ;
 
 innerSelector
     : (combinatorNonWs WS*)? selector;
-    
+
 ruleSetSelector
     : fontFaceSelector -> ^(SELECTOR fontFaceSelector)
     | selectorList
     ;
-    
+
 fontFaceSelector
     : '@' FONT_FACE
     ;
-    
+
 selectorList
-    : selector (WS* COMMA WS* selector)* -> ^(SELECTOR selector)+    
+    : selector (WS* COMMA WS* selector)* -> ^(SELECTOR selector)+
     ;
 
 selector
@@ -310,7 +310,7 @@ elementName
 attrib
     : LBRACKET WS* ident (WS* attribOp WS* (ident | STRING | number))? WS* RBRACKET
     ;
-    
+
 attribOp
     : OPEQ
     | INCLUDES
@@ -323,13 +323,13 @@ attribOp
 pseudo
     : COLON COLON? ident (LPAREN WS* pseudoArg WS* RPAREN)?
     ;
-    
+
 pseudoArg
     : number
     | (ident|number) WS* (PLUS | MINUS) WS* number
     | selector
     ;
-    
+
 variableDef
     : variableExpr WS* SEMI!
     ;
@@ -338,7 +338,7 @@ variableExpr
     : variable WS* COLON WS* propertyValue
     -> ^(VAR variable ^(EXPR propertyValue))
     ;
-    
+
 variable
     : '@' ident -> ^(ident)
     ;
@@ -346,15 +346,15 @@ variable
 literal
     : (STRING | URI | ident)
     ;
-    
+
 additiveExpression
-    : multiplicativeExpression ( WS!* (PLUS|MINUS)^ WS!* multiplicativeExpression )* 
+    : multiplicativeExpression ( WS!* (PLUS|MINUS)^ WS!* multiplicativeExpression )*
     ;
-    
+
 multiplicativeExpression
     : primaryExpression ( WS!* (STAR|SOLIDUS)^ WS!* primaryExpression)*
     ;
-    
+
 primaryExpression
     : (LPAREN! WS!*) additiveExpression (WS!* RPAREN!)
     | exprValue
@@ -364,18 +364,18 @@ exprValue
     : variable      -> ^(VAR      variable)
     | numberOrColor -> ^(CONSTANT numberOrColor)
     ;
-    
+
 numberOrColor
     : number
     | hexColor
     | RGB_COLOR
     | HSL_COLOR
     ;
-    
+
 number
     :  MINUS? NUMBER
     ;
-    
+
 // the 'font' property needs some special handling because it has syntax that looks like
 // division, but really isn't.  For example, the declaration:
 //     font: 12px/16px Arial;
@@ -385,40 +385,40 @@ declaration
     | (property WS* COLON (WS* propertyValue (WS* important)?)? WS* SEMI
     -> ^(DECLARATION property ^(PROP_VALUE propertyValue)? important?))
     ;
-    
+
 propPrefix
     : STAR
     | UNDERSCORE
     ;
-    
+
 fontDeclaration
     : fontProperty WS* COLON WS* fontPropertyValue (WS* important)? WS* SEMI
     -> ^(DECLARATION fontProperty ^(PROP_VALUE fontPropertyValue) important?)
     ;
-    
+
 fontProperty
     : propPrefix? FONT
     -> ^(FONT propPrefix?)
     ;
 
 fontPropertyValue
-    : ( 
+    : (
         ( (fontStyle WS*)* fontSize (WS!* SOLIDUS WS!* lineHeight)? WS* fontFamily (WS!* COMMA WS* fontFamily)* )
         | ident
       )
     ;
-    
+
 fontFamily
     : ident
     | STRING
     | variable
     ;
-    
+
 lineHeight
     : ident
     | numberOrColor
     ;
-    
+
 fontSize
     : ident
     | numberOrColor
@@ -433,7 +433,7 @@ property
     : propPrefix? identNoFont
     -> ^(identNoFont propPrefix?)
     ;
-    
+
 // Added optional EOF tokens so that this rule can be called directly.  This
 // is necessary to support IE8 Alpha expressions
 propertyValue
@@ -444,7 +444,7 @@ propertyValue
     | (primaryExpression propTermSep propertyTerm)=>propertyTermExpression (propTermSep propertyTerm)+ EOF?
     | additiveExpression EOF? -> ^(EXPR additiveExpression)
     ;
-    
+
 mixinAccessor
     : mixinMacroSelector WS* LBRACKET WS* mixinAccessorItem WS* RBRACKET
     -> ^(MIXIN_ACCESSOR ^(SELECTOR mixinMacroSelector) mixinAccessorItem)
@@ -458,25 +458,25 @@ mixinAccessorItem
 propertyTermExpression
     : primaryExpression -> ^(EXPR primaryExpression)
     ;
-	        
+
 propTermSep
     : WS* COMMA WS*
     | WS+
     ;
-    
+
 propertyTermNoExpr
     : (functionPred)=>function
     | literal -> ^(LITERAL literal)
     ;
-    
+
 functionPred
     : functionName WS* LPAREN
     ;
-    
+
 functionName
     : (ident | PERCENT) ((DOT | COLON) ident)*
     ;
-        
+
 propertyTerm
     : propertyTermNoExpr
     | propertyTermExpression
@@ -487,16 +487,16 @@ function
     : (EXPRESSION)=>ieExpression
     | (functionName WS* LPAREN functionArgList? RPAREN -> ^(FUNCTION ^(FUNCTION_NAME functionName) functionArgList))
     ;
-    
+
 functionArgList
     : ieFunctionTerm (WS!* COMMA WS!* ieFunctionTerm)*
     | functionArg ((WS!* COMMA WS!*|WS+) functionArg)*
     ;
-    
+
 functionArg
     : propertyTerm
     ;
-    
+
 functionArgItem
     : (functionPred)=>function
     | literal
@@ -507,17 +507,17 @@ ieFunctionTerm
     : ident WS* ieFunctionTermOp WS* (literal | additiveExpression)
     -> ^(ieFunctionTermOp ident ^(LITERAL literal)? ^(EXPR additiveExpression)?)
     ;
-    
+
 ieFunctionTermOp
     : OPEQ
     | COLON
     ;
 
 ieExpression
-    : EXPRESSION WS* LPAREN ieExprTerm RPAREN 
+    : EXPRESSION WS* LPAREN ieExprTerm RPAREN
     -> ^(FUNCTION ^(FUNCTION_NAME EXPRESSION) ieExprTerm)
     ;
-    
+
 ieExprTerm
     : (STRING|'&'|'?'|~('&'|'?'|'('|')'|STRING))*
       ( LPAREN ieExprTerm RPAREN (STRING | ~('('|')'|STRING))* )*
@@ -525,15 +525,15 @@ ieExprTerm
 
 important
     : IMPORTANT_SYM
-    ;   
+    ;
 
-hexColor 
+hexColor
     : HASH
     ;
 
-identNoFont    
-    : IDENT 
-    | ALPHA 
+identNoFont
+    : IDENT
+    | ALPHA
     | EXPRESSION
     | CHARSET
     | MEDIA_SYM
@@ -544,7 +544,7 @@ identNoFont
     | NOT
     | KEYFRAMES
     ;
-    
+
 ident
     : identNoFont
     | FONT
@@ -558,7 +558,7 @@ ident
 // is unambiguous for both ANTLR and lex (the standard defines tokens
 // in lex notation), then the token names are equivalent.
 //
-// Note however that lex has a match order defined as top to bottom 
+// Note however that lex has a match order defined as top to bottom
 // with longest match first. This results in a fairly inefficent, match,
 // REJECT, match REJECT set of operations. ANTLR lexer grammars are actaully
 // LL grammars (and hence LL recognizers), which means that we must
@@ -572,7 +572,7 @@ ident
 //
 // Lex style macro names used in the spec may sometimes be used (in upper case
 // version) as fragment rules in this grammar. However ANTLR fragment rules
-// are not quite the same as lex macros, in that they generate actual 
+// are not quite the same as lex macros, in that they generate actual
 // methods in the recognizer class, and so may not be as effecient. In
 // some cases then, the macro contents are embedded. Annotation indicate when
 // this is the case.
@@ -598,17 +598,17 @@ fragment    HEXCHAR     : ('a'..'f'|'A'..'F'|'0'..'9')  ;
 
 fragment    NONASCII    : '\u0080'..'\uFFFF'            ;   // NB: Upper bound should be \u4177777
 
-fragment    UNICODE     : '\\' HEXCHAR 
-                                (HEXCHAR 
-                                    (HEXCHAR 
-                                        (HEXCHAR 
+fragment    UNICODE     : '\\' HEXCHAR
+                                (HEXCHAR
+                                    (HEXCHAR
+                                        (HEXCHAR
                                             (HEXCHAR HEXCHAR?)?
                                         )?
                                     )?
-                                )? 
+                                )?
                                 ;
 //                                ('\r'|'\n'|'\t'|'\f'|' ')*  ;
-                                
+
 fragment ESCAPE
     : UNICODE
     | '\\' ~('\r'|'\n'|'\f'|HEXCHAR)
@@ -666,7 +666,7 @@ fragment SIGN   : PLUS | MINUS ;
 // Comments.    Comments may not be nested, may be multilined and are delimited
 //              like C comments: /* ..... */
 //              LessCSS supports line comments too of the form //....
-//              COMMENTS are hidden from the parser which simplifies the parser 
+//              COMMENTS are hidden from the parser which simplifies the parser
 //              grammar a lot.
 //
 COMMENT
@@ -683,7 +683,7 @@ COMMENT
 CDO : '<!--' { $channel=HIDDEN; }  // CDO on channel 3 in case we want it later
     ;
 
-// ---------------------            
+// ---------------------
 // HTML comment close.  HTML/XML comments may be placed around style sheets so that they
 //                      are hidden from higher scope parsing engines such as HTML parsers.
 //                      They comment close is therfore ignored by the CSS parser and we hide
@@ -691,7 +691,7 @@ CDO : '<!--' { $channel=HIDDEN; }  // CDO on channel 3 in case we want it later
 //
 CDC : '-->' { $channel=HIDDEN; }  // CDC on channel 4 in case we want it later
     ;
-                
+
 INCLUDES        : '~=' ;
 DASHMATCH       : '|=' ;
 
@@ -742,7 +742,7 @@ ONLY       : O N L Y                    ;
 NOT        : N O T                      ;
 AND        : A N D                      ;
 
-KEYFRAMES  
+KEYFRAMES
     : (MINUS W E B K I T MINUS)? K E Y F R A M E S
     ;
 
@@ -750,10 +750,10 @@ RGB_COLOR
     : R G B   WS* LPAREN (WS* MINUS)? WS* NUMBER WS* COMMA (WS* MINUS)? WS* NUMBER WS* COMMA (WS* MINUS)? WS* NUMBER WS* RPAREN
     | R G B A WS* LPAREN (WS* MINUS)? WS* NUMBER WS* COMMA (WS* MINUS)? WS* NUMBER WS* COMMA (WS* MINUS)? WS* NUMBER WS* COMMA (WS* MINUS)? WS* NUMBER WS* RPAREN
     ;
-    
+
 HSL_COLOR
     : H S L   WS* LPAREN WS* NUMBER WS* COMMA WS* NUMBER WS* COMMA WS* NUMBER WS* RPAREN
-    | H S L A WS* LPAREN WS* NUMBER WS* COMMA WS* NUMBER WS* COMMA WS* NUMBER WS* COMMA WS* NUMBER WS* RPAREN 
+    | H S L A WS* LPAREN WS* NUMBER WS* COMMA WS* NUMBER WS* COMMA WS* NUMBER WS* COMMA WS* NUMBER WS* RPAREN
     ;
 
 // -------------
@@ -784,7 +784,7 @@ NUMBER
 // ------------
 // url and uri.
 //
-URI :   U R L 
+URI :   U R L
          (
              LPAREN WS* (STRING) WS* RPAREN
            | LPAREN WS*  URL_NO_WS (~('\n'|'\r'|'\f'|'\''|'"'|RPAREN)* URL_NO_WS)? WS* ( RPAREN | { $type = INVALID; } )
