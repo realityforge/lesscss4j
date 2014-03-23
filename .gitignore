@@ -1,8 +1,10 @@
 /generated
+/*/generated
 /target
 /reports
 /tmp
 /*.iml
+/*/*.iml
 /*.ipr
 /*.iws
 /.idea

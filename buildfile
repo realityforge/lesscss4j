@@ -23,16 +23,23 @@ define 'lesscss4j' do
   pom.provided_dependencies.concat PROVIDED_DEPS
   pom.description = 'Java-based "compiler" for the Less CSS language. Compiles LESS files into standard CSS and provides utility classes for integration with existing web application.'
 
-  compile.with PROVIDED_DEPS, COMPILE_DEPS
+  define 'model' do
+  end
 
-  compile.from compile_antlr(_('src/main/antlr3/org/localmatters/lesscssj4/parser/LessCss.g'), :package => 'org.localmatters.lesscss4j.parser.antlr')
+  define 'compiler' do
 
-  test.with TEST_DEPS
-  test.using :testng
+    compile.with PROVIDED_DEPS, COMPILE_DEPS, project('model')
 
-  package(:jar)
-  package(:sources)
-  package(:javadoc)
+    compile.from compile_antlr(_('src/main/antlr3/org/localmatters/lesscssj4/parser/LessCss.g'), :package => 'org.localmatters.lesscss4j.parser.antlr')
+
+    test.with TEST_DEPS
+    test.using :testng
+
+    package(:jar)
+    package(:sources)
+    package(:javadoc)
+
+  end
 
   ipr.extra_modules << '../less.js/less.js.iml'
 end
