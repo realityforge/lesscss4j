@@ -1,4 +1,5 @@
 require 'buildr/git_auto_version'
+require 'buildr/single_intermediate_layout'
 require 'buildr/top_level_generate_dir'
 require 'buildr/antlr'
 require 'buildr/jacoco'
