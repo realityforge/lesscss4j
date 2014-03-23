@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.localmatters.lesscss4j.error.DivideByZeroException;
 import org.localmatters.lesscss4j.error.UnitMismatchException;
+import org.realityforge.css.lizard.model.ColorKeyword;
 
 public class ConstantColor
   implements ConstantValue

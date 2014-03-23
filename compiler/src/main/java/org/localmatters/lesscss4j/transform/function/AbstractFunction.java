@@ -1,7 +1,7 @@
 package org.localmatters.lesscss4j.transform.function;
 
 import org.localmatters.lesscss4j.error.FunctionException;
-import org.localmatters.lesscss4j.model.expression.ColorKeyword;
+import org.realityforge.css.lizard.model.ColorKeyword;
 import org.localmatters.lesscss4j.model.expression.ConstantColor;
 import org.localmatters.lesscss4j.model.expression.ConstantExpression;
 import org.localmatters.lesscss4j.model.expression.ConstantNumber;
