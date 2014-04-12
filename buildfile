@@ -48,4 +48,21 @@ define 'lesscss4j' do
   end
 
   ipr.extra_modules << '../less.js/less.js.iml'
+
+  ipr.add_component("CompilerConfiguration") do |xml|
+    xml.option :name => 'DEFAULT_COMPILER', :value => 'Javac'
+    xml.wildcardResourcePatterns do |xml|
+      xml.entry :name => '!?*.java'
+      xml.entry :name => '!?*.class'
+    end
+    xml.annotationProcessing do |xml|
+      xml.profile(:default => true, :name => 'Default', :enabled => true) do |xml|
+        xml.sourceOutputDir(:name => 'generated/ap/main/java')
+        xml.sourceTestOutputDir(:name => 'generated/ap/test/java')
+        xml.outputRelativeToContentRoot(:value => true)
+        #xml.processor(:name => 'org.localmatters.lesscss4j.transform.function2.CssFunctionProcessor')
+        xml.processorPath(:useClasspath => true)
+      end
+    end
+  end
 end
