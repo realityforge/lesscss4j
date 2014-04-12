@@ -1,12 +1,12 @@
 package org.localmatters.lesscss4j.transform.function;
 
 import org.localmatters.lesscss4j.error.FunctionException;
-import org.realityforge.css.lizard.model.ColorKeyword;
 import org.localmatters.lesscss4j.model.expression.ConstantColor;
 import org.localmatters.lesscss4j.model.expression.ConstantExpression;
 import org.localmatters.lesscss4j.model.expression.ConstantNumber;
 import org.localmatters.lesscss4j.model.expression.Expression;
 import org.localmatters.lesscss4j.model.expression.LiteralExpression;
+import org.realityforge.css.lizard.model.ColorKeyword;
 
 public abstract class AbstractFunction
   implements Function
