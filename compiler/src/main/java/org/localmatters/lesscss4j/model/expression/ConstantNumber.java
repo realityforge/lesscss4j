@@ -31,8 +31,7 @@ public class ConstantNumber
 
   public ConstantNumber( final ConstantNumber copy )
   {
-    _value = copy._value;
-    _unit = copy._unit;
+    this( copy.getValue(), copy.getUnit() );
   }
 
   public ConstantNumber( final double value, final String unit )
