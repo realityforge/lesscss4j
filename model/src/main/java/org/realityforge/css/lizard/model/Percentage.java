@@ -13,4 +13,10 @@ public final class Percentage
   {
     return _number;
   }
+
+  @Override
+  public String toString()
+  {
+    return _number.toString() + "%";
+  }
 }

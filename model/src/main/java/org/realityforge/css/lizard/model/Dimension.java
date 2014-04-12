@@ -26,4 +26,10 @@ public final class Dimension
   {
     return _unit;
   }
+
+  @Override
+  public String toString()
+  {
+    return _number.toString() + _unit;
+  }
 }

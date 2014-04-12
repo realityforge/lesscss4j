@@ -27,6 +27,9 @@ define 'lesscss4j' do
   define 'model' do
     compile.with :javax_jsr305
 
+    test.with TEST_DEPS
+    test.using :testng
+
     package(:jar)
   end
 

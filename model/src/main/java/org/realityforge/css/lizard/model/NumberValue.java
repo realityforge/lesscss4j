@@ -18,4 +18,10 @@ public final class NumberValue
   {
     return _value;
   }
+
+  @Override
+  public String toString()
+  {
+    return _value.toPlainString();
+  }
 }
