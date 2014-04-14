@@ -40,16 +40,11 @@ import org.localmatters.lesscss4j.transform.PageTransformer;
 import org.localmatters.lesscss4j.transform.RuleSetTransformer;
 import org.localmatters.lesscss4j.transform.StyleSheetTransformer;
 import org.localmatters.lesscss4j.transform.Transformer;
-import org.localmatters.lesscss4j.transform.function.Argb;
-import org.localmatters.lesscss4j.transform.function.Darken;
-import org.localmatters.lesscss4j.transform.function.Desaturate;
 import org.localmatters.lesscss4j.transform.function.Escape;
 import org.localmatters.lesscss4j.transform.function.Format;
 import org.localmatters.lesscss4j.transform.function.Function;
-import org.localmatters.lesscss4j.transform.function.Grayscale;
-import org.localmatters.lesscss4j.transform.function.Lighten;
-import org.localmatters.lesscss4j.transform.function.Saturate;
-import org.localmatters.lesscss4j.transform.function.Spin;
+import org.localmatters.lesscss4j.transform.function2.ColorFunctions;
+import org.localmatters.lesscss4j.transform.function2.CssFunctionUtil;
 import org.localmatters.lesscss4j.transform.manager.ClassTransformerManager;
 import org.localmatters.lesscss4j.transform.manager.TransformerManager;
 
@@ -285,17 +280,8 @@ public class DefaultLessCssCompilerFactory
     final Map<String, Function> functions = new HashMap<>();
     functions.put( "%", new Format() );
     functions.put( "e", new Escape() );
-    functions.put( "argb", new Argb() );
-    functions.put( "lighten", new Lighten() );
-    functions.put( "darken", new Darken() );
-    functions.put( "saturate", new Saturate() );
-    functions.put( "desaturate", new Desaturate() );
 
-    final Grayscale grayscale = new Grayscale();
-    functions.put( "grayscale", grayscale );
-    functions.put( "greyscale", grayscale );
-
-    functions.put( "spin", new Spin() );
+    functions.putAll( CssFunctionUtil.toFunctionMap( ColorFunctions.class ) );
 
     // Apply any additional functions or overrides for default functions.
     if ( null != _functions )
