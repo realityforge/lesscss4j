@@ -54,4 +54,21 @@ public abstract class AbstractFunction
     return arg instanceof ConstantExpression &&
            ( (ConstantExpression) arg ).getValue() instanceof ConstantNumber;
   }
+
+  protected final ConstantNumber getPercentage( final String name, final int index, final Expression... args )
+  {
+    final Expression expr = args[ index ];
+    if ( !isPercentage( expr ) )
+    {
+      throw new FunctionException( "Argument %d for function '%s' must be a percentage: %s", index + 1, name, expr );
+    }
+    return (ConstantNumber) ( (ConstantExpression) expr ).getValue();
+  }
+
+  protected final boolean isPercentage( final Expression arg )
+  {
+    return arg instanceof ConstantExpression &&
+           ( (ConstantExpression) arg ).getValue() instanceof ConstantNumber &&
+           ( (ConstantNumber) ( (ConstantExpression) arg ).getValue() ).getUnit().equals( "%" );
+  }
 }
