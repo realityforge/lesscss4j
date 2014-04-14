@@ -32,11 +32,6 @@ public abstract class AbstractFunction
     }
   }
 
-  protected final boolean isColor( final int index, final Expression... args )
-  {
-    return isColor( args[ index ] );
-  }
-
   protected final boolean isColor( final Expression expr )
   {
     return
