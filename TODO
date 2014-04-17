@@ -12,3 +12,9 @@ Petes:
 - Introduce the model objects from LizardCSS. ie Percentage, Dimension etc
 - Add apt extension to generate function adapter objects statically (See Dagger for example)
 - Consider using Dagger to construct system?
+
+Notes:
+http://www.w3.org/TR/2014/CR-css-syntax-3-20140220/#consume-a-component-value0
+http://cssparser.sourceforge.net/
+http://stackoverflow.com/questions/1325305/parsing-css-with-antlr-edge-cases
+http://www.bensblog.com/blog/2008/05/23/parsing-css-with-antlr/
