@@ -54,7 +54,8 @@ public class ConstantColor
     COLOR_COMPONENT_CONSTANT +
     "(?:\\s*,\\s*" +
     COLOR_COMPONENT_CONSTANT +
-    ")?\\s*\\)" );
+    ")?\\s*\\)"
+  );
 
   public ConstantColor()
   {
@@ -74,11 +75,15 @@ public class ConstantColor
     setValue( value );
   }
 
-  public ConstantColor( final int red, final int green, final int blue )
+  public ConstantColor( final int red,
+                        final int green,
+                        final int blue,
+                        @Nonnull final BigDecimal alpha )
   {
     setRed( red );
     setGreen( green );
     setBlue( blue );
+    setAlpha( alpha );
   }
 
   public ConstantColor( String value )
@@ -343,14 +348,16 @@ public class ConstantColor
     {
       return new ConstantColor( (int) ( getRed() + right.getValue() ),
                                 (int) ( getGreen() + right.getValue() ),
-                                (int) ( getBlue() + right.getValue() ) );
+                                (int) ( getBlue() + right.getValue() ),
+                                MAX_ALPHA_VALUE );
     }
     else
     {
       final ConstantColor color = (ConstantColor) right;
       return new ConstantColor( getRed() + color.getRed(),
                                 getGreen() + color.getGreen(),
-                                getBlue() + color.getBlue() );
+                                getBlue() + color.getBlue(),
+                                MAX_ALPHA_VALUE );
     }
   }
 
@@ -361,14 +368,16 @@ public class ConstantColor
     {
       return new ConstantColor( (int) ( getRed() - right.getValue() ),
                                 (int) ( getGreen() - right.getValue() ),
-                                (int) ( getBlue() - right.getValue() ) );
+                                (int) ( getBlue() - right.getValue() ),
+                                MAX_ALPHA_VALUE );
     }
     else
     {
       final ConstantColor color = (ConstantColor) right;
       return new ConstantColor( getRed() - color.getRed(),
                                 getGreen() - color.getGreen(),
-                                getBlue() - color.getBlue() );
+                                getBlue() - color.getBlue(),
+                                MAX_ALPHA_VALUE );
     }
   }
 
@@ -377,7 +386,8 @@ public class ConstantColor
     checkUnits( right );
     return new ConstantColor( (int) ( getRed() * right.getValue() ),
                               (int) ( getGreen() * right.getValue() ),
-                              (int) ( getBlue() * right.getValue() ) );
+                              (int) ( getBlue() * right.getValue() ),
+                              MAX_ALPHA_VALUE );
   }
 
   public ConstantValue divide( final ConstantValue right )
@@ -389,7 +399,8 @@ public class ConstantColor
     }
     return new ConstantColor( (int) ( getRed() / right.getValue() ),
                               (int) ( getGreen() / right.getValue() ),
-                              (int) ( getBlue() / right.getValue() ) );
+                              (int) ( getBlue() / right.getValue() ),
+                              MAX_ALPHA_VALUE );
   }
 
   @Override
@@ -550,7 +561,10 @@ public class ConstantColor
   public ConstantColor toARGB()
   {
     final ConstantColor constantColor =
-      new ConstantColor( round( getAlpha().multiply( MAX_COLOR_COMPONENT_VALUE ) ), getRed(), getGreen() );
+      new ConstantColor( round( getAlpha().multiply( MAX_COLOR_COMPONENT_VALUE ) ),
+                         getRed(),
+                         getGreen(),
+                         MAX_ALPHA_VALUE );
     constantColor.setAlpha( new BigDecimal( getBlue() ).divide( MAX_COLOR_COMPONENT_VALUE ) );
     return constantColor;
   }
