@@ -15,6 +15,7 @@ public class ColorFunctions
 {
  private static final BigDecimal V_360 = BigDecimal.valueOf( 360 );
  private static final BigDecimal V_100 = BigDecimal.valueOf( 100 );
+ private static final BigDecimal V_1 = BigDecimal.ONE;
 
   @CssFunction( description = "Function to change the hue of a color by a given number of degrees on the color wheel.",
                 usage = "spin(@color, 10)" )
@@ -98,5 +99,20 @@ public class ColorFunctions
   public Expression argb( final ConstantColor color )
   {
     return new ConstantExpression( color.toARGB() );
+  }
+
+  @CssFunction( description = "Create a color value." )
+  public ConstantColor rgb( final NumberValue r, final NumberValue g, final NumberValue b )
+  {
+    return rgba( r, g, b, new NumberValue( V_1 ) );
+  }
+
+  @CssFunction( description = "Create a color value." )
+  public ConstantColor rgba( final NumberValue r, final NumberValue g, final NumberValue b, final NumberValue a )
+  {
+    return new ConstantColor( r.getValue().intValue(),
+                              g.getValue().intValue(),
+                              b.getValue().intValue(),
+                              a.getValue() );
   }
 }
