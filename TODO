@@ -12,6 +12,8 @@ Petes:
 - Introduce the model objects from LizardCSS. ie Percentage, Dimension etc
 - Add apt extension to generate function adapter objects statically (See Dagger for example)
 - Consider using Dagger to construct system?
+- Add the ability to define functions
+- Default functions to being "pure". Require override to allow external references.
 
 Notes:
 http://www.w3.org/TR/2014/CR-css-syntax-3-20140220/#consume-a-component-value0
