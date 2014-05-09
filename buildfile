@@ -3,6 +3,7 @@ require 'buildr/single_intermediate_layout'
 require 'buildr/top_level_generate_dir'
 require 'buildr/antlr'
 require 'buildr/jacoco'
+require 'buildr/gpg'
 
 PROVIDED_DEPS = [:javax_javaee, :javax_servlet, :javax_jsr305]
 COMPILE_DEPS = [Buildr::Antlr.runtime_dependencies, :commons_io, :getopt4j]
