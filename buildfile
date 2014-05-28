@@ -4,6 +4,7 @@ require 'buildr/top_level_generate_dir'
 require 'buildr/antlr'
 require 'buildr/jacoco'
 require 'buildr/gpg'
+require 'buildr/custom_pom'
 
 PROVIDED_DEPS = [:javax_javaee, :javax_servlet, :javax_jsr305]
 COMPILE_DEPS = [Buildr::Antlr.runtime_dependencies, :commons_io, :getopt4j]
@@ -18,7 +19,7 @@ define 'lesscss4j' do
 
   project.version = ENV['PRODUCT_VERSION'] if ENV['PRODUCT_VERSION']
 
-  pom.add_apache2_license
+  pom.add_apache_v2_license
   pom.add_github_project('realityforge/lesscss4j')
   pom.add_developer('realityforge', 'Peter Donald', 'peter@realityforge.org')
   pom.add_developer('dhay', 'David Hay', 'hay_dave@yahoo.com')
