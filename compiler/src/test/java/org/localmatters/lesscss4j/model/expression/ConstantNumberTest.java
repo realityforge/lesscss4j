@@ -250,4 +250,3 @@ public class ConstantNumberTest
                   new ConstantNumber( 3, null ).multiply( new ConstantColor( 0xaaaaaa ) ) );
   }
 }
-

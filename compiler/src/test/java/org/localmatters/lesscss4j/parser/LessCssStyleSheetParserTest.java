@@ -68,4 +68,3 @@ public class LessCssStyleSheetParserTest
     assertEquals( null, _parser.parseCharset( "" ) );
   }
 }
-

@@ -449,4 +449,3 @@ public class StyleSheetWriterImpl
            1 >= declarations.size();
   }
 }
-

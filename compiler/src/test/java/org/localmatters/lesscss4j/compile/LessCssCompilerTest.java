@@ -339,4 +339,3 @@ public class LessCssCompilerTest
     return "less/" + key + ".less";
   }
 }
-

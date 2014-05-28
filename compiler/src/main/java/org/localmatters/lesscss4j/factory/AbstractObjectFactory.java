@@ -58,4 +58,3 @@ public abstract class AbstractObjectFactory<T>
     return buf.toString();
   }
 }
-
